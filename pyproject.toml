@@ -1,0 +1,26 @@
+[project]
+name = "growth-remodeling"
+version = "0.1.0"
+description = "Hands-on teaching code comparing four growth-and-remodeling theories for soft tissue"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+]
+
+[project.optional-dependencies]
+# Nicely rendered LaTeX in figure labels is optional; matplotlib's mathtext is
+# used by default so a system LaTeX install is NOT required.
+dev = ["ruff>=0.4"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gr"]
+
+[tool.ruff]
+line-length = 100

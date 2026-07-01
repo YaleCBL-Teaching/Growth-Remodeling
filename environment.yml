@@ -1,0 +1,13 @@
+# Conda alternative to `uv`. Create with:
+#     conda env create -f environment.yml
+#     conda activate growth-remodeling
+#     pip install -e .            # install the `gr` package in editable mode
+name: growth-remodeling
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - numpy>=1.24
+  - scipy>=1.10
+  - matplotlib>=3.7
+  - pip
