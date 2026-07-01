@@ -55,10 +55,10 @@ growth has exactly two possible fates:
 - **run away** without bound.
 
 Which one occurs is decided by the sign of the mechanical feedback. Linearising
-(3.1) about a fixed point $\theta^\*$, growth is stable iff adding mass *lowers*
+(3.1) about a fixed point $\theta^*$, growth is stable iff adding mass *lowers*
 the stress it must carry:
 
-$$\left.\frac{\mathrm{d}\bar\sigma}{\mathrm{d}\theta}\right|_{\theta^\*} < 0 .$$
+$$\left.\frac{\mathrm{d}\bar\sigma}{\mathrm{d}\theta}\right|_{\theta^*} < 0 .$$
 
 For the **bar** (required stress $\propto\lambda^1$) this is always true — growth
 is self-limiting. For the **artery** (required stress $\propto\lambda^2$,
