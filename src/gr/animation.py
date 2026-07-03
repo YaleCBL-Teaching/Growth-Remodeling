@@ -29,7 +29,7 @@ from matplotlib.patches import Circle, Rectangle
 
 from .history import Result
 from .parameters import Insult
-from .plotting import CONSTITUENT_STYLE, NEUTRAL, STYLE, _repo_root, plt
+from .plotting import CONSTITUENT_STYLE, NEUTRAL, STYLE, constituent_order, _repo_root, plt
 
 STANFORD_RED = "#8C1515"
 
@@ -197,7 +197,7 @@ def animate(
         if q in PER_CONSTITUENT:
             r0 = results[0]
             store = getattr(r0, PER_CONSTITUENT[q][1])
-            for name in [c.name for c in cons if c.name in store]:
+            for name in constituent_order(c.name for c in cons if c.name in store):
                 y = interp(r0, lambda r, n=name, at=PER_CONSTITUENT[q][1]: getattr(r, at)[n])
                 lines[q].append((add_curve(ax, y, lw=2.2, label=name,
                                            **CONSTITUENT_STYLE.get(name, {})), y))

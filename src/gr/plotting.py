@@ -31,6 +31,15 @@ CONSTITUENT_STYLE = {
     "collagen": dict(color="#DD8452", ls="--"),          # orange, dashed
     "smc": dict(color="#55A868", ls="-"),                # green
 }
+# Draw order: solid lines first, dashed collagen LAST so it sits on top and its
+# dashes stay visible wherever it overlaps smooth muscle / elastin.
+CONSTITUENT_ORDER = ("elastin", "smc", "collagen")
+
+
+def constituent_order(names) -> list:
+    """Sort constituent names into the fixed draw order (unknown names last)."""
+    n = len(CONSTITUENT_ORDER)
+    return sorted(names, key=lambda x: CONSTITUENT_ORDER.index(x) if x in CONSTITUENT_ORDER else n)
 # Neutral colour for a single theory's aggregate quantities (mass, radius, ...).
 NEUTRAL = "#4C72B0"
 

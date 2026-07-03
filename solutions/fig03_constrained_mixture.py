@@ -12,7 +12,7 @@ Run:  uv run python solutions/fig03_constrained_mixture.py
 from __future__ import annotations
 
 from gr import HYPERTENSION, artery, constrained_mixture
-from gr.plotting import CONSTITUENT_STYLE, plt, save_pdf
+from gr.plotting import CONSTITUENT_STYLE, constituent_order, plt, save_pdf
 
 from _scenarios import SEMINAR_MODEL
 
@@ -25,9 +25,9 @@ def main() -> None:
 
     fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2))
 
-    # (a) per-constituent masses
-    for name, m in r.masses.items():
-        axes[0].plot(r.t, m, label=name, **CONSTITUENT_STYLE.get(name, {}))
+    # (a) per-constituent masses (dashed collagen drawn last, on top)
+    for name in constituent_order(r.masses):
+        axes[0].plot(r.t, r.masses[name], label=name, **CONSTITUENT_STYLE.get(name, {}))
     axes[0].set_ylabel(r"Constituent mass  $M^k/M_0$")
     axes[0].legend()
 
