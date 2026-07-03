@@ -39,20 +39,23 @@ point of this section.
 
 | measure | symbol | referred to | definition |
 |---|---|---|---|
-| **2nd Piola–Kirchhoff** | $S$ | **reference** config | $S=\partial W/\partial E$ (work-conjugate to $E$) |
-| 1st Piola–Kirchhoff (nominal) | $P$ | two-point | $P=\lambda S$ (force in current / **reference** area) |
-| Cauchy (true) | $\sigma$ | current config | $\sigma=\lambda^2 S$ (force / current area; $J=1$) |
+| **2nd Piola–Kirchhoff** | $S$ | **reference** config | $S=\partial W/\partial E_e$ (work-conjugate to $E_e$) |
+| Cauchy (true) | $\sigma$ | current config | $\sigma=\lambda_e^2\,S$ (force / current area; $J=1$) |
+
+(The nominal, or 1st Piola–Kirchhoff, stress $\lambda_e S$ — force in the current
+configuration per *reference* area — sits between the two; the code exposes it as
+`first_piola`, but $S$ and $\sigma$ are the only two we use throughout.)
 
 The **constitutive law lives in the reference configuration**: a constituent's
 response is $S=\partial W/\partial E$, both referential. We only *push forward* to
-the Cauchy stress $\sigma=\lambda^2 S$ where a genuinely spatial balance demands
+the Cauchy stress $\sigma=\lambda_e^2 S$ where a genuinely spatial balance demands
 it — namely the Laplace law for the pressurised artery,
 
-$$\sigma_\theta = \frac{P_{\!\text{ress}}\,r}{h}\qquad\text{(circumferential wall stress, current config)},$$
+$$\sigma_\theta = \frac{P\,r}{h}\qquad\text{(circumferential wall stress, current config)},$$
 
-with luminal pressure $P_{\!\text{ress}}$, current inner radius $r$, wall
-thickness $h$. Equilibrium is intrinsically a *spatial* statement, so Cauchy
-stress appears there; everywhere else (the material laws, the deposition
+with luminal pressure $P$, current inner radius $r$, wall thickness $h$.
+Equilibrium is intrinsically a *spatial* statement, so Cauchy stress appears
+there; everywhere else (the material laws, the deposition
 set-points, the stress power) we stay in the reference configuration.
 
 The two settings, their boundary conditions, and the two insults are shown below.
