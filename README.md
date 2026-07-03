@@ -129,6 +129,17 @@ uv run python solutions/_check_models.py   # quick numerical self-check
 
 ---
 
+## Cross-validation against svGrowth
+
+The `comparison/` directory (on the `svgrowth-comparison` branch) reproduces the
+hypertension exercise with [**svGrowth**](https://github.com/StanfordCBCL/svGrowth),
+a research-grade constrained-mixture framework, and checks that the two codes
+agree. Configured to the same problem, the `gr` 1-D model and svGrowth's biaxial
+thin-wall model track each other's normalised adaptation closely (inner radius to
+<1%, other quantities to a few percent). See
+[`comparison/README.md`](comparison/README.md) for setup, the matched
+configuration, and the residual-difference discussion.
+
 ## References
 
 - Rodriguez EK, Hoger A, McCulloch AD. *Stress-dependent finite growth in soft

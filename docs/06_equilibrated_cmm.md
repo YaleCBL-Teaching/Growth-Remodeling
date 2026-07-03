@@ -17,30 +17,30 @@ time steps.
 At mechanobiological equilibrium:
 
 - **(A) Growth balance** — production balances removal, $\Upsilon=1$, so the
-  tissue stress returns to homeostatic: $\ \bar\sigma^\* = \bar\sigma_h$.
+  tissue stress returns to homeostatic: $\ \bar\sigma^* = \bar\sigma_h$.
 - **(B) Remodeling done** — every turnover constituent sits at its deposition
   stretch: $\ \lambda_e^k = G^k \Rightarrow \sigma^k = \sigma_h^k$.
 - **(C) Mechanical equilibrium** holds at the evolved geometry (Laplace).
 
 Elastin cannot remodel or be produced, so its mass is just the surviving fraction
-$s$ and its stress follows the evolved stretch, $\sigma_e(G_e\lambda^\*)$.
+$s$ and its stress follows the evolved stretch, $\sigma_e(G_e\lambda^*)$.
 
 ## 6.3 Collapse to one scalar equation
 
 Let the turnover constituents grow in fixed proportion by a factor $\beta$ (exact
 when they share gain and turnover, as here). Conditions (A)–(C) reduce to a
-**single** equation for the evolved stretch $\lambda^\*$ (derivation in the code
+**single** equation for the evolved stretch $\lambda^*$ (derivation in the code
 docstring):
 
 $$\phi_{e0}\,s
-  + s\,\frac{\bar\sigma_h - \sigma_e(G_e\lambda^\*)}{\sigma_{\text{turn}} - \sigma_h^e}
-  - \gamma\,(\lambda^\*)^{n} = 0,\tag{6.1}$$
+  + s\,\frac{\bar\sigma_h - \sigma_e(G_e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
+  - \gamma\,(\lambda^*)^{n} = 0,\tag{6.1}$$
 
 with $n$ the geometry exponent (1 bar, 2 artery), $\gamma$ the sustained load
 factor, $s$ the surviving elastin fraction, $\phi_{e0}$ the reference elastin
 fraction, $\sigma_{\text{turn}}$ the mass-weighted homeostatic stress of the
 turnover constituents, and $\sigma_h^e$ the homeostatic elastin stress. Once
-$\lambda^\*$ is known, the evolved mass ratio is $M/M_0 = \gamma(\lambda^\*)^n$.
+$\lambda^*$ is known, the evolved mass ratio is $M/M_0 = \gamma(\lambda^*)^n$.
 
 Because (6.1) is nothing but the fixed point of the homogenized ODEs, the
 equilibrated solution **coincides with the long-time limit of the transient
@@ -58,7 +58,7 @@ mechanobiologically unstable.
 ![Equilibrated matches the transient, and predicts the boundary](figures/fig05_equilibrated.png)
 
 *(a) The homogenized transient settles exactly onto the equilibrated stretch
-$\lambda^\*$ (dotted) — the two theories agree whenever an equilibrium exists.
+$\lambda^*$ (dotted) — the two theories agree whenever an equilibrium exists.
 (b) The evolved stretch from the instant equilibrated solve, swept over insult
 severity: it rises steeply and then, past a critical elastin loss, the
 equilibrium simply ceases to exist — the onset of unbounded growth. No time
