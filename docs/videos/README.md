@@ -2,22 +2,14 @@
 
 Each video is the animated twin of a static figure, built from the **same
 simulation results** (`gr.animation` consumes the models' `Result` objects). The
-timeline is split into three clearly labelled phases so you can tell apart what is
-**reference**, what is **elastic**, and what is **G&R**:
+layout is a **16:9 grid**: a large **vessel** cross-section on the left and a grid
+of **live plots** on the right (the insult is one of the plots, animated like the
+rest). The raw simulation is played over its active window — frames are dense
+early and the flat tail is cropped.
 
-1. **Reference** — the homeostatic state, no insult.
-2. **Elastic** — the insult is applied with G&R switched *off* (at "negative
-   time"): an instantaneous mechanical response. For an aneurysm this already
-   removes elastin mass, so the mass drops here before G&R rebuilds it.
-3. **G&R** — growth & remodeling is switched on (t ≥ 0) and the tissue slowly
-   adapts. Frames are dense early and the time axis is cropped to the active
-   window, so the video does not sit on a flat tail.
-
-Each frame shows a **deforming vessel** (white lumen, Stanford-red wall, thick
-lines) with a **dashed reference outline** and a live "% vs reference" readout so
-the change from the reference configuration is always visible, and the **insult**
-drawn over time (its ratio in the y-axis label). The response panels depend on the
-video:
+The vessel is drawn with a **light-gray current wall** about the mid-wall radius
+and a bold **red reference outline** (fixed), so the change from the reference
+configuration is easy to see. The response panels depend on the video:
 
 - **single-theory** videos plot the **per-constituent** stress
   $\sigma^k/\sigma_h^k$ and mass $M^k/M_0$ — each constituent has its own
