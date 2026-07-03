@@ -1,15 +1,21 @@
 # Animated videos
 
 Each video is the animated twin of a static figure, built from the **same
-simulation results** (`gr.animation` consumes the models' `Result` objects). All
-three parts are synchronized:
+simulation results** (`gr.animation` consumes the models' `Result` objects). The
+timeline is split into three clearly labelled phases so you can tell apart what is
+**reference**, what is **elastic**, and what is **G&R**:
 
-- a **deforming vessel** whose radius / wall thickness track the simulation,
-  tinted by the current stress relative to homeostatic (red = elevated, grey =
-  restored);
-- the **insult** drawn over time, so the *immediate elastic* jump (when the load
-  steps) is visually separated from the slow **growth & remodeling** that follows;
-- the **response** curves, revealed live with a moving time cursor.
+1. **Reference** — the homeostatic state, no insult.
+2. **Elastic** — the insult is applied with G&R switched *off* (at "negative
+   time"): an instantaneous mechanical response. For an aneurysm this already
+   removes elastin mass, so the mass drops here before G&R rebuilds it.
+3. **G&R** — growth & remodeling is switched on (t ≥ 0) and the tissue slowly
+   adapts. Frames are dense early and the time axis is cropped to the active
+   window, so the video does not sit on a flat tail.
+
+Each frame shows a **deforming vessel** (Stanford-red lumen, thick inner/outer
+walls) with a dashed **reference** outline so the change from reference is always
+visible, the **insult** drawn over time, and the **response** curves revealed live.
 
 | video | twin of | what it shows |
 |---|---|---|

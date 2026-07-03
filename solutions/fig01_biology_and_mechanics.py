@@ -44,7 +44,6 @@ def main() -> None:
     axA.set_ylim(0, 170)
     axA.set_xlabel(r"Green-Lagrange strain  $E_e = \frac{1}{2}(\lambda_e^2-1)$")
     axA.set_ylabel(r"2nd Piola-Kirchhoff stress  $S^k$  [kPa]")
-    axA.set_title("(a) reference-config constituent laws & set-points")
     axA.legend()
 
     # (b) required-stress feedback: bar (exponent 1) vs artery (exponent 2) -----
@@ -56,9 +55,8 @@ def main() -> None:
         axB.plot(lam, req / model.sigma_bar_h, label=name)
     axB.axhline(1.0, color="gray", lw=1, alpha=0.6)
     axB.axvline(1.0, color="gray", lw=1, alpha=0.6)
-    axB.set_xlabel(r"stretch  $\lambda$")
-    axB.set_ylabel(r"required stress  $\sigma_{\rm req}/\bar\sigma_h$")
-    axB.set_title("(b) why the artery can run away")
+    axB.set_xlabel(r"Stretch  $\lambda$")
+    axB.set_ylabel(r"Required stress  $\sigma_{\rm req}/\bar\sigma_h$")
     axB.annotate("dilating raises\nwall stress faster\nin the artery",
                  (1.4, 1.96), fontsize=9, ha="center",
                  color="#C44E52")

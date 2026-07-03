@@ -77,11 +77,11 @@ def save_pdf(fig, path: str | Path) -> Path:
 
 # Which Result field to plot, and how to label the y-axis.
 _QUANTITIES = {
-    "sigma_norm": (r"tissue stress  $\bar\sigma/\bar\sigma_h$", lambda r: r.sigma_norm),
-    "mass": (r"mass ratio  $M/M_0$", lambda r: r.mass),
-    "lam": (r"stretch  $\lambda$", lambda r: r.lam),
-    "radius": ("inner radius / length  [mm]", lambda r: r.radius),
-    "thickness": ("wall thickness  [mm]", lambda r: r.thickness),
+    "sigma_norm": (r"Tissue stress  $\bar\sigma/\bar\sigma_h$", lambda r: r.sigma_norm),
+    "mass": (r"Mass ratio  $M/M_0$", lambda r: r.mass),
+    "lam": (r"Stretch  $\lambda$", lambda r: r.lam),
+    "radius": ("Inner radius / length  [mm]", lambda r: r.radius),
+    "thickness": ("Wall thickness  [mm]", lambda r: r.thickness),
 }
 
 
@@ -126,7 +126,7 @@ def compare(
                 }[q]
                 ax.axhline(yval, **_style("equilibrated CMM"), alpha=0.9,
                            label="equilibrated CMM")
-        ax.set_xlabel("time  [day]")
+        ax.set_xlabel("Time  [day]")
         ax.set_ylabel(ylabel)
 
     # de-duplicate legend entries (equilibrium line may repeat)

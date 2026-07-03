@@ -42,9 +42,8 @@ def main() -> None:
                          (r.t[-1] * 0.55, e.lam), fontsize=9,
                          color=STYLE["equilibrated CMM"]["color"],
                          va="bottom")
-    axA.set_xlabel("time  [day]")
-    axA.set_ylabel(r"stretch  $\lambda$")
-    axA.set_title("(a) transient converges to the equilibrated state")
+    axA.set_xlabel("Time  [day]")
+    axA.set_ylabel(r"Stretch  $\lambda$")
     axA.legend(loc="lower right")
 
     # (b) equilibrated stretch vs insult severity, with existence boundary ---
@@ -62,9 +61,8 @@ def main() -> None:
                      (100 * s_crit - 2, np.nanmax(sw["lam"]) * 0.7),
                      ha="right", fontsize=10, color="#C44E52")
         axB.annotate("adapts", (100 * s_crit + 8, 1.1), fontsize=10, color="#4C72B0")
-    axB.set_xlabel("surviving elastin  [%]")
-    axB.set_ylabel(r"evolved stretch  $\lambda^*$")
-    axB.set_title("(b) equilibrated solve = an instant stability test")
+    axB.set_xlabel("Surviving elastin  [%]")
+    axB.set_ylabel(r"Evolved stretch  $\lambda^*$")
     axB.invert_xaxis()  # severity increases to the right
 
     fig.tight_layout()
