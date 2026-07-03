@@ -114,12 +114,12 @@ def simulate(
 
         # --- supplied mixture stress as a function of global stretch, Eq. (CM5)
         def sigma_bar(lam: float) -> float:
-            total = M_elastin * elastin.law.stress(elastin.G * lam)   # elastin cohort (born at lam=1)
+            total = M_elastin * elastin.law.cauchy(elastin.G * lam)   # elastin cohort (born at lam=1)
             for c in turnover:
                 init, cm = cohort_mass[c.name]
-                total += init * c.law.stress(c.G * lam / lam_dep[0])
+                total += init * c.law.cauchy(c.G * lam / lam_dep[0])
                 if i > 0:
-                    total += float((cm * c.law.stress(c.G * lam / lam_dep[:i])).sum())
+                    total += float((cm * c.law.cauchy(c.G * lam / lam_dep[:i])).sum())
             return total / M_tot
 
         # --- mechanical equilibrium: solve sigma_bar(lam) = required(lam) -----

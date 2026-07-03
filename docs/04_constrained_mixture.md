@@ -48,8 +48,9 @@ deformation, but each cohort measures it from a different starting point.
 
 ## 4.4 Mixture stress = history integral
 
-The mixture Cauchy stress is the mass-weighted sum over **all** surviving cohorts
-(rule of mixtures):
+The mixture Cauchy stress is the **referential-mass**-weighted sum over **all**
+surviving cohorts of their constituent stresses — each computed referentially as
+$S^k$ and pushed forward, $\sigma^k=\lambda_e^2 S^k$ (rule of mixtures):
 
 $$\bar\sigma(t) = \frac{1}{M_{\text{tot}}}\sum_k\left[
    M^k(0)\,q^k(t,0)\,\sigma^k\!\big(G^k\lambda(t)\big)

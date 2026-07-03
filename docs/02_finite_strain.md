@@ -21,17 +21,39 @@ elastically — only *growth* changes volume). That lets us recover the through-
 thickness and transverse stretches from $\lambda$ alone, which is why one number
 suffices.
 
-## 2.2 Stress
+**Strain lives in the reference configuration.** Throughout this course we
+measure strain with the (reference-configuration) **Green–Lagrange strain**,
 
-We report the **Cauchy (true) stress** $\sigma$ — force per unit *current* area.
-This is the physically meaningful one for a growing body, because the load-
-bearing area itself changes as the tissue remodels. The Laplace law for a
-pressurised thin tube (used for the artery) is naturally written in Cauchy
-stress:
+$$E = \tfrac{1}{2}\!\left(\lambda^2 - 1\right) = \tfrac{1}{2}(C-1),\qquad C = \lambda^2,$$
 
-$$\sigma_\theta = \frac{P\,r}{h}\qquad\text{(circumferential wall stress)}$$
+where $C = \mathbf{F}^{\!\top}\mathbf{F}$ is the right Cauchy–Green deformation
+(here a scalar). $E=0$ in the undeformed reference state. Green–Lagrange strain
+is the natural partner of the reference stress measure introduced next; anchoring
+both to the reference configuration is what keeps the growth-and-remodeling
+kinematics consistent.
 
-with pressure $P$, current inner radius $r$, wall thickness $h$.
+## 2.2 Stress measures — and which configuration each lives in
+
+Finite strain offers three stress measures; keeping them straight is the whole
+point of this section.
+
+| measure | symbol | referred to | definition |
+|---|---|---|---|
+| **2nd Piola–Kirchhoff** | $S$ | **reference** config | $S=\partial W/\partial E$ (work-conjugate to $E$) |
+| 1st Piola–Kirchhoff (nominal) | $P$ | two-point | $P=\lambda S$ (force in current / **reference** area) |
+| Cauchy (true) | $\sigma$ | current config | $\sigma=\lambda^2 S$ (force / current area; $J=1$) |
+
+The **constitutive law lives in the reference configuration**: a constituent's
+response is $S=\partial W/\partial E$, both referential. We only *push forward* to
+the Cauchy stress $\sigma=\lambda^2 S$ where a genuinely spatial balance demands
+it — namely the Laplace law for the pressurised artery,
+
+$$\sigma_\theta = \frac{P_{\!\text{ress}}\,r}{h}\qquad\text{(circumferential wall stress, current config)},$$
+
+with luminal pressure $P_{\!\text{ress}}$, current inner radius $r$, wall
+thickness $h$. Equilibrium is intrinsically a *spatial* statement, so Cauchy
+stress appears there; everywhere else (the material laws, the deposition
+set-points, the stress power) we stay in the reference configuration.
 
 The two settings, their boundary conditions, and the two insults are shown below.
 The bar is loaded by a **dead axial load** $f$ (fixed at one end), so its required
@@ -48,49 +70,60 @@ $\sigma_\theta$ (red), inner radius $r$, thickness $h$, balanced by Laplace. (c)
 The two insults — hypertension raises $P$ (wall thickens); aneurysm degrades
 elastin (the wall dilates, dashed = original size).*
 
-## 2.3 Hyperelastic constituents
+## 2.3 Hyperelastic constituents (in reference measures)
 
-Each constituent stores energy in a strain-energy function and its stress is the
-derivative. We use the two laws that describe arterial tissue (implemented in
-[`gr/mechanics.py`](../src/gr/mechanics.py)):
+Each constituent stores energy $W$ **per unit reference volume**; its
+reference-configuration stress is the derivative $S=\partial W/\partial E$
+(equivalently $S=\tfrac{1}{\lambda_e}\,\mathrm{d}W/\mathrm{d}\lambda_e$). We use
+the two laws standard for arterial tissue — the same free energies as the
+constrained-mixture literature (e.g. the FSGe formulation), implemented in
+[`gr/mechanics.py`](../src/gr/mechanics.py):
 
-**Elastin — neo-Hookean** (soft, barely stiffening; a rubber):
+**Elastin — neo-Hookean** (soft, barely stiffening; a rubber), $I_1 = \lambda_e^2 + 2/\lambda_e$:
 
-$$W_e = c_e\,(I_1 - 3),\qquad \sigma_e(\lambda_e) = c_e\!\left(\lambda_e^2 - \tfrac{1}{\lambda_e}\right).$$
+$$W_e = \tfrac{c_e}{2}(I_1 - 3),\qquad
+  S_e(\lambda_e) = c_e\!\left(1 - \lambda_e^{-3}\right).$$
 
 **Collagen & smooth muscle — Fung exponential fiber** (crimped, then stiffens
-steeply once recruited):
+steeply once recruited), $I_4 = \lambda_e^2$:
 
 $$W = \frac{c_1}{4c_2}\Big(e^{\,c_2 (I_4-1)^2} - 1\Big),\qquad
-\sigma(\lambda_e) = c_1\,\lambda_e^2\,(\lambda_e^2-1)\,e^{\,c_2(\lambda_e^2-1)^2},$$
+  S(\lambda_e) = c_1\,(\lambda_e^2-1)\,e^{\,c_2(\lambda_e^2-1)^2}.$$
 
-where $I_4 = \lambda_e^2$ is the squared fiber stretch. These are exactly the
-constituent free energies used in the constrained-mixture literature (e.g. the
-FSGe formulation). The **material tangent** $\mathrm{d}\sigma/\mathrm{d}\lambda_e$
-is also provided — we need it for equilibrium solves and for the stability
-analysis in [§7](07_stability.md).
+The Cauchy stress used in the spatial balance is then the push-forward
+$\sigma = \lambda_e^2\,S$ — for elastin
+$\sigma_e = c_e(\lambda_e^2 - 1/\lambda_e)$, and for the Fung fiber
+$\sigma = c_1\lambda_e^2(\lambda_e^2-1)e^{c_2(\lambda_e^2-1)^2}$.
 
 ![Constituent laws and the bar-vs-artery feedback](figures/fig01_constitutive.png)
 
-*Left: the three constituent stress–stretch laws, with the deposition stretch
-$G^k$ and homeostatic stress $\sigma_h^k=\sigma^k(G^k)$ marked. Elastin is soft;
-collagen and muscle stiffen. Right: the "required stress" that the loading
-demands as a function of stretch — linear for the bar, **quadratic for the
-artery** (Laplace). That extra power of $\lambda$ is the whole story of arterial
-instability (§7).*
+*Left: the constituent laws in **reference measures** — 2nd Piola–Kirchhoff
+stress $S^k$ vs Green–Lagrange strain $E_e$ — with the deposition set-points
+$(E_e(G^k),\,S^k(G^k))$ marked. Elastin is soft; collagen and muscle stiffen
+steeply (their curves run off-scale past the physiological window). Right: the
+"required stress" the loading demands, a **spatial (Cauchy)** balance — linear
+for the bar, **quadratic for the artery** (Laplace). That extra power of
+$\lambda$ is the whole story of arterial instability (§7).*
 
 ## 2.4 The deposition stretch $G^k$ (the crucial modelling idea)
 
 Cells deposit new fibers **already under tension**, at a fixed **deposition
 stretch** $G^k > 1$ (see [biology §1.3](01_biology.md)). So at homeostasis a
-constituent's elastic stretch equals its own $G^k$, and we *define* its
-homeostatic stress from that:
+constituent's elastic stretch equals its own $G^k$ (referentially,
+$E_e = \tfrac{1}{2}(G_k^2-1)$), and we *define* its homeostatic stress from that:
 
-$$\boxed{\;\sigma_h^k := \sigma^k(G^k)\;}\tag{2.1}$$
+$$\boxed{\;\sigma_h^k := \sigma^k(G^k) = G_k^2\,S^k(G^k)\;}\tag{2.1}$$
 
 This one convention (coded in [`gr/parameters.py`](../src/gr/parameters.py)) pins
 down every set-point in the course from a few physical inputs, and is why all
 four theories can share parameters.
+
+> **Notation for §§3–7.** From here on, $\sigma$ (a constituent) and
+> $\bar\sigma$ (the mixture) denote the **Cauchy / intramural** stress — the
+> push-forward $\sigma=\lambda_e^2 S$ that enters the spatial equilibrium and the
+> mechano-sensing that drives growth. The material response and strains behind
+> them remain the reference-configuration $S(E)$ of §2.2–2.3; only mass balance
+> and the load balance are stated spatially, exactly as they must be.
 
 ## 2.5 Multiplicative decomposition — growth vs. elasticity
 
