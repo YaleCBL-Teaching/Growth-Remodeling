@@ -1,0 +1,66 @@
+% ============================================================================
+%  SECTION 3 — Kinematic growth
+% ============================================================================
+\begin{frame}[t]{}
+  \vfill\begin{center}{\Huge\color{YaleBlue} 3.\ \ Kinematic growth}\\[0.5em]
+  {\color{BoxGray} Rodriguez, Hoger \& McCulloch (1994)}\end{center}\vfill
+\end{frame}
+
+\begin{frame}[t]{The idea, and the kinematics}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      Postulate a stress-free \textbf{growth} deformation that drives the tissue
+      stress back to a prescribed set-point. Growth changes the natural volume;
+      elasticity is what is left over to carry the loads.
+      \giveneq{\bm{F} = \bm{F}_e\,\bm{F}_g,\qquad \text{only }\bm{F}_e\text{ stores energy.}}
+      For an artery, growth is \textbf{radial wall thickening} through a single
+      scalar $\theta$:
+      \giveneq{\frac{M}{M_0} = \theta,\qquad \text{elastic stretch} = G^k\lambda.}
+      The whole mixture shares \emph{one} growth variable --- no individual
+      turnover, no remodeling of natural configurations. That simplicity is the
+      strength \emph{and} the ceiling.
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \slidefig[\linewidth]{kin_multiplicative_split.png}
+      \figcredit{Fig.: A. Gebauer (TUM lecture); Rodriguez, Hoger, McCulloch, J Biomech (1994)}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{The growth law}
+  Growth is driven to null the tissue-stress deviation from the set-point (a
+  first-order stress-dependent growth law, production $\propto$ current mass):
+  \slboxeq{2.6em}{eq:kingrowth}{\frac{\dd\theta}{\dd t}
+    = k_g\,\theta\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right)}
+  At each instant $\theta$ is known, and the current stretch $\lambda$ follows from
+  mechanical equilibrium $\bar\sigma(\lambda)=\sigma_{\text{req}}(\lambda,\theta)$.
+  \vspace{0.5em}
+
+  The set-point $\bar\sigma_h$ is \textbf{prescribed}: wherever growth stops
+  ($\dot\theta=0$), the stress is homeostatic \emph{by construction}.
+  \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
+\end{frame}
+
+\begin{frame}[t]{Stability is imposed, not predicted}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      With the set-point built in, kinematic growth has exactly two fates:
+      \emph{converge} to the prescribed homeostatic stress, or \emph{run away}.
+      Linearising the growth law, growth is stable iff adding mass \emph{lowers}
+      the stress it must carry:
+      \giveneq{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*} < 0.}
+      For the \textbf{bar} ($\sigma_{\text{req}}\propto\lambda^1$) this always
+      holds. For the \textbf{artery} ($\propto\lambda^2$, Laplace) a strong enough
+      insult flips the sign and growth runs away.
+      \vspace{0.4em}
+
+      {\color{AccentRed} But kinematic growth can only \emph{impose} a set-point ---
+      it cannot \emph{predict} mechanobiological stability from tissue turnover.
+      That is what the mixture theories add.}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \slidefig[\linewidth]{fig02_kinematic_growth.pdf}
+      \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+    \end{column}
+  \end{columns}
+\end{frame}

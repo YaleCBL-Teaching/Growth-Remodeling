@@ -1,0 +1,74 @@
+% ============================================================================
+%  SECTION 11 — Summary & references
+% ============================================================================
+\begin{frame}[t]{Summary --- what to take away}
+  \begin{enumerate}
+    \item Living tissue continuously \textbf{turns over}; cells deposit new
+    material \emph{pre-stretched}, chasing a homeostatic mechanical set-point.
+    \item \textbf{Kinematic growth} imposes that set-point --- simple and robust,
+    but stability is assumed, not predicted.
+    \item \textbf{Constrained mixtures} predict stability from turnover, and it
+    \textbf{depends on the insult}: mild $\to$ adapt, severe $\to$ runaway.
+    \item The \textbf{homogenized} model reproduces the full model's time
+    trajectory at a fraction of the cost.
+    \item The \textbf{equilibrated} model matches the transient theories \emph{when
+    an equilibrium exists}, and flags instability by failing to find one.
+    \item These tools now drive \textbf{clinical prediction} (TEVGs),
+    \textbf{systems-biology coupling}, and \textbf{fluid--solid--growth}.
+  \end{enumerate}
+  \vfill
+  \begin{center}\color{AccentRed}
+  \emph{When does a loaded tissue adapt, and when does it run away? --- now you can
+  compute the answer.}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t,allowframebreaks]{Key references}
+  \footnotesize
+  \begin{itemize}\setlength{\itemsep}{0.35em}
+    \item Rodriguez, Hoger, McCulloch. Stress-dependent finite growth in soft
+    elastic tissues. \textit{J Biomech} (1994).
+    \item Humphrey, Rajagopal. A constrained mixture model for growth and
+    remodeling of soft tissues. \textit{Math Models Methods Appl Sci} (2002).
+    \item Cyron, Wilson, Humphrey. Mechanobiological stability. \textit{J R Soc
+    Interface} (2014).
+    \item Cyron, Aydin, Humphrey. A homogenized constrained mixture (and
+    mechanical analog) model. \textit{Biomech Model Mechanobiol} (2016).
+    \item Latorre, Humphrey. A mechanobiologically equilibrated constrained
+    mixture model. \textit{ZAMM} (2018).
+    \item Latorre, Humphrey. Fast, rate-independent finite-element implementation
+    of a 3D constrained mixture model. \textit{Comput Methods Appl Mech Eng} (2020).
+    \item Humphrey. Constrained mixture models of soft tissue growth and
+    remodeling. \textit{J Elasticity} (2021).
+    \item Irons, Humphrey. Cell signaling model for arterial mechanobiology.
+    \textit{PLoS Comput Biol} (2020).
+    \item Irons, Latorre, Humphrey. From transcript to tissue: multiscale
+    modeling. \textit{Ann Biomed Eng} (2021).
+    \item Drews, Pepper, Best, \ldots, Humphrey, Breuer. Spontaneous reversal of
+    stenosis in tissue-engineered vascular grafts. \textit{Sci Transl Med} (2020).
+    \item Figueroa, Baek, Taylor, Humphrey. A computational framework for
+    fluid--solid--growth modeling. \textit{Comput Methods Appl Mech Eng} (2009).
+    \item Schwarz, Pfaller, \ldots, Marsden. A fluid--solid--growth solver for
+    cardiovascular modeling. \textit{Comput Methods Appl Mech Eng} (2023).
+    \item Pfaller, Latorre, \ldots, Marsden. FSGe: a fast, strongly coupled 3D
+    fluid--solid--growth method. \textit{Comput Methods Appl Mech Eng} (2024).
+    \item Humphrey, Eberth, Dye, Gleason. Fundamental role of axial stress in
+    arterial mechanics. \textit{J Biomech} (2009).
+    \item Ambrosi, Ben Amar, Cyron, \ldots, Humphrey, Kuhl. Growth and remodelling
+    of living tissues. \textit{J R Soc Interface} (2019).
+  \end{itemize}
+  \framebreak
+  \small
+  \textbf{Code}
+  \begin{itemize}
+    \item Seminar code (this deck's figures): \texttt{github.com/YaleCBL-Teaching/Growth-Remodeling}
+    \item \texttt{github.com/StanfordCBCL/svGrowth}, \texttt{svFSGe}
+    \item \texttt{github.com/yale-humphrey-lab/FEMBE\_Plugin}, \texttt{FEFSG\_Plugin}
+  \end{itemize}
+  \vspace{0.6em}
+  \textbf{Figure sources.} Schematic and hand-annotated figures adapted from
+  lecture material by A.\ Gebauer (TUM) and prior talks by M.\ Pfaller; result
+  figures reproduced with the \texttt{gr} package; literature figures cited
+  per-slide.
+\end{frame}
+

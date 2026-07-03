@@ -1,0 +1,88 @@
+% ============================================================================
+%  SECTION 7 — Stability capstone
+% ============================================================================
+\begin{frame}[t]{}
+  \vfill\begin{center}{\Huge\color{YaleBlue} 7.\ \ Stability}\\[0.5em]
+  {\color{BoxGray} adaptation vs.\ aneurysm --- the one big question}\end{center}\vfill
+\end{frame}
+
+\begin{frame}[t]{Where instability comes from: the Laplace exponent}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      Recall the required-stress laws:
+      \giveneq{\text{bar:}\ \sigma_{\text{req}}\propto\frac{\lambda^1}{M/M_0},
+        \qquad \text{artery:}\ \sigma_{\text{req}}\propto\frac{\lambda^2}{M/M_0}.}
+      Growth adds mass ($M\uparrow$), which \emph{lowers} required stress --- a
+      stabilising negative feedback. But dilation ($\lambda\uparrow$) \emph{raises}
+      it, and in the artery \textbf{quadratically}. When elastin --- the
+      low-stretch load-bearing buffer --- is lost, dilation wins the race against
+      mass production, the feedback turns positive: \textbf{runaway}.
+      \vspace{0.3em}
+
+      The stability condition, in one line:
+      \slboxeq{2.2em}{eq:stab}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
+        \ \Leftrightarrow\ \text{tissue adapts}}
+      {\color{AccentRed}\small The bar (linear) can never lose this race.}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \slidefig[\linewidth]{stab_criterion_map.png}
+      \figcredit{Fig.: A. Gebauer (TUM lecture); Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{Same tissue, two insults}
+  \begin{columns}[T]
+    \begin{column}{0.44\textwidth}
+      Two ways to read stability:
+      \begin{enumerate}\small
+        \item \textbf{Existence (instant).} The equilibrated equation
+        \eqref{eq:equil} has a root iff the tissue can adapt --- sweeping the
+        insult traces the boundary with no time integration.
+        \item \textbf{Transient.} Integrate the model: a stable insult plateaus,
+        an unstable one climbs without bound; near the boundary it slows
+        dramatically.
+      \end{enumerate}
+      \vspace{0.3em}
+
+      Retaining 30\% of elastin, the artery adapts (blue); retaining only 3\%, it
+      dilates without bound (red). The map is computed purely from the equilibrated
+      existence test.
+    \end{column}
+    \begin{column}{0.56\textwidth}
+      \slidefig[\linewidth]{fig06_stability.pdf}
+      \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{How the four theories answer --- the takeaways}
+  \small
+  \begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{@{}p{0.24\textwidth}p{0.20\textwidth}p{0.48\textwidth}@{}}
+    \toprule
+    \textbf{Theory} & \textbf{Predicts stability?} & \textbf{What it says} \\
+    \midrule
+    \textbf{\color{YaleBlue}Kinematic growth} & No --- \emph{imposed} &
+      Reaches the \emph{prescribed} homeostatic set-point, or runs away. Stability
+      is built in, not learned from turnover. \\
+    \textbf{\color{YaleBlue}Constrained mixture (full)} & Yes &
+      Adapts or dilates \textbf{depending on the insult} --- the faithful
+      reference. \\
+    \textbf{\color{YaleBlue}Homogenized CMM} & Yes &
+      Same verdict as the full model, following its \textbf{time trajectory}
+      cheaply. \\
+    \textbf{\color{YaleBlue}Equilibrated CMM} & Yes --- \emph{instantly} &
+      \textbf{Matches} the transient theories \emph{if} a root exists; \emph{no}
+      root $\Rightarrow$ unbounded growth. \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vfill
+  \begin{center}\color{AccentRed}
+  Stability \emph{depends on the insult}, and --- with turnover-based theories ---
+  it can be \emph{predicted}, not just assumed.
+  \end{center}
+\end{frame}
+

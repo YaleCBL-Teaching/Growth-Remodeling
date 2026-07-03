@@ -1,0 +1,112 @@
+% ============================================================================
+%  Growth & Remodeling seminar — shared beamer preamble
+%  Adapted from the YaleCBL-Teaching/BENG_5570 slide build system.
+%  Two build modes are selected by \teachertrue / \teacherfalse in the
+%  master files (slides-student.tex / slides-teacher.tex):
+%    student  -> key equations shown as EMPTY numbered boxes to fill on iPad
+%    teacher  -> the same boxes are filled with the actual equation
+% ============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts,mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\usepackage[export]{adjustbox}
+\usepackage{xcolor}
+
+% ---- sans-serif math+text (matches BENG_5570 house style) ------------------
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usefonttheme{professionalfonts}
+
+% ---- Yale-blue palette -----------------------------------------------------
+\definecolor{YaleBlue}{RGB}{0,53,107}
+\definecolor{YaleLightBlue}{RGB}{40,109,192}
+\definecolor{AccentRed}{RGB}{171,38,38}
+\definecolor{BoxGray}{RGB}{120,120,120}
+\definecolor{SlideFrame}{RGB}{0,53,107}
+
+% ---- beamer theme ----------------------------------------------------------
+\usetheme{default}
+\usecolortheme{default}
+\setbeamercolor{frametitle}{fg=YaleBlue}
+\setbeamercolor{title}{fg=YaleBlue}
+\setbeamercolor{structure}{fg=YaleLightBlue}
+\setbeamercolor{item}{fg=YaleBlue}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[circle]
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamersize{text margin left=1.2em,text margin right=1.2em}
+
+% footline: course tag + slide number
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.4ex,dp=1.1ex,leftskip=1.2em,rightskip=1.2em]{}%
+      {\scriptsize\color{BoxGray} Growth \& Remodeling of Soft Tissue\hfill
+       \insertframenumber}%
+    \end{beamercolorbox}}%
+}
+
+% ============================================================================
+%  Fill-in-the-blank equation mechanism
+% ============================================================================
+% \teacher toggle set in the master file.
+\newif\ifteacher
+
+% Height register for a student blank box.
+% Usage in slides:
+%   \slboxeq{<box height>}{<eq label>}{<equation body>}
+%     student : empty framed box of the given height, right-numbered (label)
+%     teacher : the equation, boxed and numbered (same label)
+% The label is shared, so \eqref works identically in both builds.
+\newcommand{\slboxeq}[3]{%
+  \ifteacher
+    % teacher: show the boxed, numbered equation
+    \begin{equation}\label{#2}
+      \boxed{\displaystyle #3}
+    \end{equation}
+  \else
+    % student: reserve an empty framed box carrying the equation number
+    \begin{equation}\label{#2}\end{equation}%
+    \vspace{-2.2\baselineskip}%
+    \begin{center}%
+    \setlength{\fboxrule}{0.8pt}\setlength{\fboxsep}{4pt}%
+    \textcolor{SlideFrame}{\framebox[0.92\linewidth][c]{%
+      \rule{0pt}{#1}\rule{0pt}{0pt}%
+    }}%
+    \end{center}%
+    \vspace{-0.3\baselineskip}%
+  \fi
+}
+
+% Inline "given" equation (always shown in both builds, unnumbered box-free).
+\newcommand{\giveneq}[1]{\begin{equation*}#1\end{equation*}}
+
+% ---- per-slide source citation, required format ----------------------------
+% "First, ..., Last, short journal (year)"
+\newcommand{\srccite}[1]{%
+  \par\vspace{0.25em}{\scriptsize\color{BoxGray}\itshape Source: #1}%
+}
+% bottom-right floating credit for a figure
+\newcommand{\figcredit}[1]{%
+  \begin{flushright}\vspace{-0.6em}{\tiny\color{BoxGray} #1}\end{flushright}%
+}
+
+% ---- convenience figure command --------------------------------------------
+\newcommand{\slidefig}[2][0.8\linewidth]{%
+  \begin{center}\includegraphics[width=#1,height=0.62\textheight,keepaspectratio]{figures/#2}\end{center}%
+}
+
+% ---- math shorthands used across the deck ----------------------------------
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Ftens}{\bm{F}}
+\newcommand{\sig}{\sigma}
+\newcommand{\sigbar}{\bar{\sigma}}
+\newcommand{\sigh}{\bar{\sigma}_h}
+\newcommand{\lam}{\lambda}
+\newcommand{\Ups}{\Upsilon}
+\newcommand{\kd}{k_d}

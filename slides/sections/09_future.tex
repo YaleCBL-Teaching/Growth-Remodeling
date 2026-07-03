@@ -1,0 +1,94 @@
+% ============================================================================
+%  SECTION 9 — Future perspectives
+% ============================================================================
+\begin{frame}[t]{}
+  \vfill\begin{center}{\Huge\color{YaleBlue} 9.\ \ Future perspectives}\\[0.5em]
+  {\color{BoxGray} clinical translation, systems biology, fluid--solid--growth}\end{center}\vfill
+\end{frame}
+
+\begin{frame}[t]{Clinical application: reversible graft stenosis}
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      Tissue-engineered vascular grafts (TEVGs) in children narrow early --- but a
+      constrained-mixture G\&R model predicted, and in-vivo imaging confirmed, that
+      the stenosis can \textbf{spontaneously reverse} as inflammation-driven
+      neotissue matures and remodels.
+      \vspace{0.4em}
+
+      The same modelling machinery re-interpreted a clinical trial: much of the
+      observed narrowing was transient, not a graft failure --- changing how these
+      devices should be monitored.
+      \vspace{0.4em}
+
+      {\color{AccentRed} G\&R models are moving from explanation to
+      \emph{prediction} for device design and clinical decision-making.}
+    \end{column}
+    \begin{column}{0.54\textwidth}
+      \slidefig[\linewidth]{fut_drews_reversal.png}
+      \figcredit{Drews, Pepper, Best, \ldots, Humphrey, Breuer, Sci Transl Med (2020)}
+    \end{column}
+  \end{columns}
+  \srccite{Drews, Pepper, Best, \ldots, Humphrey, Breuer, Sci Transl Med (2020)}
+\end{frame}
+
+\begin{frame}[t]{Systems-biology coupling: from signaling to remodeling}
+  \begin{columns}[T]
+    \begin{column}{0.44\textwidth}
+      The stress stimuli in every theory here are \emph{phenomenological}. A next
+      step couples the tissue-level G\&R model to a \textbf{logic-based
+      cell-signaling network} (52 species, 89 reactions): mechanical state drives
+      signaling (AngII, TGF-$\beta$, integrins, \ldots), and the network's outputs
+      feed back on mass production, removal, and active stress.
+      \vspace{0.4em}
+
+      {\color{AccentRed} This connects transcriptomic / pathway-level data to
+      mechanical adaptation --- ``from transcript to tissue''.}
+    \end{column}
+    \begin{column}{0.56\textwidth}
+      \slidefig[\linewidth]{fut_irons_network.png}
+      \figcredit{Irons, Latorre, Humphrey, Ann Biomed Eng (2021)}
+    \end{column}
+  \end{columns}
+  \srccite{Irons, Humphrey, PLoS Comput Biol (2020); Irons, Latorre, Humphrey, Ann Biomed Eng (2021)}
+\end{frame}
+
+\begin{frame}[t]{Fluid--solid--growth (FSG): closing the hemodynamic loop}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      So far the load was prescribed. In a real vessel, geometry changes from G\&R
+      alter the \emph{flow}, which changes wall shear stress, which changes the
+      remodeling stimulus. \textbf{FSG} couples the fast fluid problem (Navier--Stokes,
+      milliseconds) to the slow solid-growth problem (weeks).
+      \vspace{0.4em}
+
+      \textbf{FSGe} makes this strongly coupled and fast by using the
+      \emph{equilibrated} solver for the solid --- exactly the model from §6 --- so
+      a long-term aneurysmal equilibrium can be computed directly.
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \slidefig[\linewidth]{fut_fsg_loop.png}
+      \figcredit{Fig.: M. Pfaller (TUM/Stanford talk)}
+    \end{column}
+  \end{columns}
+  \srccite{Schwarz, Pfaller, \ldots, Marsden, Comput Methods Appl Mech Eng (2023); Pfaller, Latorre, \ldots, Marsden, Comput Methods Appl Mech Eng (2024)}
+\end{frame}
+
+\begin{frame}[t]{FSGe: long-term evolved aneurysmal equilibrium}
+  \begin{columns}[T]
+    \begin{column}{0.4\textwidth}
+      Coupling the equilibrated constrained-mixture solid to the hemodynamics
+      yields the evolved wall geometry \emph{and} the flow fields (wall shear
+      stress, velocity, pressure) at the adapted state --- in a fraction of the
+      cost of a fully transient fluid--structure--growth simulation.
+      \vspace{0.4em}
+
+      {\color{AccentRed} The equilibrated theory is not just pedagogy --- it is the
+      enabling ingredient for tractable 3D fluid--solid--growth.}
+    \end{column}
+    \begin{column}{0.6\textwidth}
+      \slidefig[\linewidth]{fut_fsge_aneurysm.png}
+      \figcredit{Pfaller, Latorre, Schwarz, Gerosa, Szafron, Humphrey, Marsden, Comput Methods Appl Mech Eng (2024)}
+    \end{column}
+  \end{columns}
+\end{frame}
+

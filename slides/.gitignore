@@ -1,0 +1,11 @@
+*.aux
+*.log
+*.nav
+*.snm
+*.toc
+*.out
+*.vrb
+*.fls
+*.fdb_latexmk
+slides-student.pdf
+slides-teacher.pdf

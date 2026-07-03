@@ -1,0 +1,94 @@
+% ============================================================================
+%  SECTION 4 — Full constrained mixture
+% ============================================================================
+\begin{frame}[t]{}
+  \vfill\begin{center}{\Huge\color{YaleBlue} 4.\ \ Constrained mixture (full)}\\[0.5em]
+  {\color{BoxGray} Humphrey \& Rajagopal (2002) --- the heart of the lecture}\end{center}\vfill
+\end{frame}
+
+\begin{frame}[t]{The idea: track every cohort}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      Model the tissue as a mixture of constituents \textbf{constrained to deform
+      together}, but each carrying its \emph{own} natural configuration and
+      continuously \textbf{produced and removed}. Because material is deposited at
+      different times --- under different loads --- the tissue carries a whole
+      \emph{history} of cohorts.
+      \vspace{0.5em}
+
+      Tracking that history is what makes the model \textbf{faithful}, and
+      \textbf{expensive}.
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \slidefig[\linewidth]{cmm_schematic.png}
+      \figcredit{Fig.: A. Gebauer (TUM lecture); Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{Mass balance --- the heredity integral}
+  The mass of a turnover constituent $k$ now is the surviving remnant of the
+  initial material plus everything produced since, each aged by a survival
+  function:
+  \slboxeq{2.6em}{eq:heredity}{M^k(t) = M^k(0)\,q^k(t,0)
+    + \int_0^t m^k(\tau)\,q^k(t,\tau)\,\dd\tau}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Survival} (Poisson removal at rate $k_d^k$):
+      \giveneq{q^k(t,\tau) = e^{-k_d^k (t-\tau)}.}
+      Mean lifetime $1/k_d^k$; elastin does not turn over ($k_d^e=0$).
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Production} $\propto$ current mass, driven by the tissue-stress
+      stimulus that vanishes at homeostasis:
+      \giveneq{m^k = k_d^k M^k\,\Upsilon,\quad
+        \Upsilon = 1 + K_\sigma^k\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right).}
+    \end{column}
+  \end{columns}
+  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+\end{frame}
+
+\begin{frame}[t]{Each cohort remembers its birth configuration}
+  A cohort of $k$ deposited at time $\tau$ is laid down at the deposition stretch
+  $G^k$; as the tissue goes on deforming, that cohort stretches \emph{with} the
+  mixture, so its elastic stretch evaluated now is
+  \slboxeq{2.4em}{eq:cohort}{\lambda_e^{k}(t;\tau) = G^k\,\frac{\lambda(t)}{\lambda(\tau)}}
+  At birth ($t=\tau$) it sits exactly at $G^k$ (hence $\sigma_h^k$). This is the
+  \textbf{constrained-mixture constraint}: every constituent shares the current
+  deformation, but each cohort measures it from a different starting point.
+  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+\end{frame}
+
+\begin{frame}[t]{Mixture stress = history integral}
+  The mixture Cauchy stress is the mass-weighted sum over \emph{all} surviving
+  cohorts (rule of mixtures):
+  \slboxeq{3.2em}{eq:mixstress}{\bar\sigma(t) = \frac{1}{M_{\text{tot}}}\sum_k\!\left[
+     M^k(0)\,q^k(t,0)\,\sigma^k\!\big(G^k\lambda(t)\big)
+     + \int_0^t\! m^k(\tau)\,q^k(t,\tau)\,\sigma^k\!\Big(G^k\tfrac{\lambda(t)}{\lambda(\tau)}\Big)\dd\tau\right]}
+  Each time step discretises the mass balance and this sum over stored cohorts,
+  then solves $\bar\sigma(\lambda)=\sigma_{\text{req}}(\lambda)$ for the current
+  stretch. Elastin contributes a single, non-renewing cohort (optionally degraded
+  by an insult).
+  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+\end{frame}
+
+\begin{frame}[t]{What it buys you: stability is \emph{predicted}}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      Unlike kinematic growth, \emph{nothing} prescribes the outcome. Whether the
+      tissue adapts or dilates \textbf{emerges} from the turnover dynamics and the
+      insult. Under hypertension the model grows collagen and muscle while elastin
+      is merely diluted, and tissue stress returns to homeostatic.
+      \vspace{0.5em}
+
+      {\color{AccentRed} The price is cost: the history integrals make the model
+      $O(N^2)$ in the number of time steps --- the motivation for the
+      \textbf{homogenized} model (§5).}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \slidefig[\linewidth]{fig03_constrained_mixture.pdf}
+      \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+    \end{column}
+  \end{columns}
+\end{frame}
+
