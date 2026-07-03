@@ -36,6 +36,7 @@ STANFORD_RED = "#8C1515"
 # Capitalised, descriptive y-axis labels (no plot titles — the label is enough).
 # Single-valued quantities (one line per theory):
 QUANTITIES = {
+    "sigma_norm": (r"Wall stress  $\sigma/\sigma_h$", lambda r: r.sigma_norm),  # single material
     "mass": (r"Mass ratio  $M/M_0$", lambda r: r.mass),
     "lam": (r"Stretch  $\lambda$", lambda r: r.lam),
     "radius": (r"Radius ratio  $a/a_0$", lambda r: r.radius),        # normalised in animate()
@@ -121,7 +122,7 @@ def animate(
     has_p = insult.pressure_factor != 1.0
     has_e = insult.elastin_surviving != 1.0
 
-    REF = {"mass": 1.0, "lam": 1.0, "radius": 1.0, "thickness": 1.0}   # all ratios -> 1
+    REF = {"sigma_norm": 1.0, "mass": 1.0, "lam": 1.0, "radius": 1.0, "thickness": 1.0}
     norm = {"radius": R0, "thickness": H0}                             # a/a_0, h/h_0
     is_artery = results[0].setting == "artery"
 
@@ -206,8 +207,8 @@ def animate(
                 lines[q].append((add_curve(ax, y, label=r.theory, **STYLE.get(r.theory, {})), y))
             ax.axhline(REF[q], color="gray", lw=1, ls=":", alpha=0.8)
             if equilibrium is not None and getattr(equilibrium, "exists", False):
-                val = {"mass": equilibrium.mass, "lam": equilibrium.lam,
-                       "radius": equilibrium.radius / R0,
+                val = {"sigma_norm": equilibrium.sigma_norm, "mass": equilibrium.mass,
+                       "lam": equilibrium.lam, "radius": equilibrium.radius / R0,
                        "thickness": equilibrium.thickness / H0}.get(q)
                 if val is not None and np.isfinite(val):
                     ax.axhline(val, **STYLE["equilibrated CMM"], alpha=0.9,

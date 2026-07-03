@@ -11,14 +11,16 @@ The vessel is drawn with a **light-gray current wall** about the mid-wall radius
 and a bold **red reference outline** (fixed), so the change from the reference
 configuration is easy to see. The response panels depend on the video:
 
-- **single-theory** videos plot the **per-constituent** stress
-  $\sigma^k/\sigma_h^k$ and mass $M^k/M_0$ — each constituent has its own
-  homeostatic stress, so you see collagen and smooth muscle **remodel back** to
-  $\sigma_h^k$ while **elastin cannot** (its stress stays elevated, and in the
-  aneurysm case runs away — the mechanistic signature of the instability);
-- **comparison** videos plot the geometry (mid-wall radius, wall thickness) and
-  total mass across the theories, with the reference and equilibrated targets
-  marked.
+- **single-theory** constrained-mixture videos plot the **per-constituent** stress
+  $\sigma^k/\sigma_h^k$ and mass $M^k/M_0$ (plus the radius and thickness ratios)
+  — each constituent has its own homeostatic stress, so you see collagen and
+  smooth muscle **remodel back** to $\sigma_h^k$ while **elastin cannot** (its
+  stress stays elevated, and in the aneurysm case runs away — the mechanistic
+  signature of the instability). **Kinematic growth is a single material**, so its
+  video shows one **wall stress** $\sigma/\sigma_h$ instead (no constituents);
+- **comparison** videos plot the geometry (radius ratio $a/a_0$, thickness ratio
+  $h/h_0$) and mass ratio $M/M_0$ across the theories, with the reference and
+  equilibrated targets marked.
 
 A single shared legend sits outside the panels.
 

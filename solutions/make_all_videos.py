@@ -43,7 +43,7 @@ def video_kinematic():
     """Twin of fig02 — kinematic growth adapting to hypertension (artery)."""
     art = artery(SEMINAR_MODEL)
     r = kinematic_growth.simulate(art, HYPERTENSION, t_end=1000)
-    fig, anim = animate([r], HYPERTENSION, art, quantities=("stress_k", "mass", "radius"),
+    fig, anim = animate([r], HYPERTENSION, art, quantities=("sigma_norm", "mass", "radius", "thickness"),
                         title="Kinematic growth — hypertension")
     _save(anim, "video02_kinematic_growth")
 
@@ -52,7 +52,7 @@ def video_cmm_turnover():
     """Twin of fig03 — full CMM turnover under hypertension (per constituent)."""
     art = artery(SEMINAR_MODEL)
     r = constrained_mixture.simulate(art, HYPERTENSION, t_end=1200, dt=2.0)
-    fig, anim = animate([r], HYPERTENSION, art, quantities=("stress_k", "mass_k", "radius"),
+    fig, anim = animate([r], HYPERTENSION, art, quantities=("stress_k", "mass_k", "radius", "thickness"),
                         title="Full constrained mixture — turnover under hypertension")
     _save(anim, "video03_constrained_mixture")
 
@@ -80,7 +80,7 @@ def video_runaway():
     art = artery(SEMINAR_MODEL)
     severe = Insult(elastin_surviving=0.03, t_on=1.0, ramp=10.0)
     r = homogenized_cmm.simulate(art, severe, t_end=5000)
-    fig, anim = animate([r], severe, art, quantities=("stress_k", "mass_k", "radius"),
+    fig, anim = animate([r], severe, art, quantities=("stress_k", "mass_k", "radius", "thickness"),
                         title="Runaway aneurysm (elastin → 3%, no equilibrium)")
     _save(anim, "video06_runaway_aneurysm")
 

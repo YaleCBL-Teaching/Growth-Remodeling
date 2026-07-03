@@ -19,7 +19,7 @@ from .history import Result
 # One fixed colour / style per theory, used everywhere.
 STYLE = {
     "kinematic growth": dict(color="#4C72B0", ls="-"),
-    "full CMM": dict(color="#000000", ls="-"),
+    "full CMM": dict(color="#2E7D32", ls="-"),          # green (black is used for the insult)
     "homogenized CMM": dict(color="#DD8452", ls="--"),
     "equilibrated CMM": dict(color="#C44E52", ls=":"),
 }
