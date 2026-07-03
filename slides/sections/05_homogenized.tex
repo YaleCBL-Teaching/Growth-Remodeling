@@ -26,13 +26,24 @@
   restore tissue stress.
   \vspace{0.3em}
 
-  \textbf{Remodeling} --- new mass enters at $\lambda/G^k$, old mass leaves at the
-  current $\lambda_n^k$; mixing at the turnover rate,
+  \textbf{Remodeling} --- the mean \emph{natural configuration} evolves as new mass
+  enters at $\lambda/G^k$ and old mass leaves at the current value; mixing at the
+  turnover rate. In general this is a tensor $\bm{F}_n^k$; here it reduces to its
+  scalar stretch $\lambda_n^k$:
+  \zlab{scalar evolution of the natural configuration}
   \slboxeq{2.4em}{eq:homog_remodel}{\frac{\dd\lambda_n^k}{\dd t}
     = \frac{m^k}{M^k}\left(\frac{\lambda}{G^k}-\lambda_n^k\right)}
   Holding $\lambda$ fixed, this relaxes constituent stress exponentially to
-  $\sigma_h^k$ (time constant $\sim 1/k_d$) --- Cyron's \textbf{mechanical analog}:
-  a Maxwell element in parallel with a motor holding the homeostatic prestress.
+  $\sigma_h^k$ (time constant $\sim 1/k_d$) --- and not to zero, but to a prestress.
+  \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
+\end{frame}
+
+\begin{frame}[t]{The Mechanical Analog: A Maxwell Fluid with a Motor}
+  Turnover relaxes stress to a \textbf{prestress}, not zero: a Maxwell element
+  (dashpot $+$ spring) \textbf{in parallel with a motor} $\bar\sigma^k_{\text{pre}}$.
+  \vfill
+  \begin{center}\maxwellelement[1.0]\end{center}
+  \vfill
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 

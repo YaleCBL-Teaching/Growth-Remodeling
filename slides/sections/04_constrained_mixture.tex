@@ -12,8 +12,9 @@
   removed}. The tissue therefore carries a whole \emph{history} of cohorts ---
   faithful, and expensive.
   \vfill
-  \begin{center}\cmmmap[1.0]\end{center}
+  \begin{center}\humphreygr[1.02]\end{center}
   \vfill
+  \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
 \begin{frame}[t]{Mass Balance --- The Heredity Integral}
@@ -39,10 +40,12 @@
 \end{frame}
 
 \begin{frame}[t]{Each Cohort Remembers Its Birth Configuration}
-  A cohort of $k$ deposited at time $\tau$ is laid down at the deposition stretch
-  $G^k$; as the tissue goes on deforming, that cohort stretches \emph{with} the
-  mixture, so its elastic stretch evaluated now is
-  \slboxeq{2.4em}{eq:cohort}{\lambda_e^{k}(t;\tau) = G^k\,\frac{\lambda(t)}{\lambda(\tau)}}
+  A cohort of $k$ deposited at time $\tau$ is laid down at deposition stretch
+  $G^k$ and thereafter stretches \emph{with} the mixture.
+  \dlab{general form --- constituent-specific deformation (Humphrey Fig.\ 1)}
+  \giveneq{\bm{F}^{k}_{n(\tau)}(t) = \bm{F}(t)\,\bm{F}^{-1}(\tau)\,\bm{G}^{k}.}
+  \zlab{reduction used here --- scalar elastic stretch}
+  \slboxeq{2.2em}{eq:cohort}{\lambda_e^{k}(t;\tau) = G^k\,\frac{\lambda(t)}{\lambda(\tau)}}
   At birth ($t=\tau$) it sits exactly at $G^k$ (hence $\sigma_h^k$). This is the
   \textbf{constrained-mixture constraint}: every constituent shares the current
   deformation, but each cohort measures it from a different starting point.

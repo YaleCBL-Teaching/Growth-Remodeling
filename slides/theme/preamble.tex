@@ -91,6 +91,27 @@
 % Inline "given" equation (always shown in both builds, unnumbered box-free).
 \newcommand{\giveneq}[1]{\begin{equation*}#1\end{equation*}}
 
+% ============================================================================
+%  3D <-> 0D presentation convention
+%  Every core relation is shown first in its general 3D (tensor) form, then in
+%  the 0D scalar reduction actually used in this course. A small colored badge
+%  marks which regime a line belongs to; \formlab places the badge + a short
+%  caption on a tight line just above the equation it introduces.
+% ============================================================================
+\definecolor{TagD}{RGB}{62,78,138}    % indigo/slate  -> 3D (general tensor)
+\definecolor{TagZ}{RGB}{17,122,116}   % teal          -> 0D (scalar reduction)
+\newcommand{\dpill}[2]{\tikz[baseline]{%
+  \node[fill=#1,text=white,rounded corners=2.5pt,inner xsep=4pt,inner ysep=1.6pt,
+        font=\bfseries\scriptsize,anchor=base]{#2};}}
+\newcommand{\tagd}{\dpill{TagD}{3D}}
+\newcommand{\tagz}{\dpill{TagZ}{0D}}
+% \formlab{<badge>}{<short caption>} — tight labeled line before an equation
+\newcommand{\formlab}[2]{\par\smallskip\noindent
+  {#1}\;{\footnotesize\color{black!62}#2}\par\nobreak\vspace{-0.2em}}
+% convenience wrappers
+\newcommand{\dlab}[1]{\formlab{\tagd}{#1}}   % 3D general (tensor) form
+\newcommand{\zlab}[1]{\formlab{\tagz}{#1}}   % 0D scalar reduction
+
 % ---- per-slide source citation, required format ----------------------------
 % "First, ..., Last, short journal (year)"
 % The reference is not printed in the slide body; it is stashed and shown in the
@@ -248,32 +269,139 @@
     node[below,font=\footnotesize]{$\dd\bm{x}=\bm{F}\,\dd\bm{X}$} (6.0,-0.45);
 \end{tikzpicture}}
 
-% ---- kinematic growth: F = F_e F_g -----------------------------------------
+% ---- kinematic growth: F = F_e F_g, with INCOMPATIBLE grown configuration ---
+% Reference body is cut into pieces; each piece grows stress-free on its own, so
+% the grown pieces no longer tile (overlaps + gaps = incompatible). The elastic
+% step F_e forces them back into one connected body (residual stress).
 \newcommand{\kinmap}[1][1.0]{%
-\begin{tikzpicture}[scale=#1,every node/.style={font=\small}]
-  % reference (left)
-  \draw[refbody] plot[smooth cycle,tension=0.9]
-    coordinates {(0,0)(0.9,0.45)(1.5,0.1)(1.3,-0.8)(0.5,-0.95)(-0.1,-0.45)};
-  \node[font=\footnotesize] at (0.65,-1.35) {reference $\mathcal{B}_0$};
-  % grown, stress-free intermediate (middle, larger + shifted up)
-  \begin{scope}[shift={(3.4,0.15)}]
-    \draw[intbody] plot[smooth cycle,tension=0.9]
-      coordinates {(0,0.1)(1.15,0.6)(1.9,0.15)(1.7,-1.0)(0.6,-1.2)(-0.15,-0.55)};
-    \node[font=\footnotesize,align=center] at (0.8,-1.55) {grown, stress-free\\$\mathcal{B}_g$};
+\begin{tikzpicture}[scale=#1,every node/.style={font=\small},
+    piece/.style={draw=black!70,thick,fill=black!10},
+    gpiece/.style={draw=black!70,thick,dashed,fill=black!16},
+    cpiece/.style={draw=black!80,thick,fill=black!24}]
+  % --- reference B_0: 2x2 compatible tiling (left) ---
+  \begin{scope}[shift={(0,0)}]
+    \foreach \x in {0,0.9} \foreach \y in {-0.9,0}{
+      \draw[piece] (\x,\y) rectangle ++(0.9,0.9);}
+    \node[font=\footnotesize] at (0.9,-1.35) {reference $\mathcal{B}_0$};
   \end{scope}
-  % current, loaded (right)
-  \begin{scope}[shift={(6.8,0)}]
-    \draw[curbody] plot[smooth cycle,tension=0.9]
-      coordinates {(0,0.05)(1.05,0.5)(1.75,0.1)(1.55,-0.9)(0.55,-1.05)(-0.1,-0.5)};
-    \node[font=\footnotesize] at (0.7,-1.4) {current $\mathcal{B}_t$};
+  % --- grown, stress-free, INCOMPATIBLE (middle): each piece enlarged about
+  %     its own centre + jittered so they overlap and leave gaps ---
+  \begin{scope}[shift={(3.7,0.05)}]
+    \draw[gpiece] (-0.12,0.02) rectangle ++(1.14,1.14);   % top-left, shifted
+    \draw[gpiece] (1.02,0.12)  rectangle ++(1.14,1.14);   % top-right, overlaps
+    \draw[gpiece] (0.06,-1.18) rectangle ++(1.14,1.14);   % bot-left
+    \draw[gpiece] (1.16,-1.08) rectangle ++(1.14,1.14);   % bot-right, gap
+    \node[font=\footnotesize,align=center] at (1.05,-1.7)
+      {grown, stress-free\\\emph{incompatible} $\mathcal{B}_g$};
   \end{scope}
-  % arrows (top: two-step split; bottom: composite, routed well below labels)
-  \draw[cfgmaparrow] (1.6,0.15) to[bend left=18]
-    node[above,font=\small]{$\bm{F}_g$ (growth)} (3.35,0.3);
-  \draw[cfgmaparrow] (5.35,0.3) to[bend left=18]
-    node[above,font=\small]{$\bm{F}_e$ (elastic)} (6.9,0.15);
-  \draw[cfgmaparrow,black!55] (0.4,-2.35) to[bend right=10]
-    node[below,font=\footnotesize,pos=0.5]{$\bm{F}=\bm{F}_e\,\bm{F}_g$} (7.6,-2.05);
+  % --- current, loaded, COMPATIBLE (right): reassembled connected body ---
+  \begin{scope}[shift={(7.6,0)}]
+    \foreach \x in {0,1.02} \foreach \y in {-1.02,0}{
+      \draw[cpiece] (\x,\y) rectangle ++(1.02,1.02);}
+    \node[font=\footnotesize] at (1.02,-1.42) {current $\mathcal{B}_t$};
+  \end{scope}
+  % --- arrows ---
+  \draw[cfgmaparrow] (1.95,0.15) to[bend left=16]
+    node[above,font=\small]{$\bm{F}_g$ (growth, prescribed)} (3.7,0.35);
+  \draw[cfgmaparrow] (6.4,1.35) to[bend left=12]
+    node[above,font=\small,pos=0.4]{$\bm{F}_e$ (elastic, restores fit)} (7.7,0.7);
+  \draw[cfgmaparrow,black!55] (0.5,-2.35) to[bend right=8]
+    node[below,font=\footnotesize,pos=0.5]{$\bm{F}=\bm{F}_e\,\bm{F}_g$} (8.6,-2.15);
+\end{tikzpicture}}
+
+% ---- Humphrey (2021) Fig. 1: finite deformations in a constrained mixture -----
+% Horizontal barrel of stacked ellipse cross-sections = tissue evolving from
+% kappa(0) -> kappa(tau) -> kappa(s); a deposited constituent sits at its own
+% stress-free natural config kappa_n^alpha(tau) above kappa(tau), carried in by
+% the deposition stretch G^alpha(tau); F_{n(tau)}^alpha(s) is the constituent-
+% specific deformation; F(tau), F(s) are the tissue-level deformations.
+\newcommand{\humphreygr}[1][1.0]{%
+\begin{tikzpicture}[scale=#1,every node/.style={font=\small},
+    ell/.style={draw=black!65,thick,fill=black!12},
+    ellface/.style={draw=black!75,very thick,fill=black!18},
+    grarr/.style={-{Latex[length=2.4mm]},very thick,black!78},
+    tisarr/.style={-{Latex[length=2.2mm]},thick,black!70}]
+  \def\ry{0.85}   % ellipse vertical radius
+  \def\rx{0.30}   % ellipse horizontal radius
+  % --- barrel: many faint ellipses stacked left->right ---
+  \foreach \i in {0,1,...,16}{
+    \pgfmathsetmacro\xx{0.6+\i*0.32}
+    \draw[ell,fill opacity=0.85] (\xx,0) ellipse [x radius=\rx, y radius=\ry];}
+  % --- three labeled cross-sections: kappa(0), kappa(tau), kappa(s) ---
+  \draw[ellface] (0.6,0)  ellipse [x radius=\rx, y radius=\ry];   % kappa(0)
+  \draw[ellface] (3.16,0) ellipse [x radius=\rx, y radius=\ry];   % kappa(tau)  (i=8)
+  \draw[ellface] (5.72,0) ellipse [x radius=\rx, y radius=\ry];   % kappa(s)    (i=16)
+  \node[font=\footnotesize] at (0.6,0)  {$\kappa(0)$};
+  \node[font=\footnotesize] at (3.16,0) {$\kappa(\tau)$};
+  \node[font=\footnotesize] at (5.72,0) {$\kappa(s)$};
+  % dash-dot centre axis extending both ends
+  \draw[densely dashdotted,black!55] (-0.5,0)--(0.28,0);
+  \draw[densely dashdotted,black!55] (6.04,0)--(6.9,0);
+  \node[align=center,font=\footnotesize,black!75] at (7.0,-0.55)
+    {Growth \&\\Remodeling};
+  % --- deposited constituent at its stress-free natural config (top) ---
+  \node[circle,draw=black!70,thick,fill=black!22,minimum size=6pt,inner sep=0pt]
+    (kn) at (2.55,2.25) {};
+  \node[anchor=east,font=\footnotesize] at (2.42,2.35) {$\kappa_n^{\alpha}(\tau)$};
+  % two small chained blobs suggesting the constituent chain
+  \fill[black!22,draw=black!70] (2.68,1.95) circle (2.2pt);
+  \fill[black!22,draw=black!70] (2.82,1.68) circle (2.0pt);
+  % deposition stretch G^alpha(tau): from natural config down into kappa(tau)
+  \draw[grarr] (2.78,1.55) to[bend left=25]
+    node[left,font=\small,pos=0.55]{$\bm{G}^{\alpha}(\tau)$} (3.02,0.7);
+  % constituent-specific deformation F_{n(tau)}^alpha(s): natural config -> right
+  \draw[grarr] (2.95,2.35) to[bend left=20]
+    node[above,font=\small,pos=0.5]{$\bm{F}^{\alpha}_{n(\tau)}(s)$} (5.5,1.15);
+  % --- tissue-level deformations underneath ---
+  \draw[tisarr] (0.7,-1.05) to[bend right=22]
+    node[below,font=\small,pos=0.5]{$\bm{F}(\tau)$} (3.06,-1.05);
+  \draw[tisarr] (0.7,-1.55) to[bend right=20]
+    node[below,font=\small,pos=0.55]{$\bm{F}(s)$} (5.62,-1.55);
+\end{tikzpicture}}
+
+% ---- Cyron (2016) Fig. 2 (right): mechanical analog for mass turnover ---------
+% A motor element (circle) exerting the prestress sigma_pre in PARALLEL with a
+% Maxwell material = dashpot (time constant rho-dot0/rho0 + 1/T) in SERIES with a
+% (nonlinear) spring of stiffness C. Load sigma applied top and bottom.
+\newcommand{\maxwellelement}[1][1.0]{%
+\begin{tikzpicture}[scale=#1,line width=1pt,black!85,every node/.style={font=\small}]
+  % geometry
+  \def\xm{0}      % Maxwell arm x
+  \def\xp{3.2}    % motor arm x
+  \def\ytop{4.6}
+  \def\ybot{0}
+  % top & bottom load leads with sigma
+  \draw (\xm,\ytop)--(\xp,\ytop);                 % top rail
+  \draw (\xm,\ybot)--(\xp,\ybot);                 % bottom rail
+  \coordinate (topmid) at ($(\xm,\ytop)!0.5!(\xp,\ytop)$);
+  \coordinate (botmid) at ($(\xm,\ybot)!0.5!(\xp,\ybot)$);
+  \draw (topmid)--++(0,0.7) node[above,font=\normalsize]{$\bm{\sigma}^i$};
+  \draw[-{Latex[length=2mm]}] (topmid)++(0,0.62)--++(0,0.28);
+  \draw (botmid)--++(0,-0.7) node[below,font=\normalsize]{$\bm{\sigma}^i$};
+  \draw[-{Latex[length=2mm]}] (botmid)++(0,-0.62)--++(0,-0.28);
+  % ===== Maxwell arm (left): dashpot on top, spring below =====
+  % lead from top rail down to dashpot
+  \draw (\xm,\ytop)--(\xm,4.15);
+  % dashpot: cylinder + piston
+  \draw (\xm-0.32,4.15)--(\xm-0.32,3.5)--(\xm+0.32,3.5)--(\xm+0.32,4.15); % cylinder (open top)
+  \draw[line width=3pt] (\xm-0.22,3.95)--(\xm+0.22,3.95);                 % piston plate
+  \draw (\xm,4.15)--(\xm,3.95);                                          % piston rod
+  \node[right,font=\footnotesize,align=left] at (\xm+0.5,3.82)
+    {$\dfrac{\dot\varrho_0^{\,i}}{\varrho_0^{\,i}}+\dfrac{1}{T^{i}}$};
+  % series link dashpot -> spring
+  \draw (\xm,3.5)--(\xm,3.1);
+  % spring (zig-zag) 3.1 -> 1.5
+  \draw (\xm,3.1)
+    --(\xm-0.28,2.95)--(\xm+0.28,2.75)--(\xm-0.28,2.55)--(\xm+0.28,2.35)
+    --(\xm-0.28,2.15)--(\xm+0.28,1.95)--(\xm-0.28,1.75)--(\xm,1.6)--(\xm,1.5);
+  \node[right,font=\footnotesize] at (\xm+0.42,2.35) {$\mathbb{C}^{i}$};
+  % lead spring -> bottom rail
+  \draw (\xm,1.5)--(\xm,\ybot);
+  % ===== Motor / prestress arm (right): circle with sigma_pre =====
+  \draw (\xp,\ytop)--(\xp,3.15);
+  \draw (\xp,3.15) circle (0.42);
+  \node[left,font=\footnotesize] at (\xp-0.6,3.15) {$\bar{\bm{\sigma}}^{i}_{\text{pre}}$};
+  \draw (\xp,2.73)--(\xp,\ybot);
 \end{tikzpicture}}
 
 % ---- constrained mixture: cohorts, each its own natural configuration ------

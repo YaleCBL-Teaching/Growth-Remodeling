@@ -7,18 +7,40 @@
 \end{frame}
 
 \begin{frame}[t]{The Idea, and the Kinematics}
-  Postulate a stress-free \textbf{growth} deformation; only the elastic part
-  carries load. Growth is one scalar $\theta$ (radial thickening):
-  \giveneq{\bm{F} = \bm{F}_e\,\bm{F}_g,\qquad \frac{M}{M_0}=\theta,\qquad
+  Postulate a stress-free \textbf{growth} deformation $\bm{F}_g$; only the elastic
+  part $\bm{F}_e$ carries load.
+  \dlab{general form --- tensor split}
+  \giveneq{\bm{F} = \bm{F}_e\,\bm{F}_g,\qquad
     \text{only }\bm{F}_e\text{ stores energy.}}
+  Grown pieces need not fit together --- $\bm{F}_g$ leaves an \emph{incompatible}
+  stress-free state; $\bm{F}_e$ forces them back into one body (residual stress).
   \vfill
-  \begin{center}\kinmap[1.05]\end{center}
+  \begin{center}\kinmap[1.0]\end{center}
   \vfill
 \end{frame}
 
+\begin{frame}[t]{The Growth Tensor Must Be Prescribed}
+  $\bm{F}_g$ is \textbf{chosen by the modeler}, not derived --- it encodes
+  \emph{how} the tissue is assumed to add mass. A common choice for an artery is
+  transverse (wall-thickening) growth along the radial direction $\bm{e}_r$:
+  \dlab{prescribed growth tensor --- this is an \emph{input}}
+  \slboxeq{2.6em}{eq:growthtensor}{\bm{F}_g = \bm{I} + (\theta-1)\,
+    \bm{e}_r\!\otimes\bm{e}_r
+    \;=\;\mathrm{diag}(1,\,1,\,\theta)}
+  \zlab{the one scalar that actually evolves}
+  \giveneq{\theta = \frac{M}{M_0}\ \ (\text{mass / volume ratio}),\qquad
+    \det\bm{F}_g=\theta.}
+  Everything about the growth \emph{pattern} is fixed a priori; only the scalar
+  \textbf{growth stretch} $\theta$ is left to evolve in time --- and that is what
+  the growth law drives.
+  \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
+\end{frame}
+
 \begin{frame}[t]{The Growth Law}
-  Growth nulls the stress deviation from the set-point (first-order, production
-  $\propto$ current mass):
+  The growth \emph{pattern} $\bm{F}_g$ is fixed; the growth law evolves its single
+  scalar $\theta$ to null the stress deviation from the set-point (first-order,
+  production $\propto$ current mass):
+  \zlab{scalar evolution of $\theta$ (the only unknown in $\bm{F}_g$)}
   \slboxeq{2.6em}{eq:kingrowth}{\frac{\dd\theta}{\dd t}
     = k_g\,\theta\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right)}
   The set-point $\bar\sigma_h$ is \textbf{prescribed}: wherever growth stops

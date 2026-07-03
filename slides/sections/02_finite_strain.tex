@@ -18,49 +18,52 @@
 
 \begin{frame}[t]{The Deformation Gradient}
   How a line element transforms is the key kinematic quantity --- the
-  \textbf{deformation gradient} $\bm{F}=\partial\bm{x}/\partial\bm{X}$ maps
-  reference line elements to current ones:
+  \textbf{deformation gradient} maps reference line elements to current ones.
+  \dlab{general form --- a tensor}
   \slboxeq{2.4em}{eq:defgrad}{\dd\bm{x} = \bm{F}\,\dd\bm{X},\qquad
-    \bm{F}=\frac{\partial\bm{\varphi}}{\partial\bm{X}}}
-  Its determinant $J=\det\bm{F}$ is the volume ratio; \textbf{elastic
-  incompressibility} means $J_e=1$ (only growth changes volume). Reducing to one
-  dominant direction, $\bm{F}$ collapses to a single scalar \textbf{stretch}
-  \giveneq{\lambda=\frac{\text{current length}}{\text{reference length}},\qquad
-    \lambda=1\ \text{undeformed}.}
+    \bm{F}=\frac{\partial\bm{\varphi}}{\partial\bm{X}},\qquad J=\det\bm{F}}
+  $J$ is the volume ratio; \textbf{elastic incompressibility} means $J_e=1$ (only
+  growth changes volume).
+  \zlab{reduction used here --- one dominant direction}
+  \giveneq{\bm{F}\ \longrightarrow\ \lambda=\frac{\text{current length}}
+    {\text{reference length}},\qquad \lambda=1\ \text{undeformed}.}
 \end{frame}
 
 \begin{frame}[t]{Strain --- A Rotation-Free Measure of Stretching}
   $\bm{F}$ still contains rigid rotation. Removing it gives the \textbf{right
-  Cauchy--Green} tensor and the \textbf{Green--Lagrange strain}:
+  Cauchy--Green} tensor and the \textbf{Green--Lagrange strain}.
+  \dlab{general form --- tensors}
   \slboxeq{2.4em}{eq:strain}{\bm{C}=\bm{F}^{\!\top}\bm{F},\qquad
     \bm{E}=\tfrac12\!\left(\bm{C}-\bm{I}\right)}
-  $\bm{E}=\bm{0}$ at no deformation. In 1D, $C=\lambda^2$ and
-  $E=\tfrac12(\lambda^2-1)$ --- and the fiber invariant $I_4=\lambda_e^2$ used
-  below is exactly $\bm{C}$ read along a fiber.
+  \zlab{reduction used here --- along one fiber}
+  \giveneq{C=\lambda^2,\qquad E=\tfrac12(\lambda^2-1),\qquad I_4=\lambda_e^2.}
+  The fiber invariant $I_4$ is just $\bm{C}$ read along a fiber direction.
 \end{frame}
 
 \begin{frame}[t]{Stress --- Force per Current Area}
-  We report the \textbf{Cauchy (true) stress} $\sigma$: force per unit
-  \emph{current} area --- the physically meaningful measure for a growing body,
-  because the load-bearing area itself changes as the tissue remodels. It is what
-  enters the Laplace law \eqref{eq:laplace}.
-  \vspace{0.4em}
-
-  \begin{itemize}\small
-    \item Reference-area measures (1st/2nd Piola--Kirchhoff) exist too, but for a
-    remodeling tissue ``per current area'' is the natural bookkeeping.
-    \item Balance of linear momentum in the current configuration reduces, for our
-    quasi-static thin-walled vessel, to exactly the Laplace relation.
-  \end{itemize}
+  We report the \textbf{Cauchy (true) stress}: force per unit \emph{current} area
+  --- the natural measure for a growing body, since the load-bearing area itself
+  changes as the tissue remodels.
+  \dlab{general form --- a tensor (from the 2nd Piola--Kirchhoff $\bm{S}$)}
+  \giveneq{\bm{\sigma}=\tfrac1J\,\bm{F}\,\bm{S}\,\bm{F}^{\!\top},\qquad
+    \bm{S}=2\,\frac{\partial W}{\partial\bm{C}}.}
+  \zlab{reduction used here --- one scalar}
+  \giveneq{\bm{\sigma}\ \longrightarrow\ \sigma\ \text{(the value in Laplace,
+    \eqref{eq:laplace})}.}
+  Balance of linear momentum in the current configuration reduces, for our
+  quasi-static thin-walled vessel, to exactly that Laplace relation.
 \end{frame}
 
 \begin{frame}[t]{Hyperelasticity: Stress from a Stored-Energy Function}
-  A \textbf{hyperelastic} material stores energy $W(\lambda_e)$ and its stress is
-  the derivative --- no dissipation, path-independent:
-  \slboxeq{2.4em}{eq:hyper}{\sigma \;=\; \lambda_e\,\frac{\dd W}{\dd\lambda_e}}
-  \textbf{Elastin --- neo-Hookean} $W_e=c_e(I_1-3)$ (soft, barely stiffening):
-  \giveneq{\sigma_e(\lambda_e)=c_e\!\left(\lambda_e^2-\tfrac{1}{\lambda_e}\right).}
-  \textbf{Collagen \& SMC --- Fung fiber} (crimped, then stiffens steeply):
+  A \textbf{hyperelastic} material stores energy $W$ and its stress is a
+  derivative of it --- no dissipation, path-independent.
+  \dlab{general form --- tensor derivative}
+  \giveneq{\bm{S}=2\,\frac{\partial W(\bm{C})}{\partial\bm{C}}.}
+  \zlab{reduction used here --- scalar derivative}
+  \slboxeq{2.2em}{eq:hyper}{\sigma \;=\; \lambda_e\,\frac{\dd W}{\dd\lambda_e}}
+  \textbf{Elastin} (neo-Hookean, soft):
+  $\sigma_e=c_e(\lambda_e^2-\lambda_e^{-1})$. \quad
+  \textbf{Collagen \& SMC} (Fung fiber, stiffens steeply):
   \slboxeq{2.6em}{eq:fung}{\sigma(\lambda_e)=c_1\,\lambda_e^2(\lambda_e^2-1)\,
     e^{\,c_2(\lambda_e^2-1)^2},\qquad I_4=\lambda_e^2}
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
@@ -88,14 +91,16 @@
 
 \begin{frame}[t]{Multiplicative Decomposition --- Growth vs.\ Elasticity}
   Split the deformation into a stress-free \textbf{inelastic} part (growth /
-  remodeling) and an \textbf{elastic} part --- the only part that carries stress:
-  \slboxeq{2.4em}{eq:split}{\lambda = \lambda_e \,\lambda_{\text{inel}}}
+  remodeling) and an \textbf{elastic} part --- the only part that carries stress.
+  \dlab{general form --- a product of tensors}
+  \giveneq{\bm{F}=\bm{F}_e\,\bm{F}_{\text{inel}}.}
+  \zlab{reduction used here --- scalar stretches}
+  \slboxeq{2.2em}{eq:split}{\lambda = \lambda_e \,\lambda_{\text{inel}}}
   \begin{itemize}\small
     \item \textbf{Kinematic growth}: \emph{one} split, an inelastic growth stretch.
     \item \textbf{Constrained mixtures}: each cohort its own natural
     configuration, superposed.
   \end{itemize}
-  \vspace{0.3em}
   The set-point \eqref{eq:setpoint} and the split \eqref{eq:split} recur in every
   model that follows.
 \end{frame}
