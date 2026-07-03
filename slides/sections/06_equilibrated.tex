@@ -2,7 +2,7 @@
 %  SECTION 6 — Equilibrated constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 7.\ \ Equilibrated CMM}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} Equilibrated CMM}\\[0.5em]
   {\color{BoxGray} Latorre \& Humphrey (2018)}\end{center}\vfill
 \end{frame}
 
@@ -40,15 +40,11 @@
   Equation \eqref{eq:equil} may have \textbf{no physical root} --- then no adapted
   state exists and the transient theories dilate without bound. The solver is
   therefore the cleanest \textbf{stability test}: root $\Rightarrow$ adapts, no root
-  $\Rightarrow$ unstable.
-  \bigfigw{fig05_equilibrated.pdf}{0.78\linewidth}{Equilibrated solution matches
-  the transient end-state where a root exists; near the boundary the transient
-  slows critically.}
-  \begin{center}\color{AccentRed}\small
-  Learning: the equilibrated model matches the transient theories \emph{iff} an
-  equilibrium exists.
-  \end{center}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  $\Rightarrow$ unstable. Near the boundary the transient slows critically, which
+  is exactly why the instant algebraic test is so useful.
+  \vfill
+  {\footnotesize\color{BoxGray} You will check the match and hunt for the critical
+  elastin loss in the exercise next.}
 \end{frame}
 
 
@@ -70,11 +66,14 @@
 \begin{frame}[t]{}
   \begin{answerbox}{Equilibrated}
     Where a root exists, the equilibrated solve lands exactly on the transient
-    end-state. Below $s_{\text{crit}}$ there is \emph{no} root --- and the transient
+    end-state. Below $s_{\text{crit}}$ there is \emph{no} root --- the transient
     dilates without bound.
-    \par\smallskip
-    {\color{ABlue}\bfseries Learning.} The equilibrated model \textbf{matches} the
-    transient theories \emph{if} an equilibrium exists --- and flags, by failing to
-    find one, exactly when it does not.
   \end{answerbox}
+  \vspace{-0.3em}
+  \bigfigw{fig05_equilibrated.pdf}{0.66\linewidth}{Your run: equilibrated end-state
+  on the transient plateau where a root exists; near the boundary, critical slowing.}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  \vspace{-0.4em}
+  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} \textbf{matches} the
+  transient theories \emph{if} an equilibrium exists --- and flags when it does not.\end{center}
 \end{frame}

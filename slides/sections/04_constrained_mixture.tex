@@ -2,7 +2,7 @@
 %  SECTION 4 — Full constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 5.\ \ Constrained mixture (full)}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} Constrained mixture (full)}\\[0.5em]
   {\color{BoxGray} Humphrey \& Rajagopal (2002) --- the heart of the lecture}\end{center}\vfill
 \end{frame}
 
@@ -64,13 +64,15 @@
 
 \begin{frame}[t]{What it buys you: stability is \emph{predicted}}
   \emph{Nothing} prescribes the outcome --- adaptation or dilation \textbf{emerges}
-  from the turnover dynamics and the insult.
-  \bigfigw{fig03_constrained_mixture.pdf}{0.78\linewidth}{Under hypertension
-  collagen and muscle grow, elastin is diluted, and tissue stress returns to
-  homeostatic.}
-  {\color{AccentRed}\small The price: history integrals make the model $O(N^2)$ in
-  time steps --- the motivation for the homogenized model (§6).}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  from the turnover dynamics and the insult. Under hypertension the model grows
+  collagen and muscle while elastin is diluted, and tissue stress returns to
+  homeostatic on its own.
+  \vfill
+  {\color{AccentRed} The price: the history integrals make the model $O(N^2)$ in
+  time steps --- the motivation for the homogenized model.}
+  \vfill
+  {\footnotesize\color{BoxGray} You will run this insult and see the adaptation in
+  the exercise next.}
 \end{frame}
 
 
@@ -94,8 +96,12 @@
     Mild hypertension \textbf{adapts}: collagen and SMC grow, tissue stress returns
     to homeostatic. A severe elastin insult can \textbf{run away}. Faster turnover
     / higher gain reach the new state sooner.
-    \par\smallskip
-    {\color{ABlue}\bfseries Learning.} Stability is \emph{predicted}, and it
-    \textbf{depends on the insult} --- not fixed in advance.
   \end{answerbox}
+  \vspace{-0.3em}
+  \bigfigw{fig03_constrained_mixture.pdf}{0.66\linewidth}{Your run: under
+  hypertension collagen/muscle grow, elastin dilutes, stress returns to set-point.}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  \vspace{-0.4em}
+  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} stability is
+  \emph{predicted}, and it \textbf{depends on the insult}.\end{center}
 \end{frame}

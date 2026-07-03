@@ -2,7 +2,7 @@
 %  SECTION 5 — Homogenized constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 6.\ \ Homogenized CMM}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} Homogenized CMM}\\[0.5em]
   {\color{BoxGray} Cyron, Aydin \& Humphrey (2016)}\end{center}\vfill
 \end{frame}
 
@@ -37,14 +37,18 @@
 \end{frame}
 
 \begin{frame}[t]{It tracks the full model closely --- much cheaper}
-  \bigfigw{fig04_compare_all.pdf}{0.82\linewidth}{Homogenized (dashed orange) sits
-  almost on the full CMM (black); kinematic growth (blue) under-responds to elastin
-  loss --- it grows constituents in lockstep and cannot remodel them individually.}
+  Two ODEs per constituent replace the full deposition history. The homogenized
+  trajectory sits almost on the full constrained mixture, while kinematic growth
+  under-responds to elastin loss --- it grows constituents in lockstep and cannot
+  remodel their natural configurations individually.
+  \vfill
   \begin{center}\color{AccentRed}
-  Learning: the homogenized model follows the full model's \emph{time trajectory}
-  closely.
+  The homogenized model follows the full model's \emph{time trajectory} closely,
+  at $O(N)$ instead of $O(N^2)$.
   \end{center}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  \vfill
+  {\footnotesize\color{BoxGray} You will overlay the two models and measure the gap
+  in the exercise next.}
 \end{frame}
 
 
@@ -63,10 +67,11 @@
 
 \begin{frame}[t]{}
   \begin{answerbox}{Homogenized vs.\ full}
-    The homogenized curve overlays the full CMM closely across the transient, at a
-    fraction of the runtime ($O(N)$ vs.\ $O(N^2)$).
-    \par\smallskip
-    {\color{ABlue}\bfseries Learning.} The homogenized model reproduces a
-    \textbf{similar time trajectory} to the full model --- cheaply.
+    The homogenized curve overlays the full CMM closely at a fraction of the
+    runtime ($O(N)$ vs.\ $O(N^2)$). {\color{ABlue}\bfseries Learning:} it reproduces
+    a \textbf{similar time trajectory} to the full model --- cheaply.
   \end{answerbox}
+  \vspace{-0.4em}
+  \bigfigw{fig04_compare_all.pdf}{0.52\linewidth}{Your overlay: homogenized (dashed)
+  on the full CMM (black); kinematic growth (blue) under-responds.}
 \end{frame}

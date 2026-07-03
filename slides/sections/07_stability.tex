@@ -2,7 +2,7 @@
 %  SECTION 7 — Stability capstone
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 8.\ \ Stability}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} Stability}\\[0.5em]
   {\color{BoxGray} adaptation vs.\ aneurysm --- the one big question}\end{center}\vfill
 \end{frame}
 
@@ -20,11 +20,11 @@
 \begin{frame}[t]{Same tissue, two insults}
   Read stability two ways: \textbf{existence} --- the equilibrated equation
   \eqref{eq:equil} has a root iff the tissue can adapt (no time integration); or
-  \textbf{transient} --- integrate and watch it plateau or climb.
-  \bigfigw{fig06_stability.pdf}{0.80\linewidth}{Retaining 30\% elastin the artery
-  adapts (blue); retaining 3\% it dilates without bound (red). Map computed from the
-  equilibrated existence test.}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  \textbf{transient} --- integrate and watch it plateau or climb. The same tissue
+  can do either: mild elastin loss adapts, severe loss dilates without bound.
+  \vfill
+  {\footnotesize\color{BoxGray} You will map the stable / unstable boundary and move
+  it by changing one tissue property in the exercise next.}
 \end{frame}
 
 \begin{frame}[t]{How the four theories answer --- the takeaways}
@@ -77,8 +77,12 @@
     Higher gain, stiffer collagen, or larger deposition stretch all enlarge the
     \emph{adapts} region --- the tissue tolerates a stronger insult before running
     away.
-    \par\smallskip
-    {\color{ABlue}\bfseries Learning.} The same existence test that defines the
-    equilibrium boundary \emph{is} the stability criterion.
   \end{answerbox}
+  \vspace{-0.3em}
+  \bigfigw{fig06_stability.pdf}{0.66\linewidth}{Your map: 30\% elastin adapts (blue),
+  3\% dilates without bound (red). Boundary from the equilibrated existence test.}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  \vspace{-0.4em}
+  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} the existence test
+  that defines the equilibrium boundary \emph{is} the stability criterion.\end{center}
 \end{frame}

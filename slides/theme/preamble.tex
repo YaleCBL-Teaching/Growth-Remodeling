@@ -43,12 +43,15 @@
 \setbeamersize{text margin left=1.2em,text margin right=1.2em}
 
 % footline: course tag + slide number
+% Lower-left carries the slide's reference (set via \srccite), not a running
+% title; lower-right the frame number. The stored reference resets each shipout.
 \setbeamertemplate{footline}{%
   \leavevmode\hbox{%
     \begin{beamercolorbox}[wd=\paperwidth,ht=2.4ex,dp=1.1ex,leftskip=1.2em,rightskip=1.2em]{}%
-      {\scriptsize\color{BoxGray} Growth \& Remodeling of Soft Tissue\hfill
-       \insertframenumber}%
+      {\scriptsize\color{BoxGray}\itshape\sliderefstore\hfill
+       \upshape\insertframenumber}%
     \end{beamercolorbox}}%
+  \gdef\sliderefstore{}%
 }
 
 % ============================================================================
@@ -88,9 +91,10 @@
 
 % ---- per-slide source citation, required format ----------------------------
 % "First, ..., Last, short journal (year)"
-\newcommand{\srccite}[1]{%
-  \par\vspace{0.25em}{\scriptsize\color{BoxGray}\itshape Source: #1}%
-}
+% The reference is not printed in the slide body; it is stashed and shown in the
+% lower-left footline (see the footline template above). Reset each shipout.
+\newcommand{\sliderefstore}{}
+\newcommand{\srccite}[1]{\gdef\sliderefstore{#1}}
 % bottom-right floating credit for a figure
 \newcommand{\figcredit}[1]{%
   \begin{flushright}\vspace{-0.6em}{\tiny\color{BoxGray} #1}\end{flushright}%

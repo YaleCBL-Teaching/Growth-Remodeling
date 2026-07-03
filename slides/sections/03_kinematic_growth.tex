@@ -2,7 +2,7 @@
 %  SECTION 3 — Kinematic growth
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 4.\ \ Kinematic growth}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} Kinematic growth}\\[0.5em]
   {\color{BoxGray} Rodriguez, Hoger \& McCulloch (1994)}\end{center}\vfill
 \end{frame}
 
@@ -31,13 +31,11 @@
 
 \begin{frame}[t]{Stability is imposed, not predicted}
   Growth is stable iff adding mass \emph{lowers} the stress it must carry,
-  $\left.\dd\bar\sigma/\dd\theta\right|_{\theta^*}<0$ --- always true for the
-  \textbf{bar}, but a strong enough insult flips the sign for the \textbf{artery}
-  (Laplace $\lambda^2$) and growth runs away.
-  \bigfigw{fig02_kinematic_growth.pdf}{0.78\linewidth}{Kinematic growth either
-  converges to the \emph{prescribed} set-point or diverges --- it cannot
-  \emph{predict} stability from turnover.}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  \giveneq{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0.}
+  This always holds for the \textbf{bar}, but a strong enough insult flips the sign
+  for the \textbf{artery} (Laplace $\lambda^2$) and growth runs away. The set-point
+  is \emph{prescribed}, so the model cannot \emph{predict} stability from turnover
+  --- it can only impose it. \emph{You will see the two outcomes yourself next.}
 \end{frame}
 
 % ---- interactive coding exercise: ex02 -------------------------------------
@@ -57,12 +55,15 @@
 
 \begin{frame}[t]{}
   \begin{answerbox}{Kinematic growth}
-    The stress plateau \emph{always} lands on the set-point --- stability is
-    \textbf{imposed}, not predicted. The bar is unconditionally stable; the artery
+    The stress plateau \emph{always} lands on the set-point; the artery
     (Laplace $\lambda^2$) tips into runaway once \texttt{PRESSURE\_FACTOR} is large
-    enough.
-    \par\smallskip
-    {\color{ABlue}\bfseries Learning.} Kinematic growth reaches the a-priori
-    prescribed homeostasis, \emph{or} it is unstable --- nothing in between.
+    enough, the bar never does.
   \end{answerbox}
+  \vspace{-0.3em}
+  \bigfigw{fig02_kinematic_growth.pdf}{0.66\linewidth}{Your numerical experiment:
+  convergence to the \emph{prescribed} set-point, or divergence.}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+  \vspace{-0.4em}
+  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} reaches the a-priori
+  prescribed homeostasis, \emph{or} it is unstable --- nothing in between.\end{center}
 \end{frame}
