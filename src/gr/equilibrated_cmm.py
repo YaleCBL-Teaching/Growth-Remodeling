@@ -103,7 +103,7 @@ def solve(
     def g(lam: float) -> float:
         return (
             phi_e0 * s
-            + s * (model.sigma_bar_h - elastin.law.stress(elastin.G * lam)) / denom
+            + s * (model.sigma_bar_h - elastin.law.stress_cauchy(elastin.G * lam)) / denom
             - gamma * lam**n
         )
 
@@ -125,7 +125,7 @@ def solve(
     lam = min(roots, key=lambda x: abs(x - 1.0))
 
     # back out the turnover growth factor beta and the evolved masses
-    beta = s * (model.sigma_bar_h - elastin.law.stress(elastin.G * lam)) / denom / phi_turn0
+    beta = s * (model.sigma_bar_h - elastin.law.stress_cauchy(elastin.G * lam)) / denom / phi_turn0
     mass = gamma * lam**n                  # M/M_0 from Laplace at sigma_bar = sigma_bar_h
     masses = {"elastin": phi_e0 * s}
     for c in turnover:

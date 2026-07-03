@@ -2,68 +2,105 @@ r"""
 Finite-strain constitutive mechanics — the *shared* material behaviour used by
 **all four** G&R theories in this package.
 
-Every theory in this repository (kinematic growth, full / homogenized /
-equilibrated constrained mixture) plugs into the *same* constitutive laws
-defined here.  That is deliberate: the theories must differ only in **how the
-tissue evolves**, never in the underlying elasticity, so that any difference you
-see in the exercises is caused by the growth-and-remodeling law and nothing
+Every theory (kinematic growth, full / homogenized / equilibrated constrained
+mixture) plugs into the *same* constitutive laws defined here, so any difference
+you see in the exercises is caused by the growth-and-remodeling law and nothing
 else.
 
 -------------------------------------------------------------------------------
-Notation (see docs/02_finite_strain.md for the full development)
+Everything is grounded in the REFERENCE configuration
 -------------------------------------------------------------------------------
-We work with a single scalar stretch per constituent, because both the 1D bar
-and the thin-walled artery reduce the mechanics to one dominant direction:
+Following finite-strain theory (see docs/02_finite_strain.md), a constituent's
+elastic response is written with **reference-configuration** strain and stress
+measures — the ones referred to its own natural (stress-free) configuration:
 
-    lambda_e   elastic stretch of a constituent = (current length)
-                                                   / (its own natural length)
+    lambda_e   elastic stretch  (current length / natural length)
+    E_e = 1/2 (lambda_e^2 - 1)        Green-Lagrange strain      (reference)     (M0)
+    W(lambda_e)                       strain energy per unit reference volume
+    S = dW/dE_e                       2nd Piola-Kirchhoff stress (reference)     (M1)
 
-The Cauchy (true) stress carried by a constituent is a function sigma(lambda_e).
-A constituent is **stress-free** at lambda_e = 1 and, in this package, is
-**deposited** by the cells at a homeostatic pre-stretch lambda_e = G (the
-deposition stretch, > 1 for fibers laid down under tension; see biology §1.3).
+The two are work-conjugate (S : dE_e is the stress power per reference volume),
+which is exactly what "grounded in the reference configuration" means.  From S we
+obtain, when a *spatial* quantity is genuinely needed (e.g. the Laplace balance
+of a pressurised artery), the **nominal (1st PK)** and **Cauchy (true)** stresses
+by explicit push-forward — for a 1-D incompressible fiber (J = 1):
 
-Two constitutive laws cover the arterial constituents:
+    stress_pk1 = lambda_e * S    1st Piola-Kirchhoff / nominal  (force / REFERENCE area) (M2)
+    stress_cauchy = lambda_e^2 S Cauchy / true                  (force / current area)   (M3)
 
-  * Elastin  -> incompressible neo-Hookean fiber (soft, non-stiffening)
-        sigma(l) = c * (l**2 - 1/l)                                       (M1)
+A constituent is stress-free at lambda_e = 1 and is **deposited** by the cells at
+a homeostatic pre-stretch lambda_e = G (the deposition stretch, > 1 for fibers
+laid down under tension; see biology §1.3).
 
-  * Collagen / smooth muscle -> Fung-type exponential fiber (stiffening)
-        psi(l)   = c1/(4 c2) * ( exp[c2 (l**2 - 1)**2] - 1 )             (M2)
-        sigma(l) = c1 * l**2 * (l**2 - 1) * exp[c2 (l**2 - 1)**2]        (M3)
+-------------------------------------------------------------------------------
+The two constituent strain-energy functions (per unit reference volume)
+-------------------------------------------------------------------------------
+  * Elastin  -> incompressible neo-Hookean (soft, non-stiffening):
+        W_e = (c/2) (I1 - 3),  I1 = lambda_e^2 + 2/lambda_e
+        S_e = c (1 - lambda_e^{-3})                                            (NH)
 
-Each law also exposes its **material tangent** d(sigma)/d(lambda_e).  The tangent
-is needed twice: (i) Newton solves for mechanical equilibrium, and (ii) the
-linear-stability analysis in docs/07_stability.md, where the *sign* of the
-stiffness sets whether growth is self-limiting or runs away.
+  * Collagen / SMC -> Fung-type exponential fiber (stiffening), I4 = lambda_e^2:
+        W   = c1/(4 c2) ( exp[c2 (I4 - 1)^2] - 1 )
+        S   = c1 (lambda_e^2 - 1) exp[c2 (lambda_e^2 - 1)^2]                   (FUNG)
+
+Both push forward (M3) to the same Cauchy stresses used before this refactor, so
+the numerical results are unchanged — only the *formulation* is now referential.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 
+def strain_gl(lam: float):
+    r"""Elastic Green-Lagrange strain E_e = 1/2 (lambda_e^2 - 1), Eq. (M0).
+
+    A purely kinematic, reference-configuration strain measure (same for every
+    constituent); E_e = 0 in the natural configuration.
+    """
+    return 0.5 * (lam**2 - 1.0)
+
+
 class MaterialLaw:
-    """Base class: a 1D hyperelastic fiber law sigma(lambda_e)."""
+    """Base class: a 1-D hyperelastic fiber written in reference measures.
 
-    def stress(self, lam: float) -> float:
-        """Cauchy (true) stress at elastic stretch ``lam``."""
+    Subclasses provide the strain energy ``energy`` and the 2nd Piola-Kirchhoff
+    stress ``stress_pk2``; the nominal and Cauchy stresses are derived here by
+    push-forward, Eqs. (M2)-(M3).
+    """
+
+    # --- reference-configuration quantities (primary) ------------------------
+    def energy(self, lam: float) -> float:
+        """Strain energy per unit reference volume W(lambda_e)."""
         raise NotImplementedError
 
-    def tangent(self, lam: float) -> float:
-        """Material tangent d(sigma)/d(lam)."""
+    def stress_pk2(self, lam: float) -> float:
+        """2nd Piola-Kirchhoff stress S = dW/dE_e, Eq. (M1)  (reference config)."""
         raise NotImplementedError
+
+    # --- push-forwards (derived; used only where a spatial stress is needed) --
+    def stress_pk1(self, lam: float):
+        """Nominal (1st PK) stress = lambda_e * S, Eq. (M2)  (force / reference area)."""
+        return lam * self.stress_pk2(lam)
+
+    def stress_cauchy(self, lam: float):
+        """Cauchy (true) stress sigma = lambda_e^2 S, Eq. (M3)  (push-forward, J=1).
+
+        This is the *spatial* stress that enters the Laplace / dead-load balance
+        (``gr.geometry``) and the intramural-stress growth stimulus.  It is a
+        derived quantity — the constitutive law itself lives in the reference
+        configuration via ``stress_pk2``.
+        """
+        return lam**2 * self.stress_pk2(lam)
 
 
 @dataclass(frozen=True)
 class NeoHookean(MaterialLaw):
     r"""
-    Incompressible neo-Hookean fiber, Eq. (M1).
+    Incompressible neo-Hookean, Eq. (NH) — elastin (soft, mildly nonlinear).
 
-        sigma(l) = c (l^2 - 1/l),      d sigma/dl = c (2 l + 1/l^2)
-
-    Soft and only mildly nonlinear — the right description for **elastin**, which
-    behaves like a rubber and does *not* stiffen appreciably over the
-    physiological range.
+        W_e = (c/2)(lambda_e^2 + 2/lambda_e - 3)
+        S_e = c (1 - lambda_e^{-3})            (2nd PK, reference)
+        sigma_e = lambda_e^2 S_e = c (lambda_e^2 - 1/lambda_e)   (Cauchy push-forward)
 
     Parameters
     ----------
@@ -73,26 +110,22 @@ class NeoHookean(MaterialLaw):
 
     c: float  # [kPa]
 
-    def stress(self, lam: float) -> float:
-        return self.c * (lam**2 - 1.0 / lam)
+    def energy(self, lam: float) -> float:
+        return 0.5 * self.c * (lam**2 + 2.0 / lam - 3.0)
 
-    def tangent(self, lam: float) -> float:
-        return self.c * (2.0 * lam + 1.0 / lam**2)
+    def stress_pk2(self, lam: float):
+        return self.c * (1.0 - lam ** (-3))
 
 
 @dataclass(frozen=True)
 class FungFiber(MaterialLaw):
     r"""
-    Fung-type exponential fiber, Eqs. (M2)-(M3) — the standard model for the
-    **collagen** and **smooth-muscle** fibers, which are crimped at rest and
-    stiffen steeply once recruited.
+    Fung-type exponential fiber, Eq. (FUNG) — collagen and smooth muscle, which
+    are crimped at rest and stiffen steeply once recruited (I4 = lambda_e^2):
 
-        sigma(l) = c1 l^2 (l^2 - 1) exp[c2 (l^2 - 1)^2]
-
-    The analytic tangent (derived in docs/02_finite_strain.md) is
-
-        d sigma/dl = 2 c1 l exp[c2 E^2] * ( (2 l^2 - 1) + 2 c2 l^2 E^2 ),
-        with E = l^2 - 1.
+        W = c1/(4 c2) ( exp[c2 (I4 - 1)^2] - 1 )
+        S = c1 (lambda_e^2 - 1) exp[c2 (lambda_e^2 - 1)^2]      (2nd PK, reference)
+        sigma = lambda_e^2 S                                    (Cauchy push-forward)
 
     Parameters
     ----------
@@ -105,15 +138,13 @@ class FungFiber(MaterialLaw):
     c1: float  # [kPa]
     c2: float  # [-]
 
-    def stress(self, lam: float) -> float:
-        E = lam**2 - 1.0
-        return self.c1 * lam**2 * E * _exp(self.c2 * E**2)
+    def energy(self, lam: float) -> float:
+        Q = self.c2 * (lam**2 - 1.0) ** 2
+        return self.c1 / (4.0 * self.c2) * (_exp(Q) - 1.0)
 
-    def tangent(self, lam: float) -> float:
-        E = lam**2 - 1.0
-        return 2.0 * self.c1 * lam * _exp(self.c2 * E**2) * (
-            (2.0 * lam**2 - 1.0) + 2.0 * self.c2 * lam**2 * E**2
-        )
+    def stress_pk2(self, lam: float):
+        E4 = lam**2 - 1.0
+        return self.c1 * E4 * _exp(self.c2 * E4**2)
 
 
 def _exp(x):

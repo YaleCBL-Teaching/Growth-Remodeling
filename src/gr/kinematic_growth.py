@@ -77,7 +77,7 @@ def simulate(
         total = 0.0
         for c in cons:
             phi = c.phi0 * (elastin_frac if c.name == "elastin" else 1.0)
-            total += phi * c.law.stress(c.G * lam)
+            total += phi * c.law.stress_cauchy(c.G * lam)
         return total
 
     nsteps = int(round(t_end / dt))
