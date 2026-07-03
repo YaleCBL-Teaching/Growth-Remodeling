@@ -38,9 +38,11 @@ STANFORD_RED = "#8C1515"
 QUANTITIES = {
     "mass": (r"Mass ratio  $M/M_0$", lambda r: r.mass),
     "lam": (r"Stretch  $\lambda$", lambda r: r.lam),
-    "radius": ("Mid-wall radius  [mm]", lambda r: r.radius),
-    "thickness": ("Wall thickness  [mm]", lambda r: r.thickness),
+    "radius": (r"Radius ratio  $a/a_0$", lambda r: r.radius),        # normalised in animate()
+    "thickness": (r"Thickness ratio  $h/h_0$", lambda r: r.thickness),
 }
+# reference-normalising factors for the single-valued quantities (a/a_0, h/h_0)
+_NORM = {"radius": "R0", "thickness": "H0"}
 # Per-constituent quantities (one line per constituent, single theory). Each has
 # its OWN homeostatic set-point, so the stress is normalised by sigma_h^k.
 PER_CONSTITUENT = {
@@ -119,7 +121,8 @@ def animate(
     has_p = insult.pressure_factor != 1.0
     has_e = insult.elastin_surviving != 1.0
 
-    REF = {"mass": 1.0, "lam": 1.0, "radius": R0, "thickness": H0}
+    REF = {"mass": 1.0, "lam": 1.0, "radius": 1.0, "thickness": 1.0}   # all ratios -> 1
+    norm = {"radius": R0, "thickness": H0}                             # a/a_0, h/h_0
     is_artery = results[0].setting == "artery"
 
     # --- layout: 16:9, big vessel (2x2) + a grid of time-plots ---------------
@@ -160,7 +163,8 @@ def animate(
         ax_v.add_patch(wall); lumen = None
     # legend inside the vessel axis (reference vs current); no text UNDER the vessel
     ax_v.plot([], [], color=STANFORD_RED, lw=3, label="reference")
-    ax_v.add_patch(Rectangle((0, 0), 0, 0, facecolor="#d9d9d9", edgecolor="#666", label="current"))
+    ax_v.add_patch(Rectangle((0, 0), 0, 0, facecolor="#d9d9d9", edgecolor="#666",
+                             label=f"current ({vessel_from.theory})"))
     ax_v.legend(loc="upper center", bbox_to_anchor=(0.5, 1.09), ncol=2,
                 fontsize=10, frameon=False)
 
@@ -175,9 +179,9 @@ def animate(
     # insult panel (animated like the rest; ratio in the y-label)
     lines["_insult"] = []
     if has_p:
-        lines["_insult"].append((add_curve(ax_ins, gamma, color="#2a6fb0", lw=2.2), gamma))
+        lines["_insult"].append((add_curve(ax_ins, gamma, color="black", lw=2.2), gamma))
     if has_e:
-        lines["_insult"].append((add_curve(ax_ins, ela_frac, color=STANFORD_RED, lw=2.2), ela_frac))
+        lines["_insult"].append((add_curve(ax_ins, ela_frac, color="black", lw=2.2), ela_frac))
     ax_ins.set_ylabel(r"Pressure  $P/P_h$" if (has_p and not has_e)
                       else ("Elastin fraction" if (has_e and not has_p)
                             else r"Insult ($P/P_h$, elastin)"))
@@ -196,13 +200,15 @@ def animate(
                 ax.axhline(1.0, color="gray", lw=1, ls=":", alpha=0.8)
             ax.set_ylabel(PER_CONSTITUENT[q][0])
         else:
+            nf = norm.get(q, 1.0)
             for r in results:
-                y = interp(r, QUANTITIES[q][1])
+                y = interp(r, lambda rr, g=QUANTITIES[q][1], f=nf: g(rr) / f)
                 lines[q].append((add_curve(ax, y, label=r.theory, **STYLE.get(r.theory, {})), y))
             ax.axhline(REF[q], color="gray", lw=1, ls=":", alpha=0.8)
             if equilibrium is not None and getattr(equilibrium, "exists", False):
                 val = {"mass": equilibrium.mass, "lam": equilibrium.lam,
-                       "radius": equilibrium.radius, "thickness": equilibrium.thickness}.get(q)
+                       "radius": equilibrium.radius / R0,
+                       "thickness": equilibrium.thickness / H0}.get(q)
                 if val is not None and np.isfinite(val):
                     ax.axhline(val, **STYLE["equilibrated CMM"], alpha=0.9,
                                label="equilibrated CMM")
@@ -237,8 +243,9 @@ def animate(
     if len(labels) >= 2:
         pos = [ax.get_position() for ax in ax_q]
         x_center = 0.5 * (min(p.x0 for p in pos) + max(p.x1 for p in pos))
-        fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(x_center, 0.935),
-                   ncol=min(len(labels), 2), fontsize=9, frameon=False)
+        fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(x_center, 0.945),
+                   ncol=len(labels), fontsize=8.5, frameon=False,
+                   columnspacing=1.1, handlelength=1.6, handletextpad=0.5)
 
     # --------------------------------------------------------------- frames
     def update(k):
