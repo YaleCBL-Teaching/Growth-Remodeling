@@ -33,6 +33,21 @@ $$\sigma_\theta = \frac{P\,r}{h}\qquad\text{(circumferential wall stress)}$$
 
 with pressure $P$, current inner radius $r$, wall thickness $h$.
 
+The two settings, their boundary conditions, and the two insults are shown below.
+The bar is loaded by a **dead axial load** $f$ (fixed at one end), so its required
+stress grows like $\lambda^1$; the artery is loaded by **internal pressure** $P$,
+so by Laplace its wall stress grows like $\lambda^2$. That single difference in
+exponent is what makes the artery — but not the bar — able to lose stability
+([§7](07_stability.md)).
+
+![The shared setting: bar, artery, and the two insults](figures/fig00_setup.png)
+
+*(a) The 1-D tissue bar under a dead load. (b) The thin-walled artery
+cross-section: internal pressure $P$ (blue), circumferential wall stress
+$\sigma_\theta$ (red), inner radius $r$, thickness $h$, balanced by Laplace. (c)
+The two insults — hypertension raises $P$ (wall thickens); aneurysm degrades
+elastin (the wall dilates, dashed = original size).*
+
 ## 2.3 Hyperelastic constituents
 
 Each constituent stores energy in a strain-energy function and its stress is the

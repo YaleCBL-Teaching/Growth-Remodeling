@@ -8,6 +8,7 @@ from __future__ import annotations
 import importlib
 
 MODULES = [
+    "fig00_setup",
     "fig01_biology_and_mechanics",
     "fig02_kinematic_growth",
     "fig03_constrained_mixture",
