@@ -25,8 +25,8 @@ obtain, when a *spatial* quantity is genuinely needed (e.g. the Laplace balance
 of a pressurised artery), the **nominal (1st PK)** and **Cauchy (true)** stresses
 by explicit push-forward — for a 1-D incompressible fiber (J = 1):
 
-    P = lambda_e * S      1st Piola-Kirchhoff / nominal  (force per REFERENCE area) (M2)
-    sigma = lambda_e^2 S  Cauchy / true                  (force per current area)   (M3)
+    stress_pk1 = lambda_e * S    1st Piola-Kirchhoff / nominal  (force / REFERENCE area) (M2)
+    stress_cauchy = lambda_e^2 S Cauchy / true                  (force / current area)   (M3)
 
 A constituent is stress-free at lambda_e = 1 and is **deposited** by the cells at
 a homeostatic pre-stretch lambda_e = G (the deposition stretch, > 1 for fibers
@@ -51,7 +51,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
-def green_lagrange(lam: float):
+def strain_gl(lam: float):
     r"""Elastic Green-Lagrange strain E_e = 1/2 (lambda_e^2 - 1), Eq. (M0).
 
     A purely kinematic, reference-configuration strain measure (same for every
@@ -64,7 +64,7 @@ class MaterialLaw:
     """Base class: a 1-D hyperelastic fiber written in reference measures.
 
     Subclasses provide the strain energy ``energy`` and the 2nd Piola-Kirchhoff
-    stress ``second_piola``; the nominal and Cauchy stresses are derived here by
+    stress ``stress_pk2``; the nominal and Cauchy stresses are derived here by
     push-forward, Eqs. (M2)-(M3).
     """
 
@@ -73,24 +73,24 @@ class MaterialLaw:
         """Strain energy per unit reference volume W(lambda_e)."""
         raise NotImplementedError
 
-    def second_piola(self, lam: float) -> float:
+    def stress_pk2(self, lam: float) -> float:
         """2nd Piola-Kirchhoff stress S = dW/dE_e, Eq. (M1)  (reference config)."""
         raise NotImplementedError
 
     # --- push-forwards (derived; used only where a spatial stress is needed) --
-    def first_piola(self, lam: float):
-        """Nominal (1st PK) stress P = lambda_e S, Eq. (M2)  (force / reference area)."""
-        return lam * self.second_piola(lam)
+    def stress_pk1(self, lam: float):
+        """Nominal (1st PK) stress = lambda_e * S, Eq. (M2)  (force / reference area)."""
+        return lam * self.stress_pk2(lam)
 
-    def cauchy(self, lam: float):
+    def stress_cauchy(self, lam: float):
         """Cauchy (true) stress sigma = lambda_e^2 S, Eq. (M3)  (push-forward, J=1).
 
         This is the *spatial* stress that enters the Laplace / dead-load balance
         (``gr.geometry``) and the intramural-stress growth stimulus.  It is a
         derived quantity — the constitutive law itself lives in the reference
-        configuration via ``second_piola``.
+        configuration via ``stress_pk2``.
         """
-        return lam**2 * self.second_piola(lam)
+        return lam**2 * self.stress_pk2(lam)
 
 
 @dataclass(frozen=True)
@@ -113,7 +113,7 @@ class NeoHookean(MaterialLaw):
     def energy(self, lam: float) -> float:
         return 0.5 * self.c * (lam**2 + 2.0 / lam - 3.0)
 
-    def second_piola(self, lam: float):
+    def stress_pk2(self, lam: float):
         return self.c * (1.0 - lam ** (-3))
 
 
@@ -142,7 +142,7 @@ class FungFiber(MaterialLaw):
         Q = self.c2 * (lam**2 - 1.0) ** 2
         return self.c1 / (4.0 * self.c2) * (_exp(Q) - 1.0)
 
-    def second_piola(self, lam: float):
+    def stress_pk2(self, lam: float):
         E4 = lam**2 - 1.0
         return self.c1 * E4 * _exp(self.c2 * E4**2)
 

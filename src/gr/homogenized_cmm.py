@@ -86,9 +86,9 @@ def simulate(
 
         # supplied mixture stress vs global stretch, Eq. (HC1) + rule of mixtures
         def sigma_bar(lam: float) -> float:
-            total = M_elastin * elastin.law.cauchy(elastin.G * lam)
+            total = M_elastin * elastin.law.stress_cauchy(elastin.G * lam)
             for c in turnover:
-                total += M[c.name] * c.law.cauchy(lam / lam_n[c.name])
+                total += M[c.name] * c.law.stress_cauchy(lam / lam_n[c.name])
             return total / M_tot
 
         lam = geom.equilibrium_stretch(sigma_bar, mass_ratio=M_tot, load_factor=gamma)

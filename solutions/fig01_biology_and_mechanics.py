@@ -16,7 +16,7 @@ from __future__ import annotations
 import numpy as np
 
 from gr import Model, artery, bar
-from gr.mechanics import green_lagrange
+from gr.mechanics import strain_gl
 from gr.plotting import plt, save_pdf
 
 FIG = "docs/figures/fig01_constitutive.pdf"
@@ -31,12 +31,12 @@ def main() -> None:
     # Focus on the physiological window: the Fung stress rises exponentially and
     # is off-scale well before E ~ 0.5.
     lam = np.linspace(1.0, 1.42, 200)
-    E = green_lagrange(lam)
+    E = strain_gl(lam)
     for c in model.constituents:
-        S = np.array([c.law.second_piola(x) for x in lam])
+        S = np.array([c.law.stress_pk2(x) for x in lam])
         line, = axA.plot(E, S, label=f"{c.name}")
         # mark the deposition set-point (E(G^k), S(G^k))
-        E_G, S_G = green_lagrange(c.G), c.law.second_piola(c.G)
+        E_G, S_G = strain_gl(c.G), c.law.stress_pk2(c.G)
         axA.plot([E_G], [S_G], "o", color=line.get_color())
         axA.annotate(f"$G_{{{c.name[0]}}}={c.G}$", (E_G, S_G),
                      textcoords="offset points", xytext=(6, -11), fontsize=9,

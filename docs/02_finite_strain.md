@@ -44,7 +44,7 @@ point of this section.
 
 (The nominal, or 1st Piola–Kirchhoff, stress $\lambda_e S$ — force in the current
 configuration per *reference* area — sits between the two; the code exposes it as
-`first_piola`, but $S$ and $\sigma$ are the only two we use throughout.)
+`stress_pk1`, but $S$ and $\sigma$ are the only two we use throughout.)
 
 The **constitutive law lives in the reference configuration**: a constituent's
 response is $S=\partial W/\partial E$, both referential. We only *push forward* to

@@ -20,7 +20,7 @@ from __future__ import annotations
 import numpy as np
 
 from gr import Model
-from gr.mechanics import FungFiber, NeoHookean, green_lagrange
+from gr.mechanics import FungFiber, NeoHookean, strain_gl
 from gr.plotting import plt
 
 # =============================================================================
@@ -45,19 +45,19 @@ def main() -> None:
     collagen = FungFiber(c1=COLLAGEN_C1, c2=COLLAGEN_C2)
 
     lam = np.linspace(1.0, 1.4, 300)             # physiological window
-    E = green_lagrange(lam)                      # Green-Lagrange strain (reference)
+    E = strain_gl(lam)                      # Green-Lagrange strain (reference)
 
     fig, ax = plt.subplots(figsize=(7, 5))
     for law, name in [(elastin, "elastin (neo-Hookean)"), (collagen, "collagen (Fung)")]:
-        S = np.array([law.second_piola(x) for x in lam])   # 2nd PK stress (reference)
+        S = np.array([law.stress_pk2(x) for x in lam])   # 2nd PK stress (reference)
         line, = ax.plot(E, S, label=name)
         # faint Cauchy push-forward for intuition
-        sig = np.array([law.cauchy(x) for x in lam])
+        sig = np.array([law.stress_cauchy(x) for x in lam])
         ax.plot(E, sig, color=line.get_color(), lw=1, ls=":", alpha=0.5)
 
     # mark collagen's homeostatic set-point at the deposition stretch G
-    E_h = green_lagrange(COLLAGEN_G)
-    S_h = collagen.second_piola(COLLAGEN_G)
+    E_h = strain_gl(COLLAGEN_G)
+    S_h = collagen.stress_pk2(COLLAGEN_G)
     ax.plot([E_h], [S_h], "ko")
     ax.annotate(f"deposition stretch G={COLLAGEN_G}\n"
                 f"E={E_h:.3f},  S={S_h:.0f} kPa",
@@ -72,7 +72,7 @@ def main() -> None:
     fig.tight_layout()
 
     print(f"With G={COLLAGEN_G}: collagen set-point  E={E_h:.3f},  S={S_h:.1f} kPa,"
-          f"  (Cauchy sigma={collagen.cauchy(COLLAGEN_G):.1f} kPa)")
+          f"  (Cauchy sigma={collagen.stress_cauchy(COLLAGEN_G):.1f} kPa)")
     print("Default mixture homeostatic Cauchy stress:",
           f"{Model().sigma_bar_h:.1f} kPa")
 

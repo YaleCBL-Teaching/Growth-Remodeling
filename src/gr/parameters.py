@@ -70,7 +70,7 @@ class Constituent:
     @property
     def sigma_h(self) -> float:
         """Homeostatic constituent stress sigma_h^k = sigma^k(G^k), Eq. (P1)."""
-        return self.law.cauchy(self.G)
+        return self.law.stress_cauchy(self.G)
 
 
 # -----------------------------------------------------------------------------
