@@ -7,22 +7,29 @@
 \end{frame}
 
 \begin{frame}[t]{Where Instability Comes From: The Laplace Exponent}
-  For a pressurised tube the stress the wall \emph{must} carry scales with radius,
-  and radius grows with mass. Write the required (Laplace) stress as a power of the
-  stretch, $\bar\sigma_{\text{req}}\propto\lambda^{\,n}$, and use the equilibrium
-  mass--stretch relation $M/M_0=\gamma\,\lambda^{\,n}$:
-  \giveneq{\text{bar: }n=1\ (\text{tension}=Pa),\qquad
-    \text{artery: }n=2\ (\bar\sigma=\tfrac{Pa}{h},\ a\!\propto\!\lambda,\ h\!\propto\!M).}
-  Differentiate the growth balance at equilibrium. Adding mass \emph{lowers} the
-  required stress only if the geometric feedback stays sub-linear:
-  \slboxeq{2.2em}{eq:stab}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
+  Write the required (Laplace) stress as a power of the stretch,
+  $\bar\sigma_{\text{req}}\propto\lambda^{\,n}$, with mass--stretch relation
+  $M/M_0=\gamma\,\lambda^{\,n}$. Adding mass \emph{lowers} the required stress only
+  if the geometric feedback stays sub-linear:
+  \slboxeq{2.0em}{eq:stab}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
     \ \Longleftrightarrow\ n<n_{\text{crit}}\ \Longleftrightarrow\ \text{tissue adapts}}
-  \textbf{Bar} ($n=1$): always stable. \textbf{Artery} ($n=2$, the Laplace
-  exponent): stable only while enough elastin survives; lose elastin and the
-  quadratic term wins --- $\dd\bar\sigma/\dd\theta>0$, \textbf{runaway}.
+  \begin{columns}[c]
+    \begin{column}{0.46\textwidth}
+      \begin{center}\includegraphics[width=\linewidth]{figures/fig01b_required_stress.pdf}\end{center}
+    \end{column}
+    \begin{column}{0.54\textwidth}
+      \small
+      \textbf{Bar} ($n=1$, tension $=Pa$): required stress is \emph{linear} ---
+      always stable. \\[0.4em]
+      \textbf{Artery} ($n=2$, the Laplace exponent, $\bar\sigma=\tfrac{Pa}{h}$ with
+      $a\!\propto\!\lambda,\ h\!\propto\!M$): \emph{quadratic}. Stable only while
+      enough elastin survives; lose elastin and $\dd\bar\sigma/\dd\theta>0$ ---
+      \textbf{runaway}.
+    \end{column}
+  \end{columns}
   \begin{center}\footnotesize\color{BoxGray}
-  The whole stability verdict follows analytically from the Laplace exponent $n$
-  --- no time integration needed. (Explored numerically in \texttt{ex06}.)
+  The verdict follows analytically from the Laplace exponent $n$ (curve is
+  reproducible; explored numerically in \texttt{ex06}).
   \end{center}
   \srccite{Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
 \end{frame}
