@@ -1,0 +1,112 @@
+% ============================================================================
+%  SECTION 3 — Kinematic growth
+% ============================================================================
+\begin{frame}[t]{}
+  \vfill\begin{center}{\Huge\color{YaleBlue} Kinematic growth}
+  \end{center}\vfill
+\end{frame}
+
+\begin{frame}[t]{Multiplicative Decomposition --- Growth vs.\ Elasticity}
+  Kinematic growth splits the deformation into a stress-free \textbf{growth} part
+  $\bm{F}_g$ (how the tissue adds mass) and an \textbf{elastic} part $\bm{F}_e$ ---
+  the only part that carries stress.
+  \dlab{general form --- a product of tensors}
+  \giveneq{\bm{F}=\bm{F}_e\,\bm{F}_g,\qquad\text{only }\bm{F}_e\text{ stores energy.}}
+  \zlab{reduction used here --- scalar stretches}
+  \slboxeq{2.2em}{eq:split}{\lambda = \lambda_e \,\lambda_g}
+  Growth is \emph{one} inelastic stretch $\lambda_g$; the elastic stretch
+  $\lambda_e=\lambda/\lambda_g$ is what the constituent laws see. (Constrained
+  mixtures will later give each cohort its own natural configuration.)
+\end{frame}
+
+\begin{frame}[t]{The Idea, and the Kinematics}
+  Postulate a stress-free \textbf{growth} deformation $\bm{F}_g$; only the elastic
+  part $\bm{F}_e$ carries load. Grown pieces need not fit together ---
+  $\bm{F}_g$ leaves an \emph{incompatible} stress-free state; $\bm{F}_e$ forces
+  them back into one body (residual stress).
+  \vfill
+  \begin{center}\kinmap[1.0]\end{center}
+  \vfill
+\end{frame}
+
+\begin{frame}[t]{The Growth Tensor Must Be Prescribed}
+  $\bm{F}_g$ is \textbf{chosen by the modeler}, not derived --- it encodes
+  \emph{how} the tissue is assumed to add mass. A common choice grows the tissue
+  along a single direction $\bm{e}_f$ (a wall-thickening or \emph{fiber}
+  direction):
+  \dlab{prescribed growth tensor --- this is an \emph{input}}
+  \slboxeq{2.6em}{eq:growthtensor}{\bm{F}_g = \bm{I} + (\theta-1)\,
+    \bm{e}_f\!\otimes\bm{e}_f
+    \;=\;\mathrm{diag}(1,\,1,\,\theta)}
+  \zlab{the one scalar that actually evolves}
+  \giveneq{\theta = \frac{M}{M_0}\ \ (\text{mass / volume ratio}),\qquad
+    \det\bm{F}_g=\theta.}
+  Here $\bm{e}_f$ is the growth direction --- it could be the radial
+  (wall-thickening) direction, or a fiber direction. Everything about the growth
+  \emph{pattern} is fixed a priori; only the scalar \textbf{growth stretch}
+  $\theta$ evolves in time.
+  \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
+\end{frame}
+
+\begin{frame}[t]{The Growth Law}
+  The growth \emph{pattern} $\bm{F}_g$ is fixed; the growth law evolves its single
+  scalar $\theta$ to null the stress deviation from the set-point (first-order,
+  production $\propto$ current mass).
+  \dlab{general form --- rate of the growth tensor via its scalar}
+  \giveneq{\dot{\bm{F}}_g = \dot\theta\,\bm{e}_f\!\otimes\bm{e}_f,\qquad
+    \dot\theta = k_g\,\theta\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right).}
+  \zlab{scalar growth law --- the only unknown in $\bm{F}_g$}
+  \slboxeq{2.6em}{eq:kingrowth}{\frac{\dd\theta}{\dd t}
+    = k_g\,\theta\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right)}
+  The set-point $\bar\sigma_h$ is \textbf{prescribed}: wherever growth stops
+  ($\dot\theta=0$), stress is homeostatic \emph{by construction}. At each instant
+  $\lambda$ follows from equilibrium
+  $\bar\sigma(\lambda)=\sigma_{\text{req}}(\lambda,\theta)$.
+  \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
+\end{frame}
+
+\begin{frame}[t]{Stability Is Imposed, Not Predicted}
+  Is the homeostatic state $\theta^*$ stable? Perturb it, $\theta=\theta^*+\delta$,
+  and linearise the growth law \eqref{eq:kingrowth} about $\theta^*$ (where
+  $\bar\sigma=\bar\sigma_h$):
+  \giveneq{\dot\delta = \underbrace{k_g\,\theta^*\,
+    \frac{1}{\bar\sigma_h}\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}}_{\displaystyle =:\,\alpha}\;\delta.}
+  The perturbation decays ($\delta\to0$, \textbf{stable}) iff $\alpha<0$, i.e.
+  \slboxeq{2.2em}{eq:stabkin}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
+    \quad\Longleftrightarrow\quad\text{adding mass \emph{lowers} the stress it must carry.}}
+  This holds for the \textbf{bar}, but a strong enough insult flips the sign for the
+  \textbf{artery} (Laplace $\bar\sigma\propto\lambda^2$) --- then $\alpha>0$ and
+  growth runs away. The set-point is \emph{prescribed}, so the model can only
+  \emph{impose} stability, never \emph{predict} it.
+\end{frame}
+
+% ---- interactive coding exercise: ex02 -------------------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Kinematic growth --- code}
+    \qq{\textbf{Example:} a hypertensive artery. \textbf{Model:} kinematic growth,
+    $\bm{F}=\bm{F}_e\bm{F}_g$ with the scalar law \eqref{eq:kingrowth}.
+    \textbf{Parameters:} gain \texttt{K\_G}, deposition set-point $\bar\sigma_h$.
+    \textbf{Insult:} a sustained pressure step \texttt{PRESSURE\_FACTOR}. Does the
+    artery reach the prescribed set-point, or run away? \qkind{\texttt{ex02}}}
+    \qres{\texttt{gr} package, \texttt{exercises/ex02\_kinematic\_growth.py}.
+    Tunables: \texttt{K\_G=0.05}, \texttt{PRESSURE\_FACTOR=1.5}.}
+    \qhint{Watch the stress plateau land on $\bar\sigma_h$. Then crank
+    \texttt{PRESSURE\_FACTOR} until the artery diverges --- the sign of
+    $\dd\bar\sigma/\dd\theta$ has flipped.}
+    \qrun{uv run python exercises/ex02\_kinematic\_growth.py}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{Kinematic growth}
+    The stress plateau \emph{always} lands on the prescribed set-point; the artery
+    (Laplace $\lambda^2$) tips into runaway once \texttt{PRESSURE\_FACTOR} is large
+    enough --- exactly when $\dd\bar\sigma/\dd\theta$ turns positive.
+  \end{answerbox}
+  \vspace{-0.3em}
+  \bigfigw{fig02_kinematic_growth.pdf}{0.66\linewidth}{Your numerical experiment:
+  convergence to the \emph{prescribed} set-point, or divergence.}
+  \vspace{-0.4em}
+  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} reaches the a-priori
+  prescribed homeostasis, \emph{or} it is unstable --- nothing in between.\end{center}
+\end{frame}

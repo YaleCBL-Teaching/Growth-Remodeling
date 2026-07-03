@@ -1,0 +1,108 @@
+% ============================================================================
+%  SECTION 11 — Summary & references
+% ============================================================================
+\begin{frame}[t]{How the Four Theories Answer --- The Takeaways}
+  \small
+  \begin{center}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{@{}p{0.24\textwidth}p{0.20\textwidth}p{0.48\textwidth}@{}}
+    \toprule
+    \textbf{Theory} & \textbf{Stability?} & \textbf{What it says} \\
+    \midrule
+    \textbf{\color{YaleBlue}Kinematic growth} & \emph{Imposed} &
+      Either reaches the \emph{a-priori prescribed} homeostasis, or is unstable ---
+      nothing in between. Built in, not learned. \\
+    \textbf{\color{YaleBlue}Constrained mixture (full)} & \emph{Predicted} &
+      Adapts or dilates \textbf{depending on the insult} --- the faithful
+      reference. \\
+    \textbf{\color{YaleBlue}Homogenized CMM} & \emph{Predicted} &
+      A \textbf{similar time trajectory} to the full model, at a fraction of the
+      cost. \\
+    \textbf{\color{YaleBlue}Equilibrated CMM} & \emph{Instantly} &
+      \textbf{Matches} the transient theories \emph{if} an equilibrium exists;
+      \emph{no} root $\Rightarrow$ it does not match --- unbounded growth. \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vfill
+  \begin{center}\color{AccentRed}
+  Stability \emph{depends on the insult}, and --- with turnover-based theories ---
+  it can be \emph{predicted}, not just assumed.
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{Summary --- What to Take Away}
+  \textbf{The biology.} Living tissue continuously \textbf{turns over}; cells
+  deposit new material \emph{pre-stretched} at $G^k$, chasing a homeostatic
+  mechanical set-point $\sigma_h$.
+  \vfill
+  \textbf{The four theories, one set-point, one question --- does it adapt or run away?}
+  \begin{itemize}\small\itemsep2pt
+    \item \textbf{Kinematic growth} --- prescribe $\bm{F}_g$; \emph{imposes} the
+    set-point. Outcome is binary: reach the prescribed homeostasis, or go unstable.
+    \item \textbf{Constrained mixture} --- track every cohort; stability is
+    \emph{predicted} and \textbf{depends on the insult} (mild $\to$ adapt, severe
+    $\to$ runaway).
+    \item \textbf{Homogenized} --- one mean natural configuration per constituent;
+    a \textbf{similar time trajectory} to the full model at $O(N)$ not $O(N^2)$.
+    \item \textbf{Equilibrated} --- solve for the end state directly; \textbf{matches}
+    the transient theories \emph{iff} an equilibrium exists, and flags instability
+    by finding no root.
+  \end{itemize}
+  \vfill
+  \textbf{Where it goes.} These tools now drive \textbf{clinical prediction}
+  (TEVGs), \textbf{systems-biology coupling}, and \textbf{fluid--solid--growth}.
+  \vspace{0.3em}
+  \begin{center}\color{AccentRed}
+  \emph{When does a loaded tissue adapt, and when does it run away? --- now you can
+  compute the answer.}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t,allowframebreaks]{Key references}
+  \footnotesize
+  \begin{itemize}\setlength{\itemsep}{0.35em}
+    \item Rodriguez, Hoger, McCulloch. Stress-dependent finite growth in soft
+    elastic tissues. \textit{J Biomech} (1994).
+    \item Humphrey, Rajagopal. A constrained mixture model for growth and
+    remodeling of soft tissues. \textit{Math Models Methods Appl Sci} (2002).
+    \item Cyron, Wilson, Humphrey. Mechanobiological stability. \textit{J R Soc
+    Interface} (2014).
+    \item Cyron, Aydin, Humphrey. A homogenized constrained mixture (and
+    mechanical analog) model. \textit{Biomech Model Mechanobiol} (2016).
+    \item Latorre, Humphrey. A mechanobiologically equilibrated constrained
+    mixture model. \textit{ZAMM} (2018).
+    \item Latorre, Humphrey. Fast, rate-independent finite-element implementation
+    of a 3D constrained mixture model. \textit{Comput Methods Appl Mech Eng} (2020).
+    \item Humphrey. Constrained mixture models of soft tissue growth and
+    remodeling. \textit{J Elasticity} (2021).
+    \item Irons, Humphrey. Cell signaling model for arterial mechanobiology.
+    \textit{PLoS Comput Biol} (2020).
+    \item Irons, Latorre, Humphrey. From transcript to tissue: multiscale
+    modeling. \textit{Ann Biomed Eng} (2021).
+    \item Drews, Pepper, Best, \ldots, Humphrey, Breuer. Spontaneous reversal of
+    stenosis in tissue-engineered vascular grafts. \textit{Sci Transl Med} (2020).
+    \item Figueroa, Baek, Taylor, Humphrey. A computational framework for
+    fluid--solid--growth modeling. \textit{Comput Methods Appl Mech Eng} (2009).
+    \item Schwarz, Pfaller, \ldots, Marsden. A fluid--solid--growth solver for
+    cardiovascular modeling. \textit{Comput Methods Appl Mech Eng} (2023).
+    \item Pfaller, Latorre, \ldots, Marsden. FSGe: a fast, strongly coupled 3D
+    fluid--solid--growth method. \textit{Comput Methods Appl Mech Eng} (2024).
+    \item Humphrey, Eberth, Dye, Gleason. Fundamental role of axial stress in
+    arterial mechanics. \textit{J Biomech} (2009).
+    \item Ambrosi, Ben Amar, Cyron, \ldots, Humphrey, Kuhl. Growth and remodelling
+    of living tissues. \textit{J R Soc Interface} (2019).
+  \end{itemize}
+  \framebreak
+  \small
+  \textbf{Code}
+  \begin{itemize}
+    \item Seminar code (this deck's figures): \texttt{github.com/YaleCBL-Teaching/Growth-Remodeling}
+    \item \texttt{github.com/StanfordCBCL/svGrowth}, \texttt{svFSGe}
+    \item \texttt{github.com/yale-humphrey-lab/FEMBE\_Plugin}, \texttt{FEFSG\_Plugin}
+  \end{itemize}
+  \vspace{0.6em}
+  \textbf{Figure sources.} Result figures reproduced with the \texttt{gr} package;
+  literature figures cited per-slide.
+\end{frame}
+

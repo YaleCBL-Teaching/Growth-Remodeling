@@ -1,0 +1,137 @@
+% ============================================================================
+%  SECTION 5 — Homogenized constrained mixture
+% ============================================================================
+\begin{frame}[t]{}
+  \vfill\begin{center}{\Huge\color{YaleBlue} Homogenized CMM}
+  \end{center}\vfill
+\end{frame}
+
+\begin{frame}[t]{Throw Away the History, Keep Its Average}
+  \textbf{Temporal homogenization} replaces the entire deposition history by a
+  \emph{single evolving mean natural configuration} per constituent --- two ODEs
+  per constituent, cost $O(N^2)\to O(N)$.
+  \dlab{general form (Cyron 2016) --- mean natural-config tensor}
+  \zlab{reduction --- scalar mean stretch}
+  \vspace{-0.2em}
+  \giveneq{\bm{F}^k_{\text{e}} = \bm{F}(s)\,\bm{F}^{k}_{n}(s)^{-1}
+    \qquad\longrightarrow\qquad \lambda_e^k = \frac{\lambda}{\lambda_n^k}.}
+  \vspace{-0.2em}
+  \begin{center}\homogmap[0.70]\end{center}
+  \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
+\end{frame}
+
+% ---- Maxwell analog moved EARLY: the visual intuition for the whole model ----
+\begin{frame}[t]{The Mechanical Analog: A Maxwell Fluid with a Motor}
+  Each constituent behaves like a \textbf{Maxwell element in parallel with a
+  motor}: turnover relaxes stress toward a \emph{prestress}, not zero.
+  \begin{center}\maxwellelement[0.78]\end{center}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \footnotesize
+      \renewcommand{\arraystretch}{1.5}
+      \begin{tabular}{@{}ll@{}}
+        $\sigma^i$ & constituent stress (the load)\\[2pt]
+        $\mathbb{C}^{i}$ & elastic stiffness (spring)\\[2pt]
+        $\dot\varrho_0^{\,i}/\varrho_0^{\,i}+1/T^i$ & turnover + degradation (dashpot)\\[2pt]
+        $\bar\sigma^{i}_{\text{pre}}$ & deposition prestress (motor)\\
+      \end{tabular}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \footnotesize \textbf{Back to the full CMM (0D):}
+      \begin{itemize}\itemsep3pt
+        \item spring $\leftrightarrow$ constituent law $\sigma^k(\lambda_e^k)$
+        \item dashpot $\leftrightarrow$ mass turnover / removal $k_d^k$
+        \item motor $\leftrightarrow$ deposition stretch $G^k$
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
+\end{frame}
+
+\begin{frame}[t]{Growth (Mass) and Remodeling (Natural Configuration)}
+  \textbf{Growth}: mass production $\propto$ current mass, driven by stress
+  deviation. \textbf{Remodeling}: the mean natural configuration evolves as new mass
+  enters at $\lambda/G^k$ and old mass leaves at the current value.
+  \dlab{general form --- mass \& mean natural-config \emph{tensor}}
+  \vspace{-0.2em}
+  \giveneq{\dot M^k = M^k\,(K_\sigma^k k_d^k)\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right),
+    \qquad \dot{\bm{F}}_n^k = f\big(\bm{F},\bm{F}_n^k;\,m^k,M^k\big).}
+  \zlab{reduction --- scalar mass and scalar natural stretch}
+  \vspace{-0.2em}
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}
+      \slboxeq{2.2em}{eq:homog_mass}{\frac{\dd M^k}{\dd t}
+        = M^k K_\sigma^k k_d^k\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right)}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \slboxeq{2.2em}{eq:homog_remodel}{\frac{\dd\lambda_n^k}{\dd t}
+        = \frac{m^k}{M^k}\!\left(\frac{\lambda}{G^k}-\lambda_n^k\right)}
+    \end{column}
+  \end{columns}
+  \vspace{0.2em}
+  Holding $\lambda$ fixed, remodeling relaxes constituent stress exponentially to
+  $\sigma_h^k$ ($\sim 1/k_d$) --- not to zero, but to a prestress.
+  \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
+\end{frame}
+
+\begin{frame}[t]{It Tracks the Full Model Closely --- Much Cheaper}
+  Two ODEs per constituent replace the full deposition history. The homogenized
+  trajectory sits almost on the full constrained mixture, while kinematic growth
+  under-responds to elastin loss --- it grows constituents in lockstep and cannot
+  remodel their natural configurations individually.
+  \vfill
+  \begin{center}\color{AccentRed}
+  The homogenized model follows the full model's \emph{time trajectory} closely,
+  at $O(N)$ instead of $O(N^2)$.
+  \end{center}
+\end{frame}
+
+% ---- pen & paper: when are the two models close? ---------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{When do homogenized and full agree?}
+    \qq{The homogenized model keeps only the \emph{mean} natural configuration per
+    constituent. Under what assumptions should it match the full deposition-history
+    model --- and when would you expect them to diverge? \qkind{discuss}}
+    \qres{The two remodeling pictures: full heredity integral vs.\ the single mean
+    stretch $\lambda_n^k$ \eqref{eq:homog_remodel}.}
+    \qhint{Think about the \emph{spread} of natural configurations across cohorts.
+    When is a single mean a good summary of the whole history?}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{When do homogenized and full agree?}
+    They agree when each constituent's cohorts share \emph{nearly the same} natural
+    configuration --- i.e.\ slow, gradual loading where deposition stretch $G^k$ and
+    turnover are roughly stationary, so the cohort spread stays narrow and the mean
+    represents it well. {\color{ABlue}\bfseries They diverge} under fast or strongly
+    time-varying insults, when cohorts deposited at very different states coexist and
+    a single mean stretch can no longer capture the distribution.
+  \end{answerbox}
+\end{frame}
+
+% ---- interactive coding exercise: ex04 -------------------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Homogenized vs.\ full --- code}
+    \qq{\textbf{Example:} the same artery under one insult. \textbf{Model:}
+    homogenized CMM overlaid on the full constrained mixture. \textbf{Parameters:}
+    \texttt{INSULT}, horizon \texttt{T\_END}. Measure both the agreement and the
+    speed-up. \qkind{\texttt{ex04}}}
+    \qres{\texttt{exercises/ex04\_homogenized\_vs\_full.py}. Tunables:
+    \texttt{INSULT} (hypertension / aneurysm), \texttt{T\_END=2000}.}
+    \qhint{Read off the gap between the two curves. Try the aneurysm insult or a
+    longer \texttt{T\_END} --- does the agreement hold?}
+    \qrun{uv run python exercises/ex04\_homogenized\_vs\_full.py}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{Homogenized vs.\ full}
+    The homogenized curve overlays the full CMM closely at a fraction of the
+    runtime ($O(N)$ vs.\ $O(N^2)$). {\color{ABlue}\bfseries Learning:} it reproduces
+    a \textbf{similar time trajectory} to the full model --- cheaply.
+  \end{answerbox}
+  \vspace{-0.4em}
+  \bigfigw{fig04_compare_all.pdf}{0.52\linewidth}{Your overlay: homogenized (dashed)
+  on the full CMM (black); kinematic growth (blue) under-responds.}
+\end{frame}
