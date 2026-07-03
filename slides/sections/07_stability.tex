@@ -7,53 +7,24 @@
 \end{frame}
 
 \begin{frame}[t]{Where instability comes from: the Laplace exponent}
-  \begin{columns}[T]
-    \begin{column}{0.54\textwidth}
-      Recall the required-stress laws:
-      \giveneq{\text{bar:}\ \sigma_{\text{req}}\propto\frac{\lambda^1}{M/M_0},
-        \qquad \text{artery:}\ \sigma_{\text{req}}\propto\frac{\lambda^2}{M/M_0}.}
-      Growth adds mass ($M\uparrow$), which \emph{lowers} required stress --- a
-      stabilising negative feedback. But dilation ($\lambda\uparrow$) \emph{raises}
-      it, and in the artery \textbf{quadratically}. When elastin --- the
-      low-stretch load-bearing buffer --- is lost, dilation wins the race against
-      mass production, the feedback turns positive: \textbf{runaway}.
-      \vspace{0.3em}
-
-      The stability condition, in one line:
-      \slboxeq{2.2em}{eq:stab}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
-        \ \Leftrightarrow\ \text{tissue adapts}}
-      {\color{AccentRed}\small The bar (linear) can never lose this race.}
-    \end{column}
-    \begin{column}{0.46\textwidth}
-      \slidefig[\linewidth]{stab_criterion_map.png}
-      \figcredit{Fig.: A. Gebauer (TUM lecture); Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
-    \end{column}
-  \end{columns}
+  Growth adds mass, \emph{lowering} required stress (stabilising); dilation
+  \emph{raises} it, \textbf{quadratically} for the artery. Lose elastin and dilation
+  wins the race --- the feedback turns positive: \textbf{runaway}.
+  \slboxeq{2.2em}{eq:stab}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
+    \ \Leftrightarrow\ \text{tissue adapts}}
+  \bigfigw{stab_criterion_map.png}{0.60\linewidth}{Stable / unstable map over insult
+  strength --- the bar (linear) can never lose this race.}
+  \figcredit{Fig.: A. Gebauer (TUM lecture); Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
 \end{frame}
 
 \begin{frame}[t]{Same tissue, two insults}
-  \begin{columns}[T]
-    \begin{column}{0.44\textwidth}
-      Two ways to read stability:
-      \begin{enumerate}\small
-        \item \textbf{Existence (instant).} The equilibrated equation
-        \eqref{eq:equil} has a root iff the tissue can adapt --- sweeping the
-        insult traces the boundary with no time integration.
-        \item \textbf{Transient.} Integrate the model: a stable insult plateaus,
-        an unstable one climbs without bound; near the boundary it slows
-        dramatically.
-      \end{enumerate}
-      \vspace{0.3em}
-
-      Retaining 30\% of elastin, the artery adapts (blue); retaining only 3\%, it
-      dilates without bound (red). The map is computed purely from the equilibrated
-      existence test.
-    \end{column}
-    \begin{column}{0.56\textwidth}
-      \slidefig[\linewidth]{fig06_stability.pdf}
-      \figcredit{Reproduced with the \texttt{gr} package (this repo)}
-    \end{column}
-  \end{columns}
+  Read stability two ways: \textbf{existence} --- the equilibrated equation
+  \eqref{eq:equil} has a root iff the tissue can adapt (no time integration); or
+  \textbf{transient} --- integrate and watch it plateau or climb.
+  \bigfigw{fig06_stability.pdf}{0.80\linewidth}{Retaining 30\% elastin the artery
+  adapts (blue); retaining 3\% it dilates without bound (red). Map computed from the
+  equilibrated existence test.}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 
 \begin{frame}[t]{How the four theories answer --- the takeaways}

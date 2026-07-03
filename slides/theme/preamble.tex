@@ -101,6 +101,26 @@
   \begin{center}\includegraphics[width=#1,height=0.62\textheight,keepaspectratio]{figures/#2}\end{center}%
 }
 
+% ---- big-figure slide: one large centred figure + short caption ------------
+% \bigfig{file}{one-line caption}  — figure dominates the slide, minimal text.
+\newcommand{\bigfig}[2]{%
+  \vfill
+  \begin{center}%
+    \includegraphics[width=0.92\linewidth,height=0.62\textheight,keepaspectratio]{figures/#1}%
+  \end{center}%
+  \begin{center}{\small\color{BoxGray} #2}\end{center}%
+  \vfill
+}
+% variant with adjustable width for tall figures
+\newcommand{\bigfigw}[3]{%
+  \vfill
+  \begin{center}%
+    \includegraphics[width=#2,height=0.62\textheight,keepaspectratio]{figures/#1}%
+  \end{center}%
+  \begin{center}{\small\color{BoxGray} #3}\end{center}%
+  \vfill
+}
+
 % ---- math shorthands used across the deck ----------------------------------
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\Ftens}{\bm{F}}

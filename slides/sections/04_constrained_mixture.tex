@@ -7,23 +7,13 @@
 \end{frame}
 
 \begin{frame}[t]{The idea: track every cohort}
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      Model the tissue as a mixture of constituents \textbf{constrained to deform
-      together}, but each carrying its \emph{own} natural configuration and
-      continuously \textbf{produced and removed}. Because material is deposited at
-      different times --- under different loads --- the tissue carries a whole
-      \emph{history} of cohorts.
-      \vspace{0.5em}
-
-      Tracking that history is what makes the model \textbf{faithful}, and
-      \textbf{expensive}.
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \slidefig[\linewidth]{cmm_schematic.png}
-      \figcredit{Fig.: A. Gebauer (TUM lecture); Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
-    \end{column}
-  \end{columns}
+  Constituents are \textbf{constrained to deform together}, but each carries its
+  \emph{own} natural configuration and is continuously \textbf{produced and
+  removed}. The tissue therefore carries a whole \emph{history} of cohorts ---
+  faithful, and expensive.
+  \bigfigw{cmm_schematic.png}{0.80\linewidth}{Material deposited at $0,\tau,s$ is
+  laid down at the deposition stretch $G^k$ into successive configurations.}
+  \figcredit{Fig.: A. Gebauer (TUM lecture); Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
 \begin{frame}[t]{Mass balance --- the heredity integral}
@@ -73,22 +63,13 @@
 \end{frame}
 
 \begin{frame}[t]{What it buys you: stability is \emph{predicted}}
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      Unlike kinematic growth, \emph{nothing} prescribes the outcome. Whether the
-      tissue adapts or dilates \textbf{emerges} from the turnover dynamics and the
-      insult. Under hypertension the model grows collagen and muscle while elastin
-      is merely diluted, and tissue stress returns to homeostatic.
-      \vspace{0.5em}
-
-      {\color{AccentRed} The price is cost: the history integrals make the model
-      $O(N^2)$ in the number of time steps --- the motivation for the
-      \textbf{homogenized} model (§5).}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \slidefig[\linewidth]{fig03_constrained_mixture.pdf}
-      \figcredit{Reproduced with the \texttt{gr} package (this repo)}
-    \end{column}
-  \end{columns}
+  \emph{Nothing} prescribes the outcome --- adaptation or dilation \textbf{emerges}
+  from the turnover dynamics and the insult.
+  \bigfigw{fig03_constrained_mixture.pdf}{0.78\linewidth}{Under hypertension
+  collagen and muscle grow, elastin is diluted, and tissue stress returns to
+  homeostatic.}
+  {\color{AccentRed}\small The price: history integrals make the model $O(N^2)$ in
+  time steps --- the motivation for the homogenized model (§5).}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 

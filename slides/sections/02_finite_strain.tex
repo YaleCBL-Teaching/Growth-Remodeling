@@ -7,90 +7,61 @@
 \end{frame}
 
 \begin{frame}[t]{Deformation, stretch, and (in)compressibility}
-  A body deforms from a \textbf{reference} to a \textbf{current} configuration; the
-  deformation gradient $\bm{F}$ maps reference line elements to current ones.
   Everything here collapses to one dominant direction (bar axis, or artery
   circumference), so we track a single scalar \textbf{stretch}
   \giveneq{\lambda = \frac{\text{current length}}{\text{reference length}},\qquad
     \lambda=1\ \text{undeformed},\quad \lambda>1\ \text{extension}.}
-  The tissue is \textbf{elastically incompressible} --- only \emph{growth} changes
-  volume --- so the through-thickness and transverse stretches follow from
-  $\lambda$ alone. One number suffices.
-  \vspace{0.4em}
-
-  We report the \textbf{Cauchy (true) stress} $\sigma$ (force per unit
-  \emph{current} area): the physically meaningful measure for a growing body,
-  because the load-bearing area itself changes as the tissue remodels.
+  The tissue is \textbf{elastically incompressible} (only growth changes volume),
+  so one number suffices. We report the \textbf{Cauchy (true) stress} $\sigma$ ---
+  the load-bearing area itself changes as the tissue remodels.
   \srccite{finite-strain background adapted from YaleCBL-Teaching/BENG\_5570}
 \end{frame}
 
-\begin{frame}[t]{Wall stress from the loading --- the Laplace law}
-  For a pressurised thin tube (the artery), the circumferential wall stress is
+\begin{frame}[t]{Wall stress from loading --- the Laplace law}
+  For a pressurised thin tube, the circumferential wall stress is
   \slboxeq{2.6em}{eq:laplace}{\sigma_\theta = \frac{P\,r}{h}}
-  with pressure $P$, current inner radius $r$, wall thickness $h$. The bar instead
-  carries a stress set by an \emph{axial} load. The consequence, drawn out on the
-  right: the ``required stress'' the loading demands grows
-  \textbf{linearly} in $\lambda$ for the bar, but \textbf{quadratically} for the
-  artery.
-  \vspace{0.3em}
-  \begin{columns}[T]
-    \begin{column}{0.46\textwidth}
-      \begin{itemize}\small
-        \item bar: $\ \sigma_{\text{req}}\propto \lambda^1 / (M/M_0)$
-        \item artery: $\ \sigma_{\text{req}}\propto \lambda^2 / (M/M_0)$
-      \end{itemize}
-      {\color{AccentRed}\small That extra power of $\lambda$ is the whole story of
-      arterial instability (§7).}
-    \end{column}
-    \begin{column}{0.54\textwidth}
-      \vspace{-0.6em}\slidefig[\linewidth]{fig01_constitutive.pdf}
-    \end{column}
-  \end{columns}
-  \figcredit{Right panel reproduced with the \texttt{gr} package (this repo)}
+  so the ``required stress'' grows \textbf{linearly} in $\lambda$ for the bar but
+  \textbf{quadratically} for the artery ($\sigma_{\text{req}}\propto
+  \lambda^2/(M/M_0)$). {\color{AccentRed}That extra power of $\lambda$ is the whole
+  story of arterial instability (§7).}
+  \bigfigw{fig01_constitutive.pdf}{0.72\linewidth}{Constituent stress--stretch
+  response and the required-stress curves.}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 
 \begin{frame}[t]{Hyperelastic constituents}
-  Each constituent stores energy in a strain-energy function; its stress is the
-  derivative. We use the two laws that describe arterial tissue.
+  Each constituent's stress is the derivative of a strain-energy function.
   \vspace{0.3em}
 
-  \textbf{Elastin --- neo-Hookean} (soft, barely stiffening):
+  \textbf{Elastin --- neo-Hookean} (soft):
   \giveneq{\sigma_e(\lambda_e) = c_e\!\left(\lambda_e^2 - \tfrac{1}{\lambda_e}\right).}
 
-  \textbf{Collagen \& smooth muscle --- Fung exponential fiber} (crimped, then
-  stiffens steeply once recruited):
+  \textbf{Collagen \& SMC --- Fung fiber} (crimped, then stiffens steeply):
   \slboxeq{2.8em}{eq:fung}{\sigma(\lambda_e) = c_1\,\lambda_e^2\,(\lambda_e^2-1)\,
     e^{\,c_2(\lambda_e^2-1)^2},\qquad I_4=\lambda_e^2}
-  These are exactly the constituent free energies used in the constrained-mixture
-  literature. The tangent $\dd\sigma/\dd\lambda_e$ is also needed --- for
-  equilibrium solves and for the stability analysis (§7).
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
 \end{frame}
 
-\begin{frame}[t]{The deposition stretch $G^k$ --- the crucial modelling idea}
-  Cells deposit new fibers \textbf{already under tension}, at a fixed
-  \textbf{deposition stretch} $G^k>1$. So at homeostasis a constituent's elastic
-  stretch equals its own $G^k$, and we \emph{define} its homeostatic stress from
-  that set-point:
+\begin{frame}[t]{The deposition stretch $G^k$}
+  Cells deposit new fibers \textbf{already under tension} at a fixed deposition
+  stretch $G^k>1$. At homeostasis the elastic stretch equals $G^k$, which
+  \emph{defines} the homeostatic stress:
   \slboxeq{2.4em}{eq:setpoint}{\sigma_h^k := \sigma^k(G^k)}
-  This single convention pins down \emph{every} set-point in the course from a few
-  physical inputs --- and is why all four theories can share one parameter set and
-  give apples-to-apples comparisons.
+  This one convention pins down every set-point in the course --- so all four
+  theories share one parameter set and compare like-for-like.
   \srccite{deposition-stretch concept: Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
-\begin{frame}[t]{Multiplicative decomposition --- growth vs.\ elasticity}
-  The single most important kinematic idea in G\&R: split the deformation into a
-  stress-free \textbf{inelastic} part (growth / remodeling) and an \textbf{elastic}
-  part --- the only part that carries stress. In 1D,
+\begin{frame}[t]{Multiplicative decomposition}
+  Split the deformation into a stress-free \textbf{inelastic} part (growth /
+  remodeling) and an \textbf{elastic} part --- the only part that carries stress:
   \slboxeq{2.4em}{eq:split}{\lambda = \lambda_e \,\lambda_{\text{inel}}}
-  \begin{itemize}
-    \item \textbf{Kinematic growth} (§3) uses \emph{one} such split with an
-    inelastic \emph{growth} stretch.
-    \item \textbf{Constrained mixtures} (§4) give \emph{each cohort of each
-    constituent} its own inelastic natural configuration, and superpose them.
+  \begin{itemize}\small
+    \item \textbf{Kinematic growth} (§3): \emph{one} split, an inelastic growth stretch.
+    \item \textbf{Constrained mixtures} (§4): each cohort its own natural
+    configuration, superposed.
   \end{itemize}
-  \vspace{0.4em}
-  The set-point \eqref{eq:setpoint} and the split \eqref{eq:split} are the two
-  pieces of machinery reused in every model that follows.
+  \vspace{0.3em}
+  {\footnotesize\color{BoxGray} The set-point \eqref{eq:setpoint} and the split
+  \eqref{eq:split} recur in every model that follows.}
 \end{frame}

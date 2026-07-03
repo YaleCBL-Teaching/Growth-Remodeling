@@ -7,23 +7,13 @@
 \end{frame}
 
 \begin{frame}[t]{Throw away the history, keep its average}
-  \begin{columns}[T]
-    \begin{column}{0.52\textwidth}
-      The full model stores every cohort --- but at any moment the surviving
-      cohorts of a constituent look alike. \textbf{Temporal homogenization}
-      replaces the entire deposition history by a \emph{single evolving mean
-      natural configuration}.
-      \vspace{0.4em}
-
-      The heredity integral becomes \textbf{two ODEs per constituent}, and the
-      cost drops from $O(N^2)$ to $O(N)$. The elastic stretch is
-      \giveneq{\lambda_e^k = \frac{\lambda}{\lambda_n^k}.}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      \slidefig[\linewidth]{homog_configs.png}
-      \figcredit{Fig.: A. Gebauer (TUM lecture); Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
-    \end{column}
-  \end{columns}
+  \textbf{Temporal homogenization} replaces the entire deposition history by a
+  \emph{single evolving mean natural configuration}. The heredity integral becomes
+  \textbf{two ODEs per constituent}; cost drops from $O(N^2)$ to $O(N)$:
+  \giveneq{\lambda_e^k = \frac{\lambda}{\lambda_n^k}.}
+  \bigfigw{homog_configs.png}{0.88\linewidth}{One mean natural configuration per
+  constituent, evolving from reference through initial to current state.}
+  \figcredit{Fig.: A. Gebauer (TUM lecture); Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
 \begin{frame}[t]{Growth (mass) and remodeling (natural configuration)}
@@ -47,26 +37,13 @@
 \end{frame}
 
 \begin{frame}[t]{It tracks the full model closely --- much cheaper}
-  \begin{columns}[T]
-    \begin{column}{0.44\textwidth}
-      Growth restores \emph{tissue} homeostasis; remodeling restores each
-      constituent to its deposition stretch. Together they reproduce the full
-      model's trajectory at a fraction of the cost.
-      \vspace{0.4em}
-
-      In the comparison, the homogenized curve (dashed orange) sits almost on top
-      of the full CMM (black); kinematic growth (blue) under-responds to elastin
-      loss, because it grows all constituents in lockstep and cannot remodel their
-      natural configurations individually.
-      \vspace{0.4em}
-
-      {\color{AccentRed} Learning: the homogenized model follows the full model's
-      \emph{time trajectory} closely.}
-    \end{column}
-    \begin{column}{0.56\textwidth}
-      \slidefig[\linewidth]{fig04_compare_all.pdf}
-      \figcredit{Reproduced with the \texttt{gr} package (this repo)}
-    \end{column}
-  \end{columns}
+  \bigfigw{fig04_compare_all.pdf}{0.82\linewidth}{Homogenized (dashed orange) sits
+  almost on the full CMM (black); kinematic growth (blue) under-responds to elastin
+  loss --- it grows constituents in lockstep and cannot remodel them individually.}
+  \begin{center}\color{AccentRed}
+  Learning: the homogenized model follows the full model's \emph{time trajectory}
+  closely.
+  \end{center}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 

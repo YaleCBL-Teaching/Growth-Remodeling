@@ -7,180 +7,111 @@
 \end{frame}
 
 \begin{frame}[t]{Living materials are never ``finished''}
-  \begin{columns}[T]
-    \begin{column}{0.56\textwidth}
-      An engineered beam is manufactured once and then wears out. A living artery
-      is the opposite: it is \textbf{continuously torn down and rebuilt}. Cells in
-      the wall constantly
-      \begin{itemize}
-        \item \textbf{deposit} new structural proteins, and
-        \item \textbf{degrade} old ones,
-      \end{itemize}
-      while sensing the loads they carry.
-      \vspace{0.6em}
-      \begin{itemize}
-        \item \textbf{Growth} --- change in \emph{mass} (add / remove material).
-        \item \textbf{Remodeling} --- change in \emph{microstructure} (re-orient
-        fibers, reset natural lengths, swap constituents).
-      \end{itemize}
-      \vspace{0.4em}
-      {\color{AccentRed}\textbf{Payoff:} predict whether a hypertensive artery
-      thickens and stabilises, or an aneurysm keeps dilating until it ruptures.}
-    \end{column}
-    \begin{column}{0.44\textwidth}
-      \slidefig[\linewidth]{biol_tensional_homeostasis.png}
-      \figcredit{Fig.: A. Gebauer (TUM lecture); plotted data Ezra \textit{et al.},
-      Invest Ophthalmol Vis Sci (2010); concept Brown \textit{et al.}, J Cell Physiol (1998)}
-    \end{column}
-  \end{columns}
+  A steel beam is made once and wears out. A living artery is
+  \textbf{continuously torn down and rebuilt}: cells deposit and degrade
+  structural proteins while sensing the loads they carry.
+  \begin{itemize}
+    \item \textbf{Growth} --- change in \emph{mass}.
+    \item \textbf{Remodeling} --- change in \emph{microstructure} (fiber
+    orientation, natural length, composition).
+  \end{itemize}
+  \vfill
+  \begin{center}\color{AccentRed}
+  Will a hypertensive artery thicken and stabilise, or an aneurysm dilate to
+  rupture?
+  \end{center}
 \end{frame}
 
 \begin{frame}[t]{The cast of characters in an arterial wall}
   \small
   \begin{center}
-  \renewcommand{\arraystretch}{1.35}
-  \begin{tabular}{@{}p{0.16\textwidth}p{0.36\textwidth}p{0.38\textwidth}@{}}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{@{}p{0.17\textwidth}p{0.34\textwidth}p{0.36\textwidth}@{}}
     \toprule
     \textbf{Constituent} & \textbf{Mechanical role} & \textbf{Turnover in adults}\\
     \midrule
-    \textbf{\color{YaleBlue}Elastin} & soft, rubber-like; bears load at low stretch;
-      stores recoil energy & \textbf{essentially none} --- half-life of \emph{decades} \\
-    \textbf{\color{YaleBlue}Collagen} & stiff fibers, crimped at rest; the main
-      protection against overstretch and rupture & \textbf{fast} --- half-life
-      \emph{weeks to months} \\
-    \textbf{\color{YaleBlue}Smooth muscle} & bears passive load \emph{and}
-      actively contracts; the main sensor/builder cell & fast; also switches
-      phenotype \\
+    \textbf{\color{YaleBlue}Elastin} & soft; bears load at low stretch &
+      \textbf{none} --- half-life of decades \\
+    \textbf{\color{YaleBlue}Collagen} & stiff, crimped; guards against rupture &
+      \textbf{fast} --- weeks to months \\
+    \textbf{\color{YaleBlue}Smooth muscle} & passive load + active contraction;
+      the sensor cell & fast; switches phenotype \\
     \bottomrule
   \end{tabular}
   \end{center}
-  \vspace{0.6em}
-  Two facts drive almost everything in the models:
-  \begin{enumerate}
-    \item \textbf{Elastin cannot be renewed} --- if age or disease destroys it, it
-    is gone for good. This is the classic trigger for \textbf{aneurysm}.
-    \item \textbf{Collagen and SMC are in constant flux} --- so the wall can
-    \emph{adapt}\,; but the same machinery, pushed too hard, can \emph{run away}.
-  \end{enumerate}
+  \vfill
+  \begin{itemize}\small
+    \item \textbf{Elastin cannot be renewed} --- its loss triggers \emph{aneurysm}.
+    \item \textbf{Collagen \& SMC turn over constantly} --- so the wall can
+    \emph{adapt}, or \emph{run away}.
+  \end{itemize}
   \srccite{Humphrey, Eberth, Dye, Gleason, J Biomech (2009)}
 \end{frame}
 
-\begin{frame}[t]{Constituent turnover is fast --- and never stops}
+\begin{frame}[t]{Deposition pre-stretch}
+  Cells cross-link each new fiber \emph{while the wall is loaded}, so it is
+  \textbf{born pre-stretched} to the same target state. Each cohort keeps its
+  \emph{own} natural configuration --- a {\color{YaleBlue}\textbf{constrained
+  mixture}}: deforming together now, each remembering a different stress-free state.
+  \vfill
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \slidefig[\linewidth]{biol_turnover_rates.png}
+      \begin{center}\textbf{\color{BoxGray} no deposition pre-stress}\end{center}
+      New material enters slack ($\sigma_{\text{pre}}=0$); as old fibers are
+      removed, the replacement carries no load --- the homeostatic state
+      \textbf{cannot be maintained}.
     \end{column}
     \begin{column}{0.5\textwidth}
-      \begin{itemize}
-        \item Collagen: $\sim$0.6\% synthesised per day; half-life 80--120 days.
-        \item Smooth muscle turns over on a similar timescale.
-        \item Elastin: half-life of \emph{decades} --- effectively $k_d^e = 0$.
-      \end{itemize}
-      \vspace{0.5em}
-      Continuous replacement is not wasteful bookkeeping --- it is what lets the
-      tissue \emph{re-tune} itself to changing loads. The price is that every new
-      fiber must be deposited \emph{correctly} to maintain the mechanical state.
+      \begin{center}\textbf{\color{YaleBlue} with deposition pre-stress}\end{center}
+      New material enters at the homeostatic prestress
+      $\sigma_{\text{pre}}=\sigma_h$ (stretch $G^k$); each replacement immediately
+      bears its share --- the state is \textbf{maintained through turnover}.
     \end{column}
   \end{columns}
-  \srccite{Weber, J Am Coll Cardiol (1989); Fig.: A. Gebauer (TUM lecture)}
+  \vfill
+  \begin{center}\color{AccentRed}
+  This one convention is what lets a continuously-renewed tissue hold a steady
+  mechanical state.
+  \end{center}
 \end{frame}
 
-\begin{frame}[t]{Deposition pre-stretch: the key idea beginners miss}
-  \begin{columns}[T]
-    \begin{column}{0.54\textwidth}
-      When a cell deposits a new collagen fiber into the \emph{loaded} wall, it
-      does \textbf{not} lay it down slack. It cross-links the fiber while the
-      tissue is under load, so the fiber is \textbf{born already stretched}
-      relative to its own natural length --- by roughly the \emph{same amount
-      every time}, because the cell targets a preferred mechanical state.
-      \vspace{0.5em}
-
-      \textbf{Consequence:} each generation (``cohort'') of fibers has its
-      \emph{own} natural configuration. The wall is a mixture whose constituents
-      do \emph{not} share a common unloaded reference --- a
-      {\color{YaleBlue}\textbf{constrained mixture}}: constrained to deform
-      together \emph{now}, but each remembering a different stress-free state.
-    \end{column}
-    \begin{column}{0.46\textwidth}
-      \slidefig[\linewidth]{biol_turnover_prestress.png}
-      \figcredit{Fig.: A. Gebauer, Modeling Cardiac Mechanics (TUM lecture)}
-    \end{column}
-  \end{columns}
+\begin{frame}[t]{Cells chase a mechanical set-point}
+  Cells regulate a \textbf{target (homeostatic) stress}: above it they build more,
+  below it removal wins --- a negative feedback that thickens a hypertensive wall
+  until stress returns to normal.
+  \bigfigw{fut_homeostasis_feedback.png}{0.86\linewidth}{Regulated variables are
+  compared to set-points; the mismatch drives constituent-specific G\&R.}
+  \figcredit{Adapted from Humphrey, J Elasticity (2021)}
 \end{frame}
 
-\begin{frame}[t]{Mechanobiology: cells chase a mechanical set-point}
-  \begin{columns}[T]
-    \begin{column}{0.52\textwidth}
-      Cells behave as if regulating a \textbf{target mechanical state} --- a
-      \emph{homeostatic} stress they ``want'' to feel:
-      \begin{itemize}
-        \item stress \textbf{above} set-point $\Rightarrow$ build \emph{more}
-        (and, for muscle, contract);
-        \item stress \textbf{below} set-point $\Rightarrow$ build less, let
-        removal win.
-      \end{itemize}
-      \vspace{0.4em}
-      This negative feedback lets an artery under sustained \textbf{hypertension}
-      thicken until stress per unit material drops back to normal.
-      \vspace{0.4em}
-
-      {\color{AccentRed} Every theory in this lecture is a different hypothesis for
-      \emph{how strongly}, \emph{how quickly}, and \emph{in what configuration}
-      the cells respond.}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      \slidefig[\linewidth]{fut_homeostasis_feedback.png}
-      \figcredit{Adapted from Humphrey, J Elasticity (2021)}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[t]{Fundamental observations from earlier work}
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      \textbf{\color{YaleBlue}Davis (1867), Wolff (1892).} Loaded soft tissue and
-      bone add material along the direction of sustained tension --- the first
-      qualitative growth ``laws''.
-      \vspace{0.3em}
-
-      \textbf{\color{YaleBlue}Wolinsky \& Glagov (1967).} Cauchy stress in the
-      aortic media is nearly \emph{constant} across mammals spanning orders of
-      magnitude in body mass --- a mechanical set-point.
-      \vspace{0.3em}
-
-      \textbf{\color{YaleBlue}Grossman (1975).} Under pressure overload the wall
-      thickens \emph{just enough} to return wall stress to normal.
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \slidefig[\linewidth]{motiv_wolinsky_glagov.png}
-      \figcredit{Fig.: A. Gebauer (TUM lecture); data Wolinsky \& Glagov, Circ Res (1967)}
-    \end{column}
-  \end{columns}
-  \srccite{Wolinsky, Glagov, Circ Res (1967); Grossman, Jones, McLaurin, J Clin Invest (1975)}
+\begin{frame}[t]{Fundamental observation: a stress set-point}
+  Wolinsky \& Glagov (1967): Cauchy stress in the aortic media is nearly
+  \textbf{constant across mammals} spanning orders of magnitude in body mass ---
+  direct evidence of a mechanical set-point. (Davis 1867 \& Wolff 1892: tissue
+  adds material along sustained tension; Grossman 1975: pressure overload thickens
+  the wall just enough to normalise stress.)
+  \bigfigw{motiv_wolinsky_glagov.png}{0.55\linewidth}{Wall tension vs.\ body mass
+  across species.}
+  \figcredit{Fig.: A. Gebauer (TUM lecture); data Wolinsky \& Glagov, Circ Res (1967)}
 \end{frame}
 
 \begin{frame}[t]{Two canonical scenarios we will simulate}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \textbf{\color{YaleBlue}Hypertension} --- a sustained step rise in blood
-      pressure. Healthy expectation: \emph{adaptation}. The wall thickens and
-      restores homeostatic stress; a good model reproduces a stable return to the
-      set-point.
+      \textbf{\color{YaleBlue}Hypertension} --- sustained pressure step. Expect
+      \emph{adaptation}: the wall thickens, stress returns to set-point.
     \end{column}
     \begin{column}{0.5\textwidth}
-      \textbf{\color{YaleBlue}Aneurysm (elastin loss)} --- irreversible elastin
-      degradation. The load-bearing burden shifts onto collagen/SMC, and geometry
-      (radius, thinning) can feed \emph{positively} back on stress. A good model
-      must predict \emph{both} outcomes: stabilise at a larger size, \emph{or}
-      dilate without bound.
+      \textbf{\color{YaleBlue}Aneurysm} --- irreversible elastin loss. Geometry can
+      feed \emph{positively} back on stress: stabilise larger, \emph{or} dilate
+      without bound.
     \end{column}
   \end{columns}
   \vfill
   \begin{center}\large\color{AccentRed}
-  \emph{When does a tissue adapt to a stable new state, and when does it lose
-  stability and run away?}
+  \emph{When does a tissue adapt, and when does it run away?}
   \end{center}
   \vfill
-  {\footnotesize The four theories answer this differently --- that is exactly
-  what the code lets you explore.}
+  {\footnotesize\color{BoxGray} The four theories answer this differently --- and
+  the code lets you explore each.}
 \end{frame}
