@@ -2,49 +2,27 @@
 %  SECTION 9 — Future perspectives
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Future perspectives}\\[0.5em]
-  {\color{BoxGray} clinical translation, systems biology, fluid--solid--growth}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} Future perspectives}
+  \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Clinical application: reversible graft stenosis}
-  A constrained-mixture G\&R model predicted --- and in-vivo imaging confirmed ---
-  that early narrowing of tissue-engineered vascular grafts can \textbf{spontaneously
-  reverse} as neotissue matures. Much observed ``failure'' is transient.
-  \bigfigw{fut_drews_reversal.png}{0.66\linewidth}{Predicted and observed reversal of
-  TEVG stenosis over time.}
-  \figcredit{Drews, Pepper, Best, \ldots, Humphrey, Breuer, Sci Transl Med (2020)}
+\begin{frame}[t]{Clinical Application: Reversible Graft Stenosis}
+  \bigfigw{fut_drews_reversal.png}{0.66\linewidth}{}
   \srccite{Drews, Pepper, Best, \ldots, Humphrey, Breuer, Sci Transl Med (2020)}
 \end{frame}
 
-\begin{frame}[t]{Systems-biology coupling: signaling to remodeling}
-  The stress stimuli here are \emph{phenomenological}. A next step couples the
-  tissue-level model to a \textbf{logic-based cell-signaling network} --- mechanics
-  drives signaling (AngII, TGF-$\beta$, \ldots), whose outputs feed back on mass
-  production and active stress: ``from transcript to tissue''.
-  \bigfigw{fut_irons_network.png}{0.74\linewidth}{Intracellular signaling network
-  linking mechanical stimuli to constituent turnover.}
-  \figcredit{Irons, Latorre, Humphrey, Ann Biomed Eng (2021)}
+\begin{frame}[t]{Systems-Biology Coupling: Signaling to Remodeling}
+  \bigfigw{fut_irons_network.png}{0.74\linewidth}{}
   \srccite{Irons, Humphrey, PLoS Comput Biol (2020); Irons, Latorre, Humphrey, Ann Biomed Eng (2021)}
 \end{frame}
 
-\begin{frame}[t]{Fluid--solid--growth: closing the hemodynamic loop}
-  In a real vessel, G\&R changes geometry $\to$ flow $\to$ wall shear stress $\to$
-  the remodeling stimulus. \textbf{FSG} couples the fast fluid (Navier--Stokes,
-  ms) to the slow solid-growth (weeks); \textbf{FSGe} makes it fast by using the
-  \emph{equilibrated} solver for the solid.
-  \bigfigw{fut_fsg_loop.png}{0.78\linewidth}{The fluid--solid--growth feedback loop
-  across disparate timescales.}
-  \figcredit{Fig.: M. Pfaller (TUM/Stanford talk)}
-  \srccite{Schwarz, Pfaller, \ldots, Marsden, Comput Methods Appl Mech Eng (2023); Pfaller, Latorre, \ldots, Marsden, Comput Methods Appl Mech Eng (2024)}
+\begin{frame}[t]{Fluid--Solid--Growth: Closing the Hemodynamic Loop}
+  \bigfigw{fut_fsg_loop.png}{0.78\linewidth}{}
+  \srccite{Schwarz, Pfaller, \ldots, Marsden, Comput Methods Appl Mech Eng (2023);\\
+  Pfaller, Latorre, \ldots, Marsden, Comput Methods Appl Mech Eng (2024)}
 \end{frame}
 
-\begin{frame}[t]{FSGe: long-term evolved aneurysmal equilibrium}
-  Coupling the equilibrated solid to the hemodynamics yields the evolved geometry
-  \emph{and} the flow fields at the adapted state --- far cheaper than a fully
-  transient simulation. {\color{AccentRed}The equilibrated theory is the enabling
-  ingredient for tractable 3D FSG.}
-  \bigfigw{fut_fsge_aneurysm.png}{0.90\linewidth}{Evolved aneurysm: wall shear
-  stress, velocity, and pressure fields at the long-term equilibrium.}
-  \figcredit{Pfaller, Latorre, Schwarz, Gerosa, Szafron, Humphrey, Marsden, Comput Methods Appl Mech Eng (2024)}
+\begin{frame}[t]{FSGe: Long-Term Evolved Aneurysmal Equilibrium}
+  \bigfigw{fut_fsge_aneurysm.png}{0.90\linewidth}{}
+  \srccite{Pfaller, Latorre, Schwarz, Gerosa, Szafron, Humphrey, Marsden, Comput Methods Appl Mech Eng (2024)}
 \end{frame}
-

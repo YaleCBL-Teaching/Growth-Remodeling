@@ -2,11 +2,11 @@
 %  SECTION 6 — Equilibrated constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Equilibrated CMM}\\[0.5em]
-  {\color{BoxGray} Latorre \& Humphrey (2018)}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} Equilibrated CMM}
+  \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Skip the transient --- solve for the end state}
+\begin{frame}[t]{Skip the Transient --- Solve for the End State}
   Set every rate to zero and solve the \textbf{algebraic} system --- one root-find
   instead of thousands of time steps. At mechanobiological equilibrium:
   {\small (A) growth balance $\Upsilon=1\Rightarrow\bar\sigma^*=\bar\sigma_h$;\;
@@ -15,10 +15,10 @@
   \bigfigw{equil_longterm.png}{0.72\linewidth}{The equilibrated model jumps
   straight to the long-term evolved state (index $h$) that the transient theories
   approach in time.}
-  \figcredit{Fig.: M. Pfaller (BMES 2023); Latorre, Humphrey, ZAMM (2018)}
+  \srccite{Latorre, Humphrey, ZAMM (2018)}
 \end{frame}
 
-\begin{frame}[t]{Collapse to one scalar equation}
+\begin{frame}[t]{Collapse to One Scalar Equation}
   Let the turnover constituents grow in fixed proportion (exact when they share
   gain and turnover). Conditions (A)--(C) reduce to a \emph{single} equation for
   the evolved stretch $\lambda^*$:
@@ -36,15 +36,12 @@
   \srccite{Latorre, Humphrey, ZAMM (2018)}
 \end{frame}
 
-\begin{frame}[t]{The punchline: existence = stability}
+\begin{frame}[t]{The Punchline: Existence = Stability}
   Equation \eqref{eq:equil} may have \textbf{no physical root} --- then no adapted
   state exists and the transient theories dilate without bound. The solver is
   therefore the cleanest \textbf{stability test}: root $\Rightarrow$ adapts, no root
   $\Rightarrow$ unstable. Near the boundary the transient slows critically, which
   is exactly why the instant algebraic test is so useful.
-  \vfill
-  {\footnotesize\color{BoxGray} You will check the match and hunt for the critical
-  elastin loss in the exercise next.}
 \end{frame}
 
 
@@ -72,7 +69,6 @@
   \vspace{-0.3em}
   \bigfigw{fig05_equilibrated.pdf}{0.66\linewidth}{Your run: equilibrated end-state
   on the transient plateau where a root exists; near the boundary, critical slowing.}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
   \vspace{-0.4em}
   \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} \textbf{matches} the
   transient theories \emph{if} an equilibrium exists --- and flags when it does not.\end{center}

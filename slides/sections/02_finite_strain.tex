@@ -2,11 +2,11 @@
 %  SECTION 3 — Finite-strain continuum mechanics
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Finite-strain fundamentals}\\[0.5em]
-  {\color{BoxGray} configuration, deformation, strain, stress, hyperelasticity}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} Finite-strain fundamentals}
+  \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Reference and current configuration}
+\begin{frame}[t]{Reference and Current Configuration}
   A body is described in two configurations: the \textbf{reference}
   $\mathcal{B}_0$ (material points $\bm{X}$) and the \textbf{current}
   $\mathcal{B}_t$ (spatial points $\bm{x}$). The \textbf{motion}
@@ -14,10 +14,9 @@
   \vfill
   \begin{center}\configmap[1.02]\end{center}
   \vfill
-  \srccite{continuum-mechanics background adapted from YaleCBL-Teaching/BENG\_5570}
 \end{frame}
 
-\begin{frame}[t]{The deformation gradient}
+\begin{frame}[t]{The Deformation Gradient}
   How a line element transforms is the key kinematic quantity --- the
   \textbf{deformation gradient} $\bm{F}=\partial\bm{x}/\partial\bm{X}$ maps
   reference line elements to current ones:
@@ -30,7 +29,7 @@
     \lambda=1\ \text{undeformed}.}
 \end{frame}
 
-\begin{frame}[t]{Strain --- a rotation-free measure of stretching}
+\begin{frame}[t]{Strain --- A Rotation-Free Measure of Stretching}
   $\bm{F}$ still contains rigid rotation. Removing it gives the \textbf{right
   Cauchy--Green} tensor and the \textbf{Green--Lagrange strain}:
   \slboxeq{2.4em}{eq:strain}{\bm{C}=\bm{F}^{\!\top}\bm{F},\qquad
@@ -40,7 +39,7 @@
   below is exactly $\bm{C}$ read along a fiber.
 \end{frame}
 
-\begin{frame}[t]{Stress --- force per current area}
+\begin{frame}[t]{Stress --- Force per Current Area}
   We report the \textbf{Cauchy (true) stress} $\sigma$: force per unit
   \emph{current} area --- the physically meaningful measure for a growing body,
   because the load-bearing area itself changes as the tissue remodels. It is what
@@ -55,7 +54,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Hyperelasticity: stress from a stored-energy function}
+\begin{frame}[t]{Hyperelasticity: Stress from a Stored-Energy Function}
   A \textbf{hyperelastic} material stores energy $W(\lambda_e)$ and its stress is
   the derivative --- no dissipation, path-independent:
   \slboxeq{2.4em}{eq:hyper}{\sigma \;=\; \lambda_e\,\frac{\dd W}{\dd\lambda_e}}
@@ -67,7 +66,7 @@
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
 \end{frame}
 
-\begin{frame}[t]{Constituent laws \& why the artery is special}
+\begin{frame}[t]{Constituent Laws \& Why the Artery Is Special}
   \bigfigw{fig01_constitutive.pdf}{0.74\linewidth}{Left: soft elastin vs.\ steeply
   stiffening collagen/muscle, with $G^k$ and $\sigma_h^k$ marked. Right: the
   required stress grows \emph{linearly} for the bar but \emph{quadratically} for
@@ -75,10 +74,9 @@
   \begin{center}\small\color{AccentRed}
   That extra power of $\lambda$ is the whole story of arterial instability --- see the stability section.
   \end{center}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 
-\begin{frame}[t]{The deposition stretch $G^k$}
+\begin{frame}[t]{The Deposition Stretch $G^k$}
   Cells deposit new fibers \textbf{already under tension} at a fixed deposition
   stretch $G^k>1$. At homeostasis the elastic stretch equals $G^k$, which
   \emph{defines} the homeostatic stress:
@@ -88,7 +86,7 @@
   \srccite{deposition-stretch concept: Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
-\begin{frame}[t]{Multiplicative decomposition --- growth vs.\ elasticity}
+\begin{frame}[t]{Multiplicative Decomposition --- Growth vs.\ Elasticity}
   Split the deformation into a stress-free \textbf{inelastic} part (growth /
   remodeling) and an \textbf{elastic} part --- the only part that carries stress:
   \slboxeq{2.4em}{eq:split}{\lambda = \lambda_e \,\lambda_{\text{inel}}}
@@ -98,6 +96,6 @@
     configuration, superposed.
   \end{itemize}
   \vspace{0.3em}
-  {\footnotesize\color{BoxGray} The set-point \eqref{eq:setpoint} and the split
-  \eqref{eq:split} recur in every model that follows.}
+  The set-point \eqref{eq:setpoint} and the split \eqref{eq:split} recur in every
+  model that follows.
 \end{frame}

@@ -2,22 +2,21 @@
 %  SECTION 3 — Kinematic growth
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Kinematic growth}\\[0.5em]
-  {\color{BoxGray} Rodriguez, Hoger \& McCulloch (1994)}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} Kinematic growth}
+  \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{The idea, and the kinematics}
+\begin{frame}[t]{The Idea, and the Kinematics}
   Postulate a stress-free \textbf{growth} deformation; only the elastic part
   carries load. Growth is one scalar $\theta$ (radial thickening):
   \giveneq{\bm{F} = \bm{F}_e\,\bm{F}_g,\qquad \frac{M}{M_0}=\theta,\qquad
     \text{only }\bm{F}_e\text{ stores energy.}}
-  \bigfigw{kin_multiplicative_split.png}{0.62\linewidth}{One growth variable for
-  the whole mixture --- no individual turnover. That is the strength and the
-  ceiling.}
-  \figcredit{Fig.: A. Gebauer (TUM lecture); Rodriguez, Hoger, McCulloch, J Biomech (1994)}
+  \vfill
+  \begin{center}\kinmap[1.05]\end{center}
+  \vfill
 \end{frame}
 
-\begin{frame}[t]{The growth law}
+\begin{frame}[t]{The Growth Law}
   Growth nulls the stress deviation from the set-point (first-order, production
   $\propto$ current mass):
   \slboxeq{2.6em}{eq:kingrowth}{\frac{\dd\theta}{\dd t}
@@ -29,7 +28,7 @@
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
-\begin{frame}[t]{Stability is imposed, not predicted}
+\begin{frame}[t]{Stability Is Imposed, Not Predicted}
   Growth is stable iff adding mass \emph{lowers} the stress it must carry,
   \giveneq{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0.}
   This always holds for the \textbf{bar}, but a strong enough insult flips the sign
@@ -62,7 +61,6 @@
   \vspace{-0.3em}
   \bigfigw{fig02_kinematic_growth.pdf}{0.66\linewidth}{Your numerical experiment:
   convergence to the \emph{prescribed} set-point, or divergence.}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
   \vspace{-0.4em}
   \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} reaches the a-priori
   prescribed homeostasis, \emph{or} it is unstable --- nothing in between.\end{center}

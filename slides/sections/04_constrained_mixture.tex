@@ -2,21 +2,21 @@
 %  SECTION 4 — Full constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Constrained mixture (full)}\\[0.5em]
-  {\color{BoxGray} Humphrey \& Rajagopal (2002) --- the heart of the lecture}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} Constrained mixture (full)}
+  \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{The idea: track every cohort}
+\begin{frame}[t]{The Idea: Track Every Cohort}
   Constituents are \textbf{constrained to deform together}, but each carries its
   \emph{own} natural configuration and is continuously \textbf{produced and
   removed}. The tissue therefore carries a whole \emph{history} of cohorts ---
   faithful, and expensive.
-  \bigfigw{cmm_schematic.png}{0.80\linewidth}{Material deposited at $0,\tau,s$ is
-  laid down at the deposition stretch $G^k$ into successive configurations.}
-  \figcredit{Fig.: A. Gebauer (TUM lecture); Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+  \vfill
+  \begin{center}\cmmmap[1.0]\end{center}
+  \vfill
 \end{frame}
 
-\begin{frame}[t]{Mass balance --- the heredity integral}
+\begin{frame}[t]{Mass Balance --- The Heredity Integral}
   The mass of a turnover constituent $k$ now is the surviving remnant of the
   initial material plus everything produced since, each aged by a survival
   function:
@@ -38,7 +38,7 @@
   \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
-\begin{frame}[t]{Each cohort remembers its birth configuration}
+\begin{frame}[t]{Each Cohort Remembers Its Birth Configuration}
   A cohort of $k$ deposited at time $\tau$ is laid down at the deposition stretch
   $G^k$; as the tissue goes on deforming, that cohort stretches \emph{with} the
   mixture, so its elastic stretch evaluated now is
@@ -49,7 +49,7 @@
   \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
-\begin{frame}[t]{Mixture stress = history integral}
+\begin{frame}[t]{Mixture Stress = History Integral}
   The mixture Cauchy stress is the mass-weighted sum over \emph{all} surviving
   cohorts (rule of mixtures):
   \slboxeq{3.2em}{eq:mixstress}{\bar\sigma(t) = \frac{1}{M_{\text{tot}}}\sum_k\!\left[
@@ -62,7 +62,7 @@
   \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
-\begin{frame}[t]{What it buys you: stability is \emph{predicted}}
+\begin{frame}[t]{What It Buys You: Stability Is \emph{Predicted}}
   \emph{Nothing} prescribes the outcome --- adaptation or dilation \textbf{emerges}
   from the turnover dynamics and the insult. Under hypertension the model grows
   collagen and muscle while elastin is diluted, and tissue stress returns to
@@ -70,9 +70,6 @@
   \vfill
   {\color{AccentRed} The price: the history integrals make the model $O(N^2)$ in
   time steps --- the motivation for the homogenized model.}
-  \vfill
-  {\footnotesize\color{BoxGray} You will run this insult and see the adaptation in
-  the exercise next.}
 \end{frame}
 
 
@@ -100,7 +97,6 @@
   \vspace{-0.3em}
   \bigfigw{fig03_constrained_mixture.pdf}{0.66\linewidth}{Your run: under
   hypertension collagen/muscle grow, elastin dilutes, stress returns to set-point.}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
   \vspace{-0.4em}
   \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} stability is
   \emph{predicted}, and it \textbf{depends on the insult}.\end{center}

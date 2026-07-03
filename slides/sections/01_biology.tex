@@ -2,11 +2,11 @@
 %  SECTION 1 — Biological motivation & fundamental observations
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} The biology}\\[0.5em]
-  {\color{BoxGray} why living tissues grow and remodel}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} The biology}
+  \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Living materials are never ``finished''}
+\begin{frame}[t]{Living Materials Are Never ``Finished''}
   A steel beam is made once and wears out. A living artery is
   \textbf{continuously torn down and rebuilt}: cells deposit and degrade
   structural proteins while sensing the loads they carry.
@@ -22,7 +22,7 @@
   \end{center}
 \end{frame}
 
-\begin{frame}[t]{The cast of characters in an arterial wall}
+\begin{frame}[t]{The Cast of Characters in an Arterial Wall}
   \small
   \begin{center}
   \renewcommand{\arraystretch}{1.4}
@@ -48,7 +48,7 @@
   \srccite{Humphrey, Eberth, Dye, Gleason, J Biomech (2009)}
 \end{frame}
 
-\begin{frame}[t]{Deposition pre-stretch}
+\begin{frame}[t]{Deposition Pre-Stretch}
   Cells cross-link each new fiber \emph{while the wall is loaded}, so it is
   \textbf{born pre-stretched} to the same target state. Each cohort keeps its
   \emph{own} natural configuration --- a {\color{YaleBlue}\textbf{constrained
@@ -56,13 +56,13 @@
   \vfill
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \begin{center}\textbf{\color{BoxGray} no deposition pre-stress}\end{center}
+      \begin{center}\textbf{\color{AccentRed} No deposition pre-stress}\end{center}
       New material enters slack ($\sigma_{\text{pre}}=0$); as old fibers are
       removed, the replacement carries no load --- the homeostatic state
       \textbf{cannot be maintained}.
     \end{column}
     \begin{column}{0.5\textwidth}
-      \begin{center}\textbf{\color{YaleBlue} with deposition pre-stress}\end{center}
+      \begin{center}\textbf{\color{YaleBlue} With deposition pre-stress}\end{center}
       New material enters at the homeostatic prestress
       $\sigma_{\text{pre}}=\sigma_h$ (stretch $G^k$); each replacement immediately
       bears its share --- the state is \textbf{maintained through turnover}.
@@ -75,16 +75,16 @@
   \end{center}
 \end{frame}
 
-\begin{frame}[t]{Cells chase a mechanical set-point}
+\begin{frame}[t]{Cells Chase a Mechanical Set-Point}
   Cells regulate a \textbf{target (homeostatic) stress}: above it they build more,
   below it removal wins --- a negative feedback that thickens a hypertensive wall
   until stress returns to normal.
   \bigfigw{fut_homeostasis_feedback.png}{0.86\linewidth}{Regulated variables are
   compared to set-points; the mismatch drives constituent-specific G\&R.}
-  \figcredit{Adapted from Humphrey, J Elasticity (2021)}
+  \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
-\begin{frame}[t]{Fundamental observation: a stress set-point}
+\begin{frame}[t]{Fundamental Observation: A Stress Set-Point}
   Wolinsky \& Glagov (1967): Cauchy stress in the aortic media is nearly
   \textbf{constant across mammals} spanning orders of magnitude in body mass ---
   direct evidence of a mechanical set-point. (Davis 1867 \& Wolff 1892: tissue
@@ -92,10 +92,10 @@
   the wall just enough to normalise stress.)
   \bigfigw{motiv_wolinsky_glagov.png}{0.55\linewidth}{Wall tension vs.\ body mass
   across species.}
-  \figcredit{Fig.: A. Gebauer (TUM lecture); data Wolinsky \& Glagov, Circ Res (1967)}
+  \srccite{Wolinsky \& Glagov, Circ Res (1967)}
 \end{frame}
 
-\begin{frame}[t]{Two canonical scenarios we will simulate}
+\begin{frame}[t]{Two Canonical Scenarios We Will Simulate}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
       \textbf{\color{YaleBlue}Hypertension} --- sustained pressure step. Expect
@@ -111,7 +111,4 @@
   \begin{center}\large\color{AccentRed}
   \emph{When does a tissue adapt, and when does it run away?}
   \end{center}
-  \vfill
-  {\footnotesize\color{BoxGray} The four theories answer this differently --- and
-  the code lets you explore each.}
 \end{frame}

@@ -2,11 +2,11 @@
 %  SECTION 7 — Stability capstone
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Stability}\\[0.5em]
-  {\color{BoxGray} adaptation vs.\ aneurysm --- the one big question}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} Stability}
+  \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Where instability comes from: the Laplace exponent}
+\begin{frame}[t]{Where Instability Comes From: The Laplace Exponent}
   Growth adds mass, \emph{lowering} required stress (stabilising); dilation
   \emph{raises} it, \textbf{quadratically} for the artery. Lose elastin and dilation
   wins the race --- the feedback turns positive: \textbf{runaway}.
@@ -14,20 +14,17 @@
     \ \Leftrightarrow\ \text{tissue adapts}}
   \bigfigw{stab_criterion_map.png}{0.60\linewidth}{Stable / unstable map over insult
   strength --- the bar (linear) can never lose this race.}
-  \figcredit{Fig.: A. Gebauer (TUM lecture); Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
+  \srccite{Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
 \end{frame}
 
-\begin{frame}[t]{Same tissue, two insults}
+\begin{frame}[t]{Same Tissue, Two Insults}
   Read stability two ways: \textbf{existence} --- the equilibrated equation
   \eqref{eq:equil} has a root iff the tissue can adapt (no time integration); or
   \textbf{transient} --- integrate and watch it plateau or climb. The same tissue
   can do either: mild elastin loss adapts, severe loss dilates without bound.
-  \vfill
-  {\footnotesize\color{BoxGray} You will map the stable / unstable boundary and move
-  it by changing one tissue property in the exercise next.}
 \end{frame}
 
-\begin{frame}[t]{How the four theories answer --- the takeaways}
+\begin{frame}[t]{How the Four Theories Answer --- The Takeaways}
   \small
   \begin{center}
   \renewcommand{\arraystretch}{1.4}
@@ -81,7 +78,6 @@
   \vspace{-0.3em}
   \bigfigw{fig06_stability.pdf}{0.66\linewidth}{Your map: 30\% elastin adapts (blue),
   3\% dilates without bound (red). Boundary from the equilibrated existence test.}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
   \vspace{-0.4em}
   \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} the existence test
   that defines the equilibrium boundary \emph{is} the stability criterion.\end{center}

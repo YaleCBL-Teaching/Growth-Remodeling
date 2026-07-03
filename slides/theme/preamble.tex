@@ -47,9 +47,11 @@
 % title; lower-right the frame number. The stored reference resets each shipout.
 \setbeamertemplate{footline}{%
   \leavevmode\hbox{%
-    \begin{beamercolorbox}[wd=\paperwidth,ht=2.4ex,dp=1.1ex,leftskip=1.2em,rightskip=1.2em]{}%
-      {\scriptsize\color{BoxGray}\itshape\sliderefstore\hfill
-       \upshape\insertframenumber}%
+    \begin{beamercolorbox}[wd=\paperwidth,dp=1.2ex,leftskip=1.2em,rightskip=1.2em]{}%
+      {\scriptsize\color{BoxGray}%
+        \begin{minipage}[b]{\dimexpr\paperwidth-5.2em\relax}\itshape\sliderefstore\end{minipage}%
+        \hfill
+        \begin{minipage}[b]{1.6em}\raggedleft\upshape\insertframenumber\end{minipage}}%
     \end{beamercolorbox}}%
   \gdef\sliderefstore{}%
 }
@@ -107,21 +109,20 @@
 
 % ---- big-figure slide: one large centred figure + short caption ------------
 % \bigfig{file}{one-line caption}  — figure dominates the slide, minimal text.
+% Captions under figures are intentionally suppressed (#2/#3 ignored).
 \newcommand{\bigfig}[2]{%
   \vfill
   \begin{center}%
-    \includegraphics[width=0.92\linewidth,height=0.62\textheight,keepaspectratio]{figures/#1}%
+    \includegraphics[width=0.92\linewidth,height=0.66\textheight,keepaspectratio]{figures/#1}%
   \end{center}%
-  \begin{center}{\small\color{BoxGray} #2}\end{center}%
   \vfill
 }
 % variant with adjustable width for tall figures
 \newcommand{\bigfigw}[3]{%
   \vfill
   \begin{center}%
-    \includegraphics[width=#2,height=0.62\textheight,keepaspectratio]{figures/#1}%
+    \includegraphics[width=#2,height=0.66\textheight,keepaspectratio]{figures/#1}%
   \end{center}%
-  \begin{center}{\small\color{BoxGray} #3}\end{center}%
   \vfill
 }
 
@@ -165,7 +166,7 @@
 \newcommand{\qq}[1]{\par\smallskip{\color{QBlue}\bfseries Question.}\ #1}
 \newcommand{\qres}[1]{\par\smallskip{\color{QBlue}\bfseries Resources.}\ #1}
 \newcommand{\qhint}[1]{\par\smallskip{\color{QBlue}\bfseries Hints.}\ #1}
-\newcommand{\qkind}[1]{\hfill{\footnotesize\color{BoxGray}\itshape #1}}
+\newcommand{\qkind}[1]{}
 
 
 % ===========================================================================
@@ -203,35 +204,105 @@
 % ============================================================================
 %  Reference -> current configuration mapping (TikZ)  \configmap
 % ============================================================================
+% ============================================================================
+%  Configuration-mapping diagrams (TikZ, grayscale)
+%    \configmap  reference -> current (deformation gradient F)
+%    \kinmap     kinematic growth multiplicative split  F = F_e F_g
+%    \cmmmap     constrained mixture: cohorts, each its own natural config
+%  Shared style: stress-free/reference bodies light gray, loaded/current
+%  bodies darker gray; labels placed clear of the blobs to avoid overlap.
+% ============================================================================
+\tikzset{
+  refbody/.style={draw=black!70,very thick,fill=black!8},
+  intbody/.style={draw=black!70,very thick,fill=black!16},
+  curbody/.style={draw=black!80,very thick,fill=black!26},
+  cfgmaparrow/.style={-{Latex[length=2.2mm]},thick,black!75},
+  cfgbase/.style={-{Latex[length=1.2mm]},black!60},
+}
+
+% ---- reference -> current --------------------------------------------------
 \newcommand{\configmap}[1][1.0]{%
-\begin{tikzpicture}[scale=#1]
-  % reference body B_0 (left blob)
-  \begin{scope}[shift={(0,0)}]
-    \draw[YaleBlue,very thick,fill=YaleLightBlue!10]
-      plot[smooth cycle,tension=0.9] coordinates {(-0.1,0)(0.9,0.5)(1.7,0.1)(1.5,-0.9)(0.5,-1.1)(-0.2,-0.6)};
-    \node[YaleBlue] at (0.1,-1.05) {$\mathcal{B}_0$};
-    \node[font=\scriptsize] at (0.75,-1.55) {reference};
-    \fill (0.8,-0.25) circle (1.6pt) node[above,font=\scriptsize]{$\bm{X}$};
-    % base vectors at X
-    \draw[-{Latex[length=1.4mm]}] (0.8,-0.25)--(1.15,-0.25);
-    \draw[-{Latex[length=1.4mm]}] (0.8,-0.25)--(0.8,0.1);
+\begin{tikzpicture}[scale=#1,every node/.style={font=\small}]
+  % reference body (left)
+  \draw[refbody] plot[smooth cycle,tension=0.9]
+    coordinates {(0,0)(1.0,0.55)(1.8,0.15)(1.55,-0.85)(0.55,-1.05)(-0.15,-0.5)};
+  \fill (0.85,-0.2) circle (1.4pt);
+  \node[anchor=south west,font=\footnotesize] at (0.9,-0.2) {$\bm{X}$};
+  \draw[cfgbase] (0.85,-0.2)--(1.2,-0.2);
+  \draw[cfgbase] (0.85,-0.2)--(0.85,0.15);
+  \node[font=\footnotesize] at (0.8,-1.5) {reference $\mathcal{B}_0$};
+  % current body (right)
+  \begin{scope}[shift={(5.0,-0.05)}]
+    \draw[curbody] plot[smooth cycle,tension=0.9]
+      coordinates {(0,0.2)(1.25,0.7)(2.25,0.2)(2.1,-1.0)(1.0,-1.45)(-0.1,-0.75)};
+    \fill (1.25,-0.3) circle (1.4pt);
+    \node[anchor=south west,font=\footnotesize] at (1.3,-0.3) {$\bm{x}$};
+    \draw[cfgbase] (1.25,-0.3)--(1.65,-0.18);
+    \draw[cfgbase] (1.25,-0.3)--(1.32,0.12);
+    \node[font=\footnotesize] at (1.05,-1.9) {current $\mathcal{B}_t$};
   \end{scope}
-  % current body B_t (right blob)
-  \begin{scope}[shift={(4.8,-0.1)}]
-    \draw[AccentRed,very thick,fill=AccentRed!7]
-      plot[smooth cycle,tension=0.9] coordinates {(0,0.2)(1.2,0.7)(2.2,0.2)(2.1,-1.0)(1.0,-1.5)(-0.1,-0.8)};
-    \node[AccentRed] at (2.0,-1.15) {$\mathcal{B}_t$};
-    \node[font=\scriptsize] at (1.0,-1.9) {current};
-    \fill (1.25,-0.35) circle (1.6pt) node[above,font=\scriptsize]{$\bm{x}$};
-    \draw[-{Latex[length=1.4mm]}] (1.25,-0.35)--(1.75,-0.2);
-    \draw[-{Latex[length=1.4mm]}] (1.25,-0.35)--(1.35,0.15);
-  \end{scope}
-  % motion arrow
-  \draw[-{Latex[length=2.4mm]},thick,YaleBlue]
-    (2.0,0.2) to[bend left=22] node[above,font=\small]{$\bm{\varphi}(t,\bm{X})$} (4.6,0.4);
-  \draw[-{Latex[length=2mm]},thick,BoxGray]
-    (1.7,-0.35) to[bend right=12] node[below,font=\scriptsize]{$\dd\bm{x}=\bm{F}\,\dd\bm{X}$} (5.85,-0.55);
+  % motion + line-element mapping
+  \draw[cfgmaparrow] (2.0,0.55) to[bend left=20]
+    node[above,font=\small]{$\bm{\varphi}(t,\bm{X})$} (5.1,0.75);
+  \draw[cfgmaparrow,black!55] (2.0,-0.25) to[bend right=10]
+    node[below,font=\footnotesize]{$\dd\bm{x}=\bm{F}\,\dd\bm{X}$} (6.0,-0.45);
 \end{tikzpicture}}
+
+% ---- kinematic growth: F = F_e F_g -----------------------------------------
+\newcommand{\kinmap}[1][1.0]{%
+\begin{tikzpicture}[scale=#1,every node/.style={font=\small}]
+  % reference (left)
+  \draw[refbody] plot[smooth cycle,tension=0.9]
+    coordinates {(0,0)(0.9,0.45)(1.5,0.1)(1.3,-0.8)(0.5,-0.95)(-0.1,-0.45)};
+  \node[font=\footnotesize] at (0.65,-1.35) {reference $\mathcal{B}_0$};
+  % grown, stress-free intermediate (middle, larger + shifted up)
+  \begin{scope}[shift={(3.4,0.15)}]
+    \draw[intbody] plot[smooth cycle,tension=0.9]
+      coordinates {(0,0.1)(1.15,0.6)(1.9,0.15)(1.7,-1.0)(0.6,-1.2)(-0.15,-0.55)};
+    \node[font=\footnotesize,align=center] at (0.8,-1.55) {grown, stress-free\\$\mathcal{B}_g$};
+  \end{scope}
+  % current, loaded (right)
+  \begin{scope}[shift={(6.8,0)}]
+    \draw[curbody] plot[smooth cycle,tension=0.9]
+      coordinates {(0,0.05)(1.05,0.5)(1.75,0.1)(1.55,-0.9)(0.55,-1.05)(-0.1,-0.5)};
+    \node[font=\footnotesize] at (0.7,-1.4) {current $\mathcal{B}_t$};
+  \end{scope}
+  % arrows (top: two-step split; bottom: composite, routed well below labels)
+  \draw[cfgmaparrow] (1.6,0.15) to[bend left=18]
+    node[above,font=\small]{$\bm{F}_g$ (growth)} (3.35,0.3);
+  \draw[cfgmaparrow] (5.35,0.3) to[bend left=18]
+    node[above,font=\small]{$\bm{F}_e$ (elastic)} (6.9,0.15);
+  \draw[cfgmaparrow,black!55] (0.4,-2.35) to[bend right=10]
+    node[below,font=\footnotesize,pos=0.5]{$\bm{F}=\bm{F}_e\,\bm{F}_g$} (7.6,-2.05);
+\end{tikzpicture}}
+
+% ---- constrained mixture: cohorts, each its own natural configuration ------
+\newcommand{\cmmmap}[1][1.0]{%
+\begin{tikzpicture}[scale=#1,every node/.style={font=\small}]
+  % three small stress-free cohort configs (left, stacked)
+  \foreach \y/\lab in {1.7/{\tau=0}, 0.0/{\tau}, -1.7/{s}} {
+    \begin{scope}[shift={(0,\y)}]
+      \draw[refbody] plot[smooth cycle,tension=0.85]
+        coordinates {(0,0)(0.55,0.32)(0.95,0.05)(0.82,-0.5)(0.32,-0.62)(-0.06,-0.3)};
+      \node[font=\scriptsize,anchor=east] at (-0.15,-0.15) {$\lab$};
+    \end{scope}}
+  \node[font=\footnotesize,align=center] at (0.45,-2.75)
+    {cohorts, each at\\deposition stretch $G^k$};
+  % shared current mixture (right)
+  \begin{scope}[shift={(5.0,0)}]
+    \draw[curbody] plot[smooth cycle,tension=0.9]
+      coordinates {(0,0.4)(1.3,1.0)(2.3,0.35)(2.15,-1.1)(1.0,-1.6)(-0.1,-0.85)};
+    \node[font=\footnotesize] at (1.05,-2.1) {current mixture $\mathcal{B}_t$};
+    \node[font=\scriptsize,align=center,black!70] at (1.05,-0.35)
+      {constrained to\\deform together};
+  \end{scope}
+  % arrows from each cohort into the current mixture
+  \draw[cfgmaparrow] (1.0,1.55) to[bend left=10]
+    node[above,font=\footnotesize]{$\bm{F}_{n(\tau)}$} (5.0,0.5);
+  \draw[cfgmaparrow] (1.0,-0.15) -- (4.9,-0.25);
+  \draw[cfgmaparrow] (1.0,-1.85) to[bend right=10] (5.0,-1.15);
+\end{tikzpicture}}
+
 
 % ---- compact coding-exercise field (adds a monospace "run this" line) ------
 \newcommand{\qrun}[1]{\par\smallskip{\color{QBlue}\bfseries Run.}\ \texttt{#1}}

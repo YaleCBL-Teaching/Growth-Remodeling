@@ -2,21 +2,21 @@
 %  SECTION 5 — Homogenized constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Homogenized CMM}\\[0.5em]
-  {\color{BoxGray} Cyron, Aydin \& Humphrey (2016)}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} Homogenized CMM}
+  \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Throw away the history, keep its average}
+\begin{frame}[t]{Throw Away the History, Keep Its Average}
   \textbf{Temporal homogenization} replaces the entire deposition history by a
   \emph{single evolving mean natural configuration}. The heredity integral becomes
   \textbf{two ODEs per constituent}; cost drops from $O(N^2)$ to $O(N)$:
   \giveneq{\lambda_e^k = \frac{\lambda}{\lambda_n^k}.}
   \bigfigw{homog_configs.png}{0.88\linewidth}{One mean natural configuration per
   constituent, evolving from reference through initial to current state.}
-  \figcredit{Fig.: A. Gebauer (TUM lecture); Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
+  \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
-\begin{frame}[t]{Growth (mass) and remodeling (natural configuration)}
+\begin{frame}[t]{Growth (Mass) and Remodeling (Natural Configuration)}
   \textbf{Growth} --- mass production $\propto$ current mass, driven by the
   tissue-stress deviation:
   \slboxeq{2.4em}{eq:homog_mass}{\frac{\dd M^k}{\dd t}
@@ -36,7 +36,7 @@
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
-\begin{frame}[t]{It tracks the full model closely --- much cheaper}
+\begin{frame}[t]{It Tracks the Full Model Closely --- Much Cheaper}
   Two ODEs per constituent replace the full deposition history. The homogenized
   trajectory sits almost on the full constrained mixture, while kinematic growth
   under-responds to elastin loss --- it grows constituents in lockstep and cannot
@@ -46,9 +46,6 @@
   The homogenized model follows the full model's \emph{time trajectory} closely,
   at $O(N)$ instead of $O(N^2)$.
   \end{center}
-  \vfill
-  {\footnotesize\color{BoxGray} You will overlay the two models and measure the gap
-  in the exercise next.}
 \end{frame}
 
 
