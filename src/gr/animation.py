@@ -80,7 +80,7 @@ def animate(
     quantities: tuple[str, ...] = ("stress_k", "mass_k"),
     vessel_from: Result | None = None,
     equilibrium=None,
-    n_frames: int = 160,
+    n_frames: int = 240,
     title: str | None = None,
 ):
     """Animation (16:9) of the simulation: a big vessel + a grid of live plots.
@@ -100,11 +100,15 @@ def animate(
         vessel_from = next((r for r in results if r.theory == "full CMM"), results[-1])
 
     t_end = max(float(r.t[np.isfinite(r.t)][-1]) for r in results)
-    t_vis = _settle_time(results, t_end)
+    t_vis = min(t_end, 1.6 * _settle_time(results, t_end))     # show a longer window
 
-    # frame clock: brief reference hold, then early-dense to the active window
-    main = t_vis * np.linspace(0.0, 1.0, n_frames) ** 1.7
-    frame_t = np.concatenate([np.zeros(4), main, np.full(3, t_vis)])
+    # frame clock: a short baseline at slightly negative time (drawn but not
+    # labelled) so the change from baseline is visible, then early-dense over the
+    # active window.
+    t_lo = -0.06 * t_vis
+    main = t_vis * np.linspace(0.0, 1.0, n_frames) ** 1.6
+    frame_t = np.concatenate([np.linspace(t_lo, 0.0, 5, endpoint=False), main,
+                              np.full(3, t_vis)])
 
     def interp(result, getter):
         t, y = _finite(result.t, getter(result))
@@ -141,7 +145,7 @@ def animate(
     if is_artery:
         outer_arr = (a_v + EX * h_v / 2) / R0
         inner_arr = (a_v - EX * h_v / 2) / R0
-        lim = 1.08 * np.nanmax(outer_arr)
+        lim = 1.12 * np.nanmax(outer_arr)                    # headroom above the vessel
         ax_v.set_xlim(-lim, lim); ax_v.set_ylim(-lim, lim)
         wall = _disc(outer_arr[0], facecolor="#d9d9d9", edgecolor="#666", lw=1.5, zorder=2)
         lumen = _disc(inner_arr[0], facecolor="white", edgecolor="#666", lw=1.5, zorder=3)
@@ -157,7 +161,7 @@ def animate(
     # legend inside the vessel axis (reference vs current); no text UNDER the vessel
     ax_v.plot([], [], color=STANFORD_RED, lw=3, label="reference")
     ax_v.add_patch(Rectangle((0, 0), 0, 0, facecolor="#d9d9d9", edgecolor="#666", label="current"))
-    ax_v.legend(loc="upper center", bbox_to_anchor=(0.5, 1.02), ncol=2,
+    ax_v.legend(loc="upper center", bbox_to_anchor=(0.5, 1.09), ncol=2,
                 fontsize=10, frameon=False)
 
     # --- helper to add a live curve (faint full guide + revealed line) -------
@@ -205,9 +209,11 @@ def animate(
             ax.set_ylabel(QUANTITIES[q][0])
 
     for ax in plot_axes:
-        ax.set_xlim(0, t_vis)
+        ax.set_xlim(t_lo, t_vis)
         ax.set_xlabel("Time  [day]")
-    cursors = [ax.axvline(0.0, color="k", lw=1, alpha=0.6) for ax in plot_axes]
+        ax.set_xticks([tk for tk in ax.get_xticks() if tk >= -1e-9])   # hide negative time
+        ax.set_xlim(t_lo, t_vis)
+    cursors = [ax.axvline(t_lo, color="k", lw=1, alpha=0.6) for ax in plot_axes]
 
     # one shared legend for the response panels, outside the axes
     if any(q in PER_CONSTITUENT for q in quantities):
@@ -222,14 +228,17 @@ def animate(
                     handles.append(h); labels.append(lb)
 
     if title:
-        fig.suptitle(title, fontsize=15, y=0.99)
-    import warnings
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        fig.tight_layout(rect=(0, 0, 1, 0.9))
+        fig.suptitle(title, fontsize=15, y=0.985)
+    # explicit tight margins so everything sits against the left border
+    fig.subplots_adjust(left=0.025, right=0.99, top=0.85, bottom=0.09,
+                        wspace=0.5, hspace=0.42)
+    ax_v.set_anchor("W")                                     # left-align the square vessel
+    # plot legend centred OVER THE PLOTS (right region), lifted clear of the vessel
     if len(labels) >= 2:
-        fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.955),
-                   ncol=min(len(labels), 4), fontsize=10, frameon=False)
+        pos = [ax.get_position() for ax in ax_q]
+        x_center = 0.5 * (min(p.x0 for p in pos) + max(p.x1 for p in pos))
+        fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(x_center, 0.935),
+                   ncol=min(len(labels), 2), fontsize=9, frameon=False)
 
     # --------------------------------------------------------------- frames
     def update(k):
