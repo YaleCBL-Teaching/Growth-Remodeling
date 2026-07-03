@@ -120,6 +120,19 @@ uv run python solutions/make_all_figures.py
 # -> writes docs/figures/*.pdf
 ```
 
+## Animated videos
+
+Every simulation figure also has an animated twin — a deforming vessel next to
+the response curves, with the insult drawn over time so the **immediate elastic**
+jump is separated from the slow **growth & remodeling**. They are built from the
+same `Result` objects the models return (`gr.animation`), so the numbers match
+the figures exactly. See [`docs/videos/`](docs/videos/README.md).
+
+```bash
+uv pip install -e ".[video]"                    # bundled ffmpeg for MP4 (optional)
+uv run python solutions/make_all_videos.py      # -> docs/videos/*.mp4
+```
+
 ## Sanity check the models
 
 ```bash
