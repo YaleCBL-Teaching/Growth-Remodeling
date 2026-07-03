@@ -11,8 +11,38 @@
   \emph{single evolving mean natural configuration}. The heredity integral becomes
   \textbf{two ODEs per constituent}; cost drops from $O(N^2)$ to $O(N)$:
   \giveneq{\lambda_e^k = \frac{\lambda}{\lambda_n^k}.}
-  \bigfigw{homog_configs.png}{0.88\linewidth}{One mean natural configuration per
-  constituent, evolving from reference through initial to current state.}
+  \vfill
+  \begin{center}\homogmap[0.92]\end{center}
+  \vfill
+  \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
+\end{frame}
+
+% ---- Maxwell analog moved EARLY: the visual intuition for the whole model ----
+\begin{frame}[t]{The Mechanical Analog: A Maxwell Fluid with a Motor}
+  Each constituent behaves like a \textbf{Maxwell element in parallel with a
+  motor}: turnover relaxes stress toward a \emph{prestress}, not zero.
+  \vspace{0.2em}
+  \begin{center}\maxwellelement[0.92]\end{center}
+  \vspace{0.2em}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \footnotesize
+      \begin{tabular}{@{}ll@{}}
+        $\sigma^i$ & constituent stress (the load)\\
+        $\mathbb{C}^{i}$ & elastic stiffness (spring)\\
+        $\dot\varrho_0^{\,i}/\varrho_0^{\,i}+1/T^i$ & turnover + degradation (dashpot)\\
+        $\bar\sigma^{i}_{\text{pre}}$ & deposition prestress (motor)\\
+      \end{tabular}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \footnotesize \textbf{Back to the full CMM (0D):}
+      \begin{itemize}\itemsep1pt
+        \item spring $\leftrightarrow$ constituent law $\sigma^k(\lambda_e^k)$
+        \item dashpot $\leftrightarrow$ mass turnover / removal $k_d^k$
+        \item motor $\leftrightarrow$ deposition stretch $G^k$
+      \end{itemize}
+    \end{column}
+  \end{columns}
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
@@ -38,15 +68,6 @@
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
-\begin{frame}[t]{The Mechanical Analog: A Maxwell Fluid with a Motor}
-  Turnover relaxes stress to a \textbf{prestress}, not zero: a Maxwell element
-  (dashpot $+$ spring) \textbf{in parallel with a motor} $\bar\sigma^k_{\text{pre}}$.
-  \vfill
-  \begin{center}\maxwellelement[1.0]\end{center}
-  \vfill
-  \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
-\end{frame}
-
 \begin{frame}[t]{It Tracks the Full Model Closely --- Much Cheaper}
   Two ODEs per constituent replace the full deposition history. The homogenized
   trajectory sits almost on the full constrained mixture, while kinematic growth
@@ -59,6 +80,29 @@
   \end{center}
 \end{frame}
 
+% ---- pen & paper: when are the two models close? ---------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{When do homogenized and full agree?}
+    \qq{The homogenized model keeps only the \emph{mean} natural configuration per
+    constituent. Under what assumptions should it match the full deposition-history
+    model --- and when would you expect them to diverge? \qkind{discuss}}
+    \qres{The two remodeling pictures: full heredity integral vs.\ the single mean
+    stretch $\lambda_n^k$ \eqref{eq:homog_remodel}.}
+    \qhint{Think about the \emph{spread} of natural configurations across cohorts.
+    When is a single mean a good summary of the whole history?}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{When do homogenized and full agree?}
+    They agree when each constituent's cohorts share \emph{nearly the same} natural
+    configuration --- i.e.\ slow, gradual loading where deposition stretch $G^k$ and
+    turnover are roughly stationary, so the cohort spread stays narrow and the mean
+    represents it well. {\color{ABlue}\bfseries They diverge} under fast or strongly
+    time-varying insults, when cohorts deposited at very different states coexist and
+    a single mean stretch can no longer capture the distribution.
+  \end{answerbox}
+\end{frame}
 
 % ---- interactive coding exercise: ex04 -------------------------------------
 \begin{frame}[t]{}

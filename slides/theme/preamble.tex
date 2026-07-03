@@ -47,11 +47,11 @@
 % title; lower-right the frame number. The stored reference resets each shipout.
 \setbeamertemplate{footline}{%
   \leavevmode\hbox{%
-    \begin{beamercolorbox}[wd=\paperwidth,dp=1.2ex,leftskip=1.2em,rightskip=1.2em]{}%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=1.6ex,dp=3.8ex,leftskip=1.2em,rightskip=1.2em]{}%
       {\scriptsize\color{BoxGray}%
-        \begin{minipage}[b]{\dimexpr\paperwidth-5.2em\relax}\itshape\sliderefstore\end{minipage}%
+        \begin{minipage}[t]{\dimexpr\paperwidth-5.2em\relax}\itshape\sliderefstore\end{minipage}%
         \hfill
-        \begin{minipage}[b]{1.6em}\raggedleft\upshape\insertframenumber\end{minipage}}%
+        \begin{minipage}[t]{1.6em}\raggedleft\upshape\insertframenumber\end{minipage}}%
     \end{beamercolorbox}}%
   \gdef\sliderefstore{}%
 }
@@ -147,6 +147,15 @@
   \vfill
 }
 
+% tall variant: figure fills the available vertical space (future-perspectives)
+\newcommand{\bigfigtall}[2]{%
+  \vfill
+  \begin{center}%
+    \includegraphics[width=#2,height=0.82\textheight,keepaspectratio]{figures/#1}%
+  \end{center}%
+  \vfill
+}
+
 % ---- math shorthands used across the deck ----------------------------------
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\Ftens}{\bm{F}}
@@ -194,32 +203,38 @@
 %  Idealized blood vessel drawn in TikZ (thick-walled cylinder cross-section)
 %    \idealvessel        -> full annotated version (P, Q, r, h, sigma_theta, tau_w)
 % ============================================================================
+% Idealized vessel as a LONGITUDINAL CUT (pipe sliced along its axis):
+%   radial quantities (a, h, P) read vertically; axial (Q, tau_w) horizontally.
 \newcommand{\idealvessel}[1][1.0]{%
-\begin{tikzpicture}[scale=#1]
-  % wall (annulus) and lumen
-  \fill[YaleLightBlue!18] (0,0) circle (2.55);
-  \fill[white] (0,0) circle (1.8);
-  \draw[YaleBlue,very thick] (0,0) circle (2.55);
-  \draw[YaleBlue,very thick] (0,0) circle (1.8);
-  % inner radius r
-  \draw[-{Latex[length=2mm]},thick] (0,0) -- (128:1.8) node[midway,above,sloped]{\small $r$};
-  \fill (0,0) circle (1.2pt);
-  % wall thickness h
-  \draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]},thick,AccentRed]
-     (-18:1.8) -- (-18:2.55);
-  \node[AccentRed] at (-18:2.9) {\small $h$};
-  % lumen pressure P (radial arrows outward on inner wall)
-  \foreach \a in {30,70,110,150,190,230,270,310}{
-     \draw[-{Latex[length=1.6mm]},YaleLightBlue] (\a:0.55) -- (\a:1.55);}
-  \node[YaleLightBlue] at (0,0.0) {\small $P$};
-  % blood flow Q (into the page / axial) + WSS tau_w at inner wall
-  \node[YaleLightBlue] at (0,-0.75) {\small $Q$};
-  \draw[-{Latex[length=1.6mm]},AccentRed] (60:1.75) arc (60:20:1.75);
-  \node[AccentRed] at (40:1.45) {\scriptsize $\tau_w$};
-  % circumferential stress sigma_theta (tangential arrows in the wall)
-  \draw[-{Latex[length=1.6mm]},YaleBlue] (95:2.18) arc (95:60:2.18);
-  \draw[-{Latex[length=1.6mm]},YaleBlue] (85:2.18) arc (85:120:2.18);
-  \node[YaleBlue] at (90:2.02) {\scriptsize $\sigma_\theta$};
+\begin{tikzpicture}[scale=#1,>={Latex[length=1.8mm]}]
+  \def\L{8.4}      % axial length
+  \def\a{1.9}      % inner radius (axis -> inner wall)
+  \def\h{0.85}     % wall thickness
+  % --- wall bands (top & bottom) ---
+  \fill[YaleLightBlue!22] (0,\a) rectangle (\L,\a+\h);
+  \fill[YaleLightBlue!22] (0,-\a) rectangle (\L,-\a-\h);
+  \draw[YaleBlue,very thick] (0,\a) rectangle (\L,\a+\h);
+  \draw[YaleBlue,very thick] (0,-\a) rectangle (\L,-\a-\h);
+  % --- lumen + axis ---
+  \draw[dash dot,black!55] (-0.2,0) -- (\L+0.4,0);
+  % --- blood pressure P: pushes outward on both inner surfaces ---
+  \foreach \x in {2.0,3.3,4.6}{
+    \draw[->,YaleLightBlue,thick] (\x,0.55) -- (\x,\a-0.06);
+    \draw[->,YaleLightBlue,thick] (\x,-0.55) -- (\x,-\a+0.06);}
+  \node[YaleLightBlue] at (3.3,0.0) {\small $P$};
+  % --- flow Q along the axis + wall shear stress tau_w on inner surface ---
+  \draw[->,AccentRed,very thick] (5.7,0) -- (7.6,0) node[midway,above=1pt]{\small $Q$};
+  \draw[->,AccentRed] (5.9,\a-0.28) -- (7.4,\a-0.28)
+       node[midway,above=0pt]{\scriptsize $\tau_w$};
+  % --- circumferential (hoop) stress sigma_theta carried by the wall ---
+  \draw[<->,YaleBlue,thick] (0.9,\a+\h/2) -- (3.4,\a+\h/2);
+  \node[YaleBlue] at (2.15,\a+\h/2+0.34) {\scriptsize $\sigma_\theta$ (hoop)};
+  % --- radius a (axis -> inner wall) ---
+  \draw[<->,thick] (0.7,0) -- (0.7,\a) node[midway,left]{\small $a$};
+  \fill (0.7,0) circle (1.4pt);
+  % --- wall thickness h ---
+  \draw[<->,thick,AccentRed] (\L+0.25,\a) -- (\L+0.25,\a+\h)
+       node[midway,right]{\small $h$};
 \end{tikzpicture}}
 
 % ============================================================================
@@ -248,25 +263,23 @@
   \draw[refbody] plot[smooth cycle,tension=0.9]
     coordinates {(0,0)(1.0,0.55)(1.8,0.15)(1.55,-0.85)(0.55,-1.05)(-0.15,-0.5)};
   \fill (0.85,-0.2) circle (1.4pt);
-  \node[anchor=south west,font=\footnotesize] at (0.9,-0.2) {$\bm{X}$};
-  \draw[cfgbase] (0.85,-0.2)--(1.2,-0.2);
-  \draw[cfgbase] (0.85,-0.2)--(0.85,0.15);
+  \draw[-{Latex[length=1.6mm]},thick] (0.85,-0.2)--(1.35,-0.05)
+    node[anchor=west,font=\footnotesize]{$\dd\bm{X}$};
   \node[font=\footnotesize] at (0.8,-1.5) {reference $\mathcal{B}_0$};
   % current body (right)
   \begin{scope}[shift={(5.0,-0.05)}]
     \draw[curbody] plot[smooth cycle,tension=0.9]
       coordinates {(0,0.2)(1.25,0.7)(2.25,0.2)(2.1,-1.0)(1.0,-1.45)(-0.1,-0.75)};
     \fill (1.25,-0.3) circle (1.4pt);
-    \node[anchor=south west,font=\footnotesize] at (1.3,-0.3) {$\bm{x}$};
-    \draw[cfgbase] (1.25,-0.3)--(1.65,-0.18);
-    \draw[cfgbase] (1.25,-0.3)--(1.32,0.12);
+    \draw[-{Latex[length=1.6mm]},thick] (1.25,-0.3)--(1.85,-0.05)
+      node[anchor=west,font=\footnotesize]{$\dd\bm{x}$};
     \node[font=\footnotesize] at (1.05,-1.9) {current $\mathcal{B}_t$};
   \end{scope}
   % motion + line-element mapping
-  \draw[cfgmaparrow] (2.0,0.55) to[bend left=20]
-    node[above,font=\small]{$\bm{\varphi}(t,\bm{X})$} (5.1,0.75);
-  \draw[cfgmaparrow,black!55] (2.0,-0.25) to[bend right=10]
-    node[below,font=\footnotesize]{$\dd\bm{x}=\bm{F}\,\dd\bm{X}$} (6.0,-0.45);
+  \draw[cfgmaparrow] (2.0,0.75) to[bend left=20]
+    node[above,font=\small]{$\bm{\varphi}(t,\bm{X})$} (5.1,0.95);
+  \draw[cfgmaparrow] (2.0,-0.55) to[bend right=10]
+    node[below,font=\footnotesize]{$\dd\bm{x}=\bm{F}\,\dd\bm{X}$} (6.0,-0.75);
 \end{tikzpicture}}
 
 % ---- kinematic growth: F = F_e F_g, with INCOMPATIBLE grown configuration ---
@@ -303,10 +316,54 @@
   % --- arrows ---
   \draw[cfgmaparrow] (1.95,0.15) to[bend left=16]
     node[above,font=\small]{$\bm{F}_g$ (growth, prescribed)} (3.7,0.35);
-  \draw[cfgmaparrow] (6.4,1.35) to[bend left=12]
-    node[above,font=\small,pos=0.4]{$\bm{F}_e$ (elastic, restores fit)} (7.7,0.7);
+  \node[font=\small,anchor=south] at (6.9,1.95) {$\bm{F}_e$ (elastic, restores fit)};
+  \draw[cfgmaparrow] (6.35,1.55) to[bend left=15] (7.65,0.7);
   \draw[cfgmaparrow,black!55] (0.5,-2.35) to[bend right=8]
     node[below,font=\footnotesize,pos=0.5]{$\bm{F}=\bm{F}_e\,\bm{F}_g$} (8.6,-2.15);
+\end{tikzpicture}}
+
+% ---- homogenized CMM: ONE evolving mean natural config per constituent --------
+% Three tissue configurations along the bottom (reference -> initial -> current);
+% above each, a SINGLE mean stress-free natural configuration per constituent
+% (contrast with the full-history cohort stack of the constrained mixture).
+\newcommand{\homogmap}[1][1.0]{%
+\begin{tikzpicture}[scale=#1,every node/.style={font=\footnotesize},
+    natA/.style={draw=black!70,thick,fill=black!10},
+    natB/.style={draw=black!70,thick,fill=black!20},
+    tisarr/.style={-{Latex[length=2.2mm]},thick,black!75},
+    natarr/.style={-{Latex[length=1.8mm]},thick,black!60}]
+  % --- three tissue bodies along the bottom ---
+  \begin{scope}[shift={(0,0)}]
+    \draw[refbody] plot[smooth cycle,tension=0.9]
+      coordinates {(0,0)(0.85,0.4)(1.5,0)(1.25,-0.9)(0.4,-1.0)(-0.2,-0.5)};
+    \node at (0.6,-1.4) {reference};
+  \end{scope}
+  \begin{scope}[shift={(4.0,0)}]
+    \draw[intbody] plot[smooth cycle,tension=0.9]
+      coordinates {(0,0.1)(0.95,0.5)(1.7,0.05)(1.45,-1.0)(0.5,-1.15)(-0.15,-0.6)};
+    \node at (0.75,-1.55) {initial};
+  \end{scope}
+  \begin{scope}[shift={(8.2,0)}]
+    \draw[curbody] plot[smooth cycle,tension=0.9]
+      coordinates {(0,0.15)(1.15,0.65)(2.05,0.1)(1.85,-1.15)(0.7,-1.4)(-0.15,-0.7)};
+    \node at (0.9,-1.8) {current};
+  \end{scope}
+  % --- tissue-level deformation arrows (bottom) ---
+  \draw[tisarr] (1.7,-0.5)  to[bend right=8] node[below]{$\bm{F}(0)$} (3.7,-0.6);
+  \draw[tisarr] (5.9,-0.6)  to[bend right=8] node[below]{$\bm{F}(s)$} (7.9,-0.75);
+  % --- single mean natural config per constituent, ABOVE, evolving ---
+  \foreach \sx/\sty in {0.35/natA, 4.35/natA, 8.55/natA}{
+    \draw[\sty] (\sx,2.0) rectangle ++(0.62,0.62);}
+  \foreach \sx/\sty in {1.05/natB, 5.05/natB, 9.25/natB}{
+    \draw[\sty] (\sx,2.0) rectangle ++(0.62,0.62);}
+  \node[align=center] at (1.0,3.05)
+    {stress-free \emph{mean} natural configurations\\(one per constituent --- \emph{evolving}, not a history)};
+  % arrows: single evolving natural config marches left->right
+  \draw[natarr] (1.75,2.3) -- node[above]{$\bm{F}_n^k$} (4.3,2.3);
+  \draw[natarr] (5.75,2.3) -- node[above]{$\bm{F}_n^k$} (8.5,2.3);
+  % tie each mean config down to its tissue body
+  \foreach \bx in {0.7,4.7,8.9}{
+    \draw[natarr,black!45,dashed] (\bx,1.98) -- (\bx,0.75);}
 \end{tikzpicture}}
 
 % ---- Humphrey (2021) Fig. 1: finite deformations in a constrained mixture -----
@@ -363,45 +420,47 @@
 % A motor element (circle) exerting the prestress sigma_pre in PARALLEL with a
 % Maxwell material = dashpot (time constant rho-dot0/rho0 + 1/T) in SERIES with a
 % (nonlinear) spring of stiffness C. Load sigma applied top and bottom.
+% HORIZONTAL Maxwell-fluid-with-a-motor analog (Cyron 2016, Fig. 2 right).
+%   Load sigma acts left<->right. TOP branch = Maxwell arm: dashpot in SERIES
+%   with a spring. BOTTOM branch (parallel) = a motor holding the prestress.
 \newcommand{\maxwellelement}[1][1.0]{%
-\begin{tikzpicture}[scale=#1,line width=1pt,black!85,every node/.style={font=\small}]
-  % geometry
-  \def\xm{0}      % Maxwell arm x
-  \def\xp{3.2}    % motor arm x
-  \def\ytop{4.6}
-  \def\ybot{0}
-  % top & bottom load leads with sigma
-  \draw (\xm,\ytop)--(\xp,\ytop);                 % top rail
-  \draw (\xm,\ybot)--(\xp,\ybot);                 % bottom rail
-  \coordinate (topmid) at ($(\xm,\ytop)!0.5!(\xp,\ytop)$);
-  \coordinate (botmid) at ($(\xm,\ybot)!0.5!(\xp,\ybot)$);
-  \draw (topmid)--++(0,0.7) node[above,font=\normalsize]{$\bm{\sigma}^i$};
-  \draw[-{Latex[length=2mm]}] (topmid)++(0,0.62)--++(0,0.28);
-  \draw (botmid)--++(0,-0.7) node[below,font=\normalsize]{$\bm{\sigma}^i$};
-  \draw[-{Latex[length=2mm]}] (botmid)++(0,-0.62)--++(0,-0.28);
-  % ===== Maxwell arm (left): dashpot on top, spring below =====
-  % lead from top rail down to dashpot
-  \draw (\xm,\ytop)--(\xm,4.15);
-  % dashpot: cylinder + piston
-  \draw (\xm-0.32,4.15)--(\xm-0.32,3.5)--(\xm+0.32,3.5)--(\xm+0.32,4.15); % cylinder (open top)
-  \draw[line width=3pt] (\xm-0.22,3.95)--(\xm+0.22,3.95);                 % piston plate
-  \draw (\xm,4.15)--(\xm,3.95);                                          % piston rod
-  \node[right,font=\footnotesize,align=left] at (\xm+0.5,3.82)
-    {$\dfrac{\dot\varrho_0^{\,i}}{\varrho_0^{\,i}}+\dfrac{1}{T^{i}}$};
-  % series link dashpot -> spring
-  \draw (\xm,3.5)--(\xm,3.1);
-  % spring (zig-zag) 3.1 -> 1.5
-  \draw (\xm,3.1)
-    --(\xm-0.28,2.95)--(\xm+0.28,2.75)--(\xm-0.28,2.55)--(\xm+0.28,2.35)
-    --(\xm-0.28,2.15)--(\xm+0.28,1.95)--(\xm-0.28,1.75)--(\xm,1.6)--(\xm,1.5);
-  \node[right,font=\footnotesize] at (\xm+0.42,2.35) {$\mathbb{C}^{i}$};
-  % lead spring -> bottom rail
-  \draw (\xm,1.5)--(\xm,\ybot);
-  % ===== Motor / prestress arm (right): circle with sigma_pre =====
-  \draw (\xp,\ytop)--(\xp,3.15);
-  \draw (\xp,3.15) circle (0.42);
-  \node[left,font=\footnotesize] at (\xp-0.6,3.15) {$\bar{\bm{\sigma}}^{i}_{\text{pre}}$};
-  \draw (\xp,2.73)--(\xp,\ybot);
+\begin{tikzpicture}[scale=#1,line width=1pt,black!85,every node/.style={font=\small},
+    >={Latex[length=2mm]}]
+  \def\xL{0}\def\xR{7.2}\def\yT{1.7}\def\yB{0}
+  % vertical rails at both ends
+  \draw (\xL,\yB)--(\xL,\yT);
+  \draw (\xR,\yB)--(\xR,\yT);
+  % applied load sigma, pulling outward left & right
+  \coordinate (Lmid) at (\xL,{(\yT+\yB)/2});
+  \coordinate (Rmid) at (\xR,{(\yT+\yB)/2});
+  \draw (Lmid)--++(-0.55,0); \draw[<-] (Lmid)++(-0.5,0)--++(-0.5,0)
+    node[left,font=\normalsize]{$\sigma^i$};
+  \draw (Rmid)--++(0.55,0);  \draw[->] (Rmid)++(0.5,0)--++(0.5,0)
+    node[right,font=\normalsize]{$\sigma^i$};
+  % ===== TOP branch: Maxwell arm = dashpot --- spring (in series) =====
+  \draw (\xL,\yT)--(0.7,\yT);                          % lead in
+  % dashpot: horizontal cylinder (open right) + piston from the right
+  \draw (0.7,\yT-0.32)--(0.7,\yT+0.32)--(1.5,\yT+0.32); % cylinder back+top
+  \draw (0.7,\yT-0.32)--(1.5,\yT-0.32);                 % cylinder bottom
+  \draw[line width=3pt] (1.28,\yT-0.24)--(1.28,\yT+0.24); % piston plate
+  \draw (1.28,\yT)--(2.0,\yT);                          % piston rod
+  \node[above,font=\footnotesize,align=center] at (1.1,\yT+0.42)
+    {$\dfrac{\dot\varrho_0^{\,i}}{\varrho_0^{\,i}}+\dfrac{1}{T^{i}}$ \ (turnover)};
+  % spring (horizontal zig-zag) 2.0 -> 4.6
+  \draw (2.0,\yT)
+    --(2.2,\yT+0.28)--(2.6,\yT-0.28)--(3.0,\yT+0.28)--(3.4,\yT-0.28)
+    --(3.8,\yT+0.28)--(4.2,\yT-0.28)--(4.4,\yT)--(4.6,\yT);
+  \node[below,font=\footnotesize] at (3.3,\yT-0.34) {$\mathbb{C}^{i}$ (elastic)};
+  \draw (4.6,\yT)--(\xR,\yT);                           % lead out
+  % ===== BOTTOM branch (parallel): MOTOR holding the prestress =====
+  \draw (\xL,\yB)--(3.05,\yB);
+  % motor glyph: circle with an M-arc + drive arrow (active element)
+  \draw[fill=black!5] (3.6,\yB) circle (0.5);
+  \draw[->,line width=0.8pt] (3.35,\yB-0.18) arc (215:-35:0.26);  % rotation arc
+  \node[font=\footnotesize] at (3.6,\yB) {M};
+  \draw (4.1,\yB)--(\xR,\yB);
+  \node[below,font=\footnotesize] at (3.6,\yB-0.66)
+    {motor: prestress $\bar\sigma^{i}_{\text{pre}}$};
 \end{tikzpicture}}
 
 % ---- constrained mixture: cohorts, each its own natural configuration ------

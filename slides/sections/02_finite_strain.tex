@@ -35,9 +35,10 @@
   \dlab{general form --- tensors}
   \slboxeq{2.4em}{eq:strain}{\bm{C}=\bm{F}^{\!\top}\bm{F},\qquad
     \bm{E}=\tfrac12\!\left(\bm{C}-\bm{I}\right)}
-  \zlab{reduction used here --- along one fiber}
-  \giveneq{C=\lambda^2,\qquad E=\tfrac12(\lambda^2-1),\qquad I_4=\lambda_e^2.}
-  The fiber invariant $I_4$ is just $\bm{C}$ read along a fiber direction.
+  \zlab{reduction used here --- one dominant direction}
+  \giveneq{C=\lambda^2,\qquad E=\tfrac12(\lambda^2-1).}
+  Along the dominant loading direction the whole strain state collapses to a
+  single stretch $\lambda$ --- all we need for the thin-walled vessel.
 \end{frame}
 
 \begin{frame}[t]{Stress --- Force per Current Area}
@@ -55,28 +56,31 @@
 \end{frame}
 
 \begin{frame}[t]{Hyperelasticity: Stress from a Stored-Energy Function}
-  A \textbf{hyperelastic} material stores energy $W$ and its stress is a
-  derivative of it --- no dissipation, path-independent.
-  \dlab{general form --- tensor derivative}
-  \giveneq{\bm{S}=2\,\frac{\partial W(\bm{C})}{\partial\bm{C}}.}
-  \zlab{reduction used here --- scalar derivative}
-  \slboxeq{2.2em}{eq:hyper}{\sigma \;=\; \lambda_e\,\frac{\dd W}{\dd\lambda_e}}
-  \textbf{Elastin} (neo-Hookean, soft):
-  $\sigma_e=c_e(\lambda_e^2-\lambda_e^{-1})$. \quad
-  \textbf{Collagen \& SMC} (Fung fiber, stiffens steeply):
-  \slboxeq{2.6em}{eq:fung}{\sigma(\lambda_e)=c_1\,\lambda_e^2(\lambda_e^2-1)\,
-    e^{\,c_2(\lambda_e^2-1)^2},\qquad I_4=\lambda_e^2}
+  A \textbf{hyperelastic} material stores energy $W$; its stress is a derivative
+  of $W$ --- no dissipation, path-independent. Each constituent gets its own $W$.
+  \dlab{general form --- energy $W(\bm{C})$, stress $\bm{S}=2\,\partial W/\partial\bm{C}$}
+  \vspace{-0.3em}
+  \[
+    W_e=\tfrac{c_e}{2}\,(I_1-3),\qquad
+    W_c=\tfrac{c_1}{4c_2}\!\left[e^{\,c_2(I_4-1)^2}-1\right]
+  \]
+  \vspace{-0.6em}\par
+  {\footnotesize $I_1=\operatorname{tr}\bm{C}$ (isotropic elastin); $I_4$ reads
+  $\bm{C}$ along the collagen fiber --- the one place anisotropy enters.}
+  \zlab{reduction used here --- one stretch $\lambda_e$, scalar $\sigma=\lambda_e\,\dd W/\dd\lambda_e$}
+  \vspace{-0.3em}
+  \slboxeq{2.6em}{eq:fung}{\sigma_e=c_e(\lambda_e^2-\lambda_e^{-1}),\qquad
+    \sigma_c=c_1\,\lambda_e^2(\lambda_e^2-1)\,e^{\,c_2(\lambda_e^2-1)^2}}
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
 \end{frame}
 
-\begin{frame}[t]{Constituent Laws \& Why the Artery Is Special}
-  \bigfigw{fig01_constitutive.pdf}{0.74\linewidth}{Left: soft elastin vs.\ steeply
-  stiffening collagen/muscle, with $G^k$ and $\sigma_h^k$ marked. Right: the
-  required stress grows \emph{linearly} for the bar but \emph{quadratically} for
-  the artery (Laplace).}
-  \begin{center}\small\color{AccentRed}
-  That extra power of $\lambda$ is the whole story of arterial instability --- see the stability section.
-  \end{center}
+\begin{frame}[t]{The Three Constituent Laws, in One Picture}
+  The scalar laws $\sigma^k(\lambda_e)$ from the previous slide, plotted together:
+  soft near-linear elastin, steeply stiffening collagen and smooth muscle. Each
+  dot marks the deposition stretch $G^k$ where $\sigma^k=\sigma_h^k$.
+  \bigfigw{fig01a_constituent_laws.pdf}{0.56\linewidth}{Constituent Cauchy stress
+  vs.\ elastic stretch, with each deposition set-point $(G^k,\sigma_h^k)$ marked.}
+  \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
 \end{frame}
 
 \begin{frame}[t]{The Deposition Stretch $G^k$}

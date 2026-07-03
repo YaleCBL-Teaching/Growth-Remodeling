@@ -10,21 +10,23 @@
   A vessel is a \textbf{pressurised, perfused tube}. Two loads act on the wall:
   \textbf{blood pressure} $P$ pushes it outward, and \textbf{blood flow} $Q$ drags
   its inner surface. Cells sense both.
-  \vfill
-  \begin{columns}[c]
-    \begin{column}{0.44\textwidth}
-      \begin{center}\idealvessel[0.82]\end{center}
-    \end{column}
-    \begin{column}{0.56\textwidth}
+  \vspace{0.2em}
+  \begin{center}\idealvessel[0.58]\end{center}
+  \vspace{0.1em}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
       \begin{itemize}\small
         \item[$P$] lumen pressure $\to$ \textbf{circumferential stress}
         $\sigma_\theta$
         \item[$Q$] volumetric flow $\to$ \textbf{wall shear stress} $\tau_w$
-        \item[$r$] inner radius, \ $h$ wall thickness
       \end{itemize}
-      \vspace{0.4em}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}\small
+        \item[$a$] inner radius, \ $h$ wall thickness
+      \end{itemize}
       {\color{AccentRed}\small Cells regulate \emph{both} $\sigma_\theta$ and
-      $\tau_w$ toward set-points --- by changing $h$ and $r$.}
+      $\tau_w$ --- by changing $h$ and $a$.}
     \end{column}
   \end{columns}
   \srccite{Humphrey, Cardiovascular Solid Mechanics (2002)}
@@ -33,7 +35,7 @@
 \begin{frame}[t]{Circumferential Stress --- The Laplace Law}
   Balancing lumen pressure against wall tension for a thin-walled tube gives the
   \textbf{circumferential (hoop) stress}:
-  \slboxeq{2.6em}{eq:laplace}{\sigma_\theta = \frac{P\,r}{h}}
+  \slboxeq{2.6em}{eq:laplace}{\sigma_\theta = \frac{P\,a}{h}}
   Thicker wall $\Rightarrow$ lower stress; larger radius or pressure
   $\Rightarrow$ higher stress. This is the load the intramural cells (SMC,
   fibroblasts) feel.
@@ -42,9 +44,9 @@
 
 \begin{frame}[t]{Wall Shear Stress --- The Flow the Endothelium Feels}
   For steady laminar (Poiseuille) flow $Q$ of a fluid with viscosity $\mu$ through
-  a tube of radius $r$, the shear stress the flowing blood exerts on the wall is
-  \slboxeq{2.6em}{eq:wss}{\tau_w = \frac{4\mu\,Q}{\pi\,r^3}}
-  The endothelium senses $\tau_w$; note the steep $r^{-3}$ dependence --- a small
+  a tube of radius $a$, the shear stress the flowing blood exerts on the wall is
+  \slboxeq{2.6em}{eq:wss}{\tau_w = \frac{4\mu\,Q}{\pi\,a^3}}
+  The endothelium senses $\tau_w$; note the steep $a^{-3}$ dependence --- a small
   radius change moves shear stress a lot.
   \srccite{Poiseuille flow; Humphrey, Cardiovascular Solid Mechanics (2002)}
 \end{frame}
@@ -57,13 +59,13 @@
     \begin{column}{0.5\textwidth}
       \begin{center}\textbf{\color{YaleBlue} Pressure $\to$ thickness}\end{center}
       Hold $\sigma_\theta=\sigma_h$:
-      \giveneq{h = \frac{P\,r}{\sigma_h}\ \propto\ P.}
+      \giveneq{h = \frac{P\,a}{\sigma_h}\ \propto\ P.}
       Higher pressure $\Rightarrow$ \textbf{thicker wall}.
     \end{column}
     \begin{column}{0.5\textwidth}
       \begin{center}\textbf{\color{YaleBlue} Flow $\to$ radius}\end{center}
       Hold $\tau_w=\tau_h$:
-      \giveneq{r = \left(\frac{4\mu\,Q}{\pi\,\tau_h}\right)^{1/3}\!\!\propto\ Q^{1/3}.}
+      \giveneq{a = \left(\frac{4\mu\,Q}{\pi\,\tau_h}\right)^{1/3}\!\!\propto\ Q^{1/3}.}
       Higher flow $\Rightarrow$ \textbf{larger lumen}.
     \end{column}
   \end{columns}
@@ -79,7 +81,7 @@
 \begin{frame}[t]{}
   \begin{yourturnbox}{Pressure adaptation}
     \qq{A patient becomes hypertensive: pressure rises to $P' = (1+\gamma)P$, but
-    the radius $r$ is held fixed. By how much must the wall thicken to bring the
+    the radius $a$ is held fixed. By how much must the wall thicken to bring the
     circumferential stress back to its set-point $\sigma_h$? \qkind{pen \& paper}}
     \qres{The Laplace law \eqref{eq:laplace}; homeostatic stress $\sigma_h$.}
     \qhint{Write $\sigma_\theta$ before and after; set the after-value equal to
@@ -89,8 +91,8 @@
 
 \begin{frame}[t]{}
   \begin{answerbox}{Pressure adaptation}
-    Initially homeostatic: $\sigma_h = P r/h$. After the step, demanding
-    $\sigma_\theta = P' r / h' = \sigma_h$ with $P'=(1+\gamma)P$ gives
+    Initially homeostatic: $\sigma_h = P a/h$. After the step, demanding
+    $\sigma_\theta = P' a / h' = \sigma_h$ with $P'=(1+\gamma)P$ gives
     \slboxeq{2.2em}{eq:ans:pressure}{h' = (1+\gamma)\,h.}
     \par\smallskip
     {\color{ABlue}\bfseries Reading.} The wall thickens \emph{in proportion} to the
@@ -106,16 +108,16 @@
     the lumen radius change to restore the wall-shear-stress set-point $\tau_h$?
     \qkind{pen \& paper}}
     \qres{The wall-shear-stress law \eqref{eq:wss}; set-point $\tau_h$.}
-    \qhint{Only $r$ adapts. Set $\tau_w(Q',r') = \tau_h$ and use
-    $\tau_h = 4\mu Q/(\pi r^3)$ to eliminate constants.}
+    \qhint{Only $a$ adapts. Set $\tau_w(Q',a') = \tau_h$ and use
+    $\tau_h = 4\mu Q/(\pi a^3)$ to eliminate constants.}
   \end{yourturnbox}
 \end{frame}
 
 \begin{frame}[t]{}
   \begin{answerbox}{Flow adaptation}
-    From $\tau_h = 4\mu Q'/(\pi r'^3) = 4\mu Q/(\pi r^3)$, the radius ratio is
-    $(r'/r)^3 = Q'/Q = 1+\varepsilon$, so
-    \slboxeq{2.2em}{eq:ans:flow}{r' = (1+\varepsilon)^{1/3}\,r.}
+    From $\tau_h = 4\mu Q'/(\pi a'^3) = 4\mu Q/(\pi a^3)$, the radius ratio is
+    $(a'/a)^3 = Q'/Q = 1+\varepsilon$, so
+    \slboxeq{2.2em}{eq:ans:flow}{a' = (1+\varepsilon)^{1/3}\,a.}
     \par\smallskip
     {\color{ABlue}\bfseries Reading.} The lumen enlarges as the \emph{cube root} of
     the flow increase --- the classic flow-induced outward remodeling. A $\sim$30\%
