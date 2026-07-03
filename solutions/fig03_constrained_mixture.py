@@ -12,7 +12,7 @@ Run:  uv run python solutions/fig03_constrained_mixture.py
 from __future__ import annotations
 
 from gr import HYPERTENSION, artery, constrained_mixture
-from gr.plotting import plt, save_pdf
+from gr.plotting import CONSTITUENT_STYLE, constituent_order, plt, save_pdf
 
 from _scenarios import SEMINAR_MODEL
 
@@ -25,28 +25,25 @@ def main() -> None:
 
     fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2))
 
-    # (a) per-constituent masses
-    for name, m in r.masses.items():
-        axes[0].plot(r.t, m, label=name)
-    axes[0].set_ylabel(r"constituent mass  $M^k/M_0$")
-    axes[0].set_title("(a) collagen & SMC grow; elastin does not")
+    # (a) per-constituent masses (dashed collagen drawn last, on top)
+    for name in constituent_order(r.masses):
+        axes[0].plot(r.t, r.masses[name], label=name, **CONSTITUENT_STYLE.get(name, {}))
+    axes[0].set_ylabel(r"Constituent mass  $M^k/M_0$")
     axes[0].legend()
 
     # (b) tissue stress back to homeostatic
     axes[1].plot(r.t, r.sigma_norm, color="black")
     axes[1].axhline(1.0, color="gray", lw=1, alpha=0.6)
-    axes[1].set_ylabel(r"tissue stress  $\bar\sigma/\bar\sigma_h$")
-    axes[1].set_title("(b) stress restored by turnover")
+    axes[1].set_ylabel(r"Wall stress  $\bar\sigma/\bar\sigma_h$")
 
     # (c) geometry
-    axes[2].plot(r.t, r.radius, label="inner radius $r$")
-    axes[2].plot(r.t, r.thickness, label="thickness $h$")
-    axes[2].set_ylabel("length  [mm]")
-    axes[2].set_title("(c) wall thickens, radius ~ constant")
+    axes[2].plot(r.t, r.radius, label="Mid-wall radius $a$")
+    axes[2].plot(r.t, r.thickness, label="Thickness $h$")
+    axes[2].set_ylabel("Length  [mm]")
     axes[2].legend()
 
     for ax in axes:
-        ax.set_xlabel("time  [day]")
+        ax.set_xlabel("Time  [day]")
 
     fig.suptitle("Full constrained-mixture model: adaptation to hypertension (artery)",
                  y=1.03, fontsize=14)

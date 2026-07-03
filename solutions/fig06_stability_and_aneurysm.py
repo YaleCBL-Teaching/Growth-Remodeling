@@ -34,9 +34,8 @@ def main() -> None:
     for label, insult, color in cases:
         r = homogenized_cmm.simulate(art, insult, t_end=6000)
         axA.plot(r.t, r.lam, color=color, label=label)
-    axA.set_xlabel("time  [day]")
-    axA.set_ylabel(r"stretch  $\lambda$")
-    axA.set_title("(a) same tissue, two insults")
+    axA.set_xlabel("Time  [day]")
+    axA.set_ylabel(r"Stretch  $\lambda$")
     axA.legend(loc="upper left")
 
     # (b) stability map over (elastin loss, pressure) -------------------------
@@ -50,9 +49,8 @@ def main() -> None:
     axB.contourf(100 * survivals, pressures, Z, levels=[-0.5, 0.5, 1.5],
                  colors=["#F4C7C3", "#CFE3F5"])
     axB.contour(100 * survivals, pressures, Z, levels=[0.5], colors="k", linewidths=1.5)
-    axB.set_xlabel("surviving elastin  [%]")
-    axB.set_ylabel(r"pressure factor  $\gamma$")
-    axB.set_title("(b) adapts (blue) vs runs away (red)")
+    axB.set_xlabel("Surviving elastin  [%]")
+    axB.set_ylabel(r"Pressure factor  $\gamma$")
     axB.invert_xaxis()
     axB.text(50, 1.4, "ADAPTS", color="#1f5fa8", fontsize=12, ha="center")
     axB.text(12, 2.6, "ANEURYSM", color="#a83232", fontsize=12, ha="center")

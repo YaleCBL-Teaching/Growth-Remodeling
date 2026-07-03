@@ -68,9 +68,10 @@ class Equilibrium:
     lam: float = float("nan")          # evolved global stretch lambda*
     mass: float = float("nan")         # evolved total mass ratio M/M_0
     beta: float = float("nan")         # turnover-mass growth factor
-    radius: float = float("nan")       # evolved inner radius / length [mm]
+    radius: float = float("nan")       # evolved mid-wall radius / length [mm]
     thickness: float = float("nan")    # evolved wall thickness [mm]
     masses: dict[str, float] = field(default_factory=dict)
+    stresses: dict[str, float] = field(default_factory=dict)  # per-constituent sigma^k/sigma_h^k
 
     @property
     def sigma_norm(self) -> float:
@@ -130,6 +131,10 @@ def solve(
     masses = {"elastin": phi_e0 * s}
     for c in turnover:
         masses[c.name] = c.phi0 * beta
+    # per-constituent stress at equilibrium: turnover back at sigma_h^k (=1);
+    # elastin cannot remodel, so it carries sigma_e(G_e lambda*)/sigma_h^e
+    stresses = {c.name: 1.0 for c in turnover}
+    stresses["elastin"] = elastin.law.stress_cauchy(elastin.G * lam) / elastin.sigma_h
 
     return Equilibrium(
         exists=True,
@@ -141,4 +146,5 @@ def solve(
         radius=geom.radius(lam),
         thickness=geom.thickness(lam, mass),
         masses=masses,
+        stresses=stresses,
     )

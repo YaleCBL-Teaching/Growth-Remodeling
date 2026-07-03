@@ -29,14 +29,11 @@ def main() -> None:
         axes[2].plot(r.t, r.lam, ls, label=geom.name)
 
     axes[0].axhline(1.0, color="gray", lw=1, alpha=0.6)
-    axes[0].set_ylabel(r"stress  $\bar\sigma/\bar\sigma_h$")
-    axes[0].set_title("stress returns to the set-point")
-    axes[1].set_ylabel(r"growth (mass ratio)  $\theta$")
-    axes[1].set_title("wall thickens (grows) to compensate")
-    axes[2].set_ylabel(r"stretch  $\lambda$")
-    axes[2].set_title("geometry change")
+    axes[0].set_ylabel(r"Wall stress  $\bar\sigma/\bar\sigma_h$")
+    axes[1].set_ylabel(r"Growth (mass ratio)  $\theta$")
+    axes[2].set_ylabel(r"Stretch  $\lambda$")
     for ax in axes:
-        ax.set_xlabel("time  [day]")
+        ax.set_xlabel("Time  [day]")
         ax.legend()
 
     fig.suptitle("Kinematic growth under hypertension (P: 1.0 -> 1.5x)", y=1.03, fontsize=14)

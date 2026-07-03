@@ -30,27 +30,25 @@ def _panel(ax, results, eq, getter, ylabel, eq_val=None):
     if eq is not None and eq.exists and eq_val is not None:
         ax.axhline(eq_val, label="equilibrated CMM", **STYLE["equilibrated CMM"])
     ax.set_ylabel(ylabel)
-    ax.set_xlabel("time  [day]")
+    ax.set_xlabel("Time  [day]")
 
 
 def main() -> None:
     art = artery(SEMINAR_MODEL)
 
     scenarios = [
-        ("Hypertension  (P: 1 -> 1.5x)", HYPERTENSION, 1000.0, 1.0),
-        ("Aneurysm  (elastin 100 -> 30%)", ANEURYSM, 6000.0, 2.0),
+        (r"Hypertension  ($P\times1.5$)", HYPERTENSION, 1000.0, 1.0),
+        (r"Aneurysm  (elastin $\to$ 30%)", ANEURYSM, 6000.0, 2.0),
     ]
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 8.4))
     for row, (title, insult, t_end, cmm_dt) in enumerate(scenarios):
         results, eq = run_all(art, insult, t_end=t_end, cmm_dt=cmm_dt)
         _panel(axes[row][0], results, eq, lambda r: r.sigma_norm,
-               r"stress  $\bar\sigma/\bar\sigma_h$", eq_val=eq.sigma_norm if eq.exists else None)
+               r"Wall stress  $\bar\sigma/\bar\sigma_h$", eq_val=eq.sigma_norm if eq.exists else None)
         axes[row][0].axhline(1.0, color="gray", lw=1, alpha=0.5)
         _panel(axes[row][1], results, eq, lambda r: r.mass,
-               r"mass ratio  $M/M_0$", eq_val=eq.mass if eq.exists else None)
-        axes[row][0].set_title(f"{title}\nstress", fontsize=12)
-        axes[row][1].set_title(f"{title}\nmass", fontsize=12)
+               r"Mass ratio  $M/M_0$", eq_val=eq.mass if eq.exists else None)
 
     # single de-duplicated legend
     handles, labels = axes[0][0].get_legend_handles_labels()
@@ -59,7 +57,11 @@ def main() -> None:
         seen.setdefault(lb, h)
     fig.legend(seen.values(), seen.keys(), loc="upper center",
                ncol=4, bbox_to_anchor=(0.5, 1.04))
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    # scenario labels as bold headings centred above each row (no per-axes titles)
+    for row, (title, *_rest) in enumerate(scenarios):
+        top = max(axes[row][0].get_position().y1, axes[row][1].get_position().y1)
+        fig.text(0.5, top + 0.012, title, ha="center", fontweight="bold", fontsize=13)
     print("wrote", save_pdf(fig, FIG))
 
 

@@ -75,6 +75,7 @@ def simulate(
     t = np.arange(N + 1) * dt
     out = {k: np.zeros(N + 1) for k in ("lam", "mass", "sigma", "r", "h")}
     masses_hist = {c.name: np.zeros(N + 1) for c in model.constituents}
+    stress_hist = {c.name: np.zeros(N + 1) for c in model.constituents}
     diverged = False
 
     for i in range(N + 1):
@@ -98,6 +99,7 @@ def simulate(
                 out[key][i:] = out[key][i - 1] if i > 0 else np.nan
             for nm in masses_hist:
                 masses_hist[nm][i:] = masses_hist[nm][i - 1] if i > 0 else np.nan
+                stress_hist[nm][i:] = stress_hist[nm][i - 1] if i > 0 else np.nan
             break
 
         out["lam"][i] = lam
@@ -106,8 +108,10 @@ def simulate(
         out["r"][i] = geom.radius(lam)
         out["h"][i] = geom.thickness(lam, M_tot)
         masses_hist["elastin"][i] = M_elastin
+        stress_hist["elastin"][i] = elastin.law.stress_cauchy(elastin.G * lam) / elastin.sigma_h
         for c in turnover:
             masses_hist[c.name][i] = M[c.name]
+            stress_hist[c.name][i] = c.law.stress_cauchy(lam / lam_n[c.name]) / c.sigma_h
 
         # advance the ODEs one explicit step, Eqs. (HC2)-(HC3)
         #
@@ -137,5 +141,6 @@ def simulate(
         radius=out["r"],
         thickness=out["h"],
         masses=masses_hist,
+        stresses=stress_hist,
         diverged=diverged,
     )

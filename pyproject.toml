@@ -14,6 +14,10 @@ dependencies = [
 # Nicely rendered LaTeX in figure labels is optional; matplotlib's mathtext is
 # used by default so a system LaTeX install is NOT required.
 dev = ["ruff>=0.4"]
+# MP4 export for the animations (solutions/make_all_videos.py).  Without it the
+# videos still export as GIF via Pillow (a matplotlib dependency).  With it, a
+# self-contained ffmpeg binary is used — no system ffmpeg needed.
+video = ["imageio-ffmpeg>=0.4"]
 
 [build-system]
 requires = ["hatchling"]

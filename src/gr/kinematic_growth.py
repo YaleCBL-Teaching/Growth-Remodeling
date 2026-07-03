@@ -4,47 +4,45 @@ Theory 1 of 4 — KINEMATIC GROWTH  (Rodriguez, Hoger & McCulloch, 1994).
 -------------------------------------------------------------------------------
 The idea
 -------------------------------------------------------------------------------
-Postulate a multiplicative split of the deformation gradient into an elastic part
-and a stress-free **growth** part:
+Kinematic growth treats the wall as a **single homogeneous material** — there are
+no constituents, no mass fractions, no turnover and no per-constituent natural
+configurations.  That is the whole point (and the limitation) of the theory: it
+is the simplest continuum description of growth, to be contrasted with the
+constrained-mixture theories that *do* resolve constituents.
 
-        F  =  Fe . Fg                                                     (KG1)
+Split the (scalar) deformation gradient into an elastic and a stress-free
+**growth** part,
 
-Only ``Fe`` (grown state -> current state) stores energy and produces stress;
-``Fg`` (reference -> grown state) is a stress-free change of the natural volume —
-it *is* the growth.  For an artery, growth is **anisotropic thickening**: the
-wall grows in the radial direction (adding material through the thickness) while
-the circumferential elastic stretch of the material is unchanged by growth.  We
-capture this with a single scalar thickening variable ``theta`` (= the mass
-ratio; a transversely isotropic growth tensor Fg = I + (theta-1) e_r (x) e_r):
+        F  =  Fe . Fg ,                                                   (KG1)
 
-        mass ratio  M/M_0 = theta,     constituent stretch = G^k * lambda   (KG2)
+with only ``Fe`` carrying stress.  For an artery, growth is anisotropic
+**thickening**: the wall grows radially (a single thickening variable ``theta``,
+= the mass ratio M/M_0), which does not change the circumferential elastic
+stretch ``lambda``.
 
-where ``lambda`` is the (circumferential) tissue stretch and G^k the deposition
-prestretch (at homeostasis theta = 1, lambda = 1, so the constituent sits at G^k,
-giving sigma_h^k).  Crucially the whole mixture shares one growth variable — there
-is **no** individual constituent turnover or remodeling of natural configurations.
+The single material carries the homeostatic wall stress ``sigma_h = P_h R / H``
+(a tissue-level quantity from the Laplace balance, not built from constituents) at
+the homeostatic state (lambda = 1).  Its incremental response is a single
+stiffening law calibrated to the tissue's homeostatic stiffness ``b``:
 
-Growth is driven to null the tissue-stress deviation from the set-point (a
-first-order form of the classic stress-dependent growth law; production taken
-proportional to current mass so that theta can settle anywhere):
+        sigma(lambda) = s * sigma_h * exp[ b (lambda - 1) ]              (KG2)
 
-        d(theta)/dt = k_g * theta * ( sigma_bar / sigma_bar_h - 1 )        (KG3)
+Here ``s <= 1`` is a damage factor: the elastin-loss (aneurysm) insult is
+represented, for this single material, as an equivalent loss of load-bearing
+capacity (a single number), since a one-material theory has no elastin to remove.
+
+Growth is driven to null the wall-stress deviation from the set-point (a
+first-order stress-dependent growth law; production proportional to current mass):
+
+        d(theta)/dt = k_g * theta * ( sigma / sigma_h - 1 )              (KG3)
 
 -------------------------------------------------------------------------------
 What to learn (docs/03_kinematic_growth.md)
 -------------------------------------------------------------------------------
-The set-point sigma_bar_h is *prescribed*: wherever growth settles, it settles at
-homeostasis **by construction**.  The only two outcomes are:
-
-  * it converges to the prescribed homeostatic stress (a stable fixed point
-    exists), **or**
-  * it grows without bound (no stable fixed point).
-
-Which one occurs is set by the mechanical feedback — the exponent in the
-required-stress law (``gr.geometry``): the bar (exponent 1) is always
-self-limiting; the artery (exponent 2, Laplace) can lose stability for a strong
-enough insult.  But kinematic growth cannot *predict* mechanobiological stability
-from tissue turnover — that is what the mixture theories add.
+The set-point ``sigma_h`` is *prescribed*: growth restores the homeostatic wall
+stress **by construction** (or runs away).  But because it is one material,
+kinematic growth cannot resolve which constituent carries what, nor remodel them
+individually — exactly the information the constrained-mixture theories add.
 """
 from __future__ import annotations
 
@@ -59,30 +57,36 @@ def simulate(
     geom: Geometry,
     insult: Insult,
     *,
-    k_g: float = 0.05,        # growth-rate gain [1/day], Eq. (KG3)
-    t_end: float = 2000.0,    # [day]
-    dt: float = 1.0,          # [day]
-    lam_runaway: float = 8.0,  # stop if the tissue dilates past this stretch
+    k_g: float = 0.05,               # growth-rate gain [1/day], Eq. (KG3)
+    tissue_stiffness: float | None = None,   # b in (KG2); None -> calibrate to the tissue
+    t_end: float = 2000.0,           # [day]
+    dt: float = 1.0,                 # [day]
+    lam_runaway: float = 8.0,
 ) -> Result:
-    """Integrate kinematic growth for the given loading and insult."""
+    """Integrate kinematic growth (single material) for the given loading."""
     model = geom.model
-    cons = model.constituents
+    sigma_h = model.sigma_bar_h       # homeostatic wall stress P_h R / H (tissue-level)
 
-    def sigma_bar(lam: float, elastin_frac: float) -> float:
-        """Mixture Cauchy stress at tissue stretch ``lam``, Eq. (KG2) + rule of mixtures.
+    # --- a single equivalent material, calibrated ONCE to the tissue ---------
+    # (the constituents define what the tissue *is* — its homeostatic stress and
+    #  stiffness — but they are not part of the kinematic theory itself.)
+    def _tissue_homeostatic(lam: float) -> float:
+        return sum(c.phi0 * c.law.stress_cauchy(c.G * lam) for c in model.constituents)
 
-        Growth is radial (thickening) and does not enter the circumferential
-        elastic stretch, so the constituent stretch is simply G^k * lambda.
-        """
-        total = 0.0
-        for c in cons:
-            phi = c.phi0 * (elastin_frac if c.name == "elastin" else 1.0)
-            total += phi * c.law.stress_cauchy(c.G * lam)
-        return total
+    if tissue_stiffness is None:
+        eps = 1e-4
+        b = (_tissue_homeostatic(1 + eps) - _tissue_homeostatic(1 - eps)) / (2 * eps) / sigma_h
+    else:
+        b = tissue_stiffness
+    elastin = model.by_name("elastin")
+    f_elastin = elastin.phi0 * elastin.sigma_h / sigma_h    # elastin's homeostatic stress share
+
+    def sigma_tissue(lam: float, s: float) -> float:
+        return s * sigma_h * np.exp(b * (lam - 1.0))
 
     nsteps = int(round(t_end / dt))
     t = np.zeros(nsteps + 1)
-    theta = 1.0                      # thickening growth variable; homeostasis: theta = 1
+    theta = 1.0                       # thickening growth variable; homeostasis: theta = 1
     out = {k: np.zeros(nsteps + 1) for k in ("lam", "mass", "sigma", "r", "h")}
     diverged = False
 
@@ -90,11 +94,12 @@ def simulate(
         ti = i * dt
         t[i] = ti
         gamma = insult.pressure(model.P_h, ti) / model.P_h
-        ef = insult.elastin_fraction(ti)
+        # elastin loss -> equivalent weakening of the single material
+        s_eff = 1.0 - (1.0 - insult.elastin_fraction(ti)) * f_elastin
 
-        # (i) mechanical equilibrium: solve sigma_bar(lam) = required(lam), mass = theta
+        # (i) mechanical equilibrium: sigma_tissue(lam) = required(lam), mass = theta
         lam = geom.equilibrium_stretch(
-            lambda L: sigma_bar(L, ef), mass_ratio=theta, load_factor=gamma
+            lambda L: sigma_tissue(L, s_eff), mass_ratio=theta, load_factor=gamma
         )
         if lam is None or lam > lam_runaway:
             diverged = True
@@ -103,7 +108,7 @@ def simulate(
             t[i:] = np.linspace(ti, t_end, nsteps + 1 - i)
             break
 
-        sig = sigma_bar(lam, ef)
+        sig = sigma_tissue(lam, s_eff)
         out["lam"][i] = lam
         out["mass"][i] = theta
         out["sigma"][i] = sig
@@ -112,19 +117,18 @@ def simulate(
 
         # (ii) advance growth one step, Eq. (KG3)
         if i < nsteps:
-            theta = theta + dt * k_g * theta * (sig / model.sigma_bar_h - 1.0)
-            theta = max(theta, 1e-6)
+            theta = max(theta + dt * k_g * theta * (sig / sigma_h - 1.0), 1e-6)
 
     return Result(
         theory="kinematic growth",
         setting=geom.name,
-        sigma_h=model.sigma_bar_h,
+        sigma_h=sigma_h,
         t=t,
         lam=out["lam"],
         mass=out["mass"],
         sigma=out["sigma"],
         radius=out["r"],
         thickness=out["h"],
-        masses={"grown_volume": out["mass"]},
+        masses={"grown_volume": out["mass"]},   # single material: one grown volume, no constituents
         diverged=diverged,
     )

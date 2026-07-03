@@ -23,10 +23,13 @@ class Result:
     t: np.ndarray                     # time [day]
     lam: np.ndarray                   # global stretch [-]
     mass: np.ndarray                  # total mass ratio M/M_0 [-]
-    sigma: np.ndarray                 # mixture Cauchy stress [kPa]
-    radius: np.ndarray                # inner radius (artery) / length (bar) [mm]
+    sigma: np.ndarray                 # mixture wall Cauchy stress [kPa]
+    radius: np.ndarray                # mid-wall radius (artery) / length (bar) [mm]
     thickness: np.ndarray             # wall thickness [mm] (artery)
     masses: dict[str, np.ndarray] = field(default_factory=dict)  # per-constituent M^k/M_0
+    # per-constituent stress normalised by its OWN homeostatic value, sigma^k/sigma_h^k
+    # (returns to 1 when a constituent is back at its deposition stretch G^k)
+    stresses: dict[str, np.ndarray] = field(default_factory=dict)
     diverged: bool = False            # True if the run lost equilibrium (runaway)
 
     @property
