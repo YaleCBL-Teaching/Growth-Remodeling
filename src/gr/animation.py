@@ -29,7 +29,7 @@ from matplotlib.patches import Circle, Rectangle
 
 from .history import Result
 from .parameters import Insult
-from .plotting import STYLE, _repo_root, plt
+from .plotting import CONSTITUENT_STYLE, NEUTRAL, STYLE, _repo_root, plt
 
 STANFORD_RED = "#8C1515"
 
@@ -130,8 +130,11 @@ def animate(
     n_time = len(quantities) + 1                       # + the insult panel
     plot_cols = math.ceil(n_time / 2)
     total_cols = 2 + plot_cols
-    height = 7.2
-    fig = plt.figure(figsize=(16.0 / 9.0 * height, height))
+    # Literal 12.8x7.2 in (a 16:9 frame): at the save dpi this must land on an
+    # EXACT even integer pixel count.  Writing 16/9*7.2 instead gives
+    # 12.79999998, which the ffmpeg writer truncates to an odd 1407 while the Agg
+    # canvas rounds to 1408 -- that 1px disagreement shears every scanline.
+    fig = plt.figure(figsize=(12.8, 7.2))
     gs = fig.add_gridspec(2, total_cols, hspace=0.42, wspace=0.5)
     ax_v = fig.add_subplot(gs[:, 0:2]); ax_v.set_aspect("equal"); ax_v.axis("off")
     plot_axes = [fig.add_subplot(gs[idx // plot_cols, 2 + idx % plot_cols])
@@ -196,15 +199,18 @@ def animate(
             store = getattr(r0, PER_CONSTITUENT[q][1])
             for name in [c.name for c in cons if c.name in store]:
                 y = interp(r0, lambda r, n=name, at=PER_CONSTITUENT[q][1]: getattr(r, at)[n])
-                lines[q].append((add_curve(ax, y, lw=2.2, label=name), y))
+                lines[q].append((add_curve(ax, y, lw=2.2, label=name,
+                                           **CONSTITUENT_STYLE.get(name, {})), y))
             if q == "stress_k":
                 ax.axhline(1.0, color="gray", lw=1, ls=":", alpha=0.8)
             ax.set_ylabel(PER_CONSTITUENT[q][0])
         else:
             nf = norm.get(q, 1.0)
+            single = len(results) == 1                  # a single theory -> neutral colour
             for r in results:
+                kw = dict(color=NEUTRAL, ls="-") if single else STYLE.get(r.theory, {})
                 y = interp(r, lambda rr, g=QUANTITIES[q][1], f=nf: g(rr) / f)
-                lines[q].append((add_curve(ax, y, label=r.theory, **STYLE.get(r.theory, {})), y))
+                lines[q].append((add_curve(ax, y, label=r.theory, **kw), y))
             ax.axhline(REF[q], color="gray", lw=1, ls=":", alpha=0.8)
             if equilibrium is not None and getattr(equilibrium, "exists", False):
                 val = {"sigma_norm": equilibrium.sigma_norm, "mass": equilibrium.mass,
@@ -292,7 +298,9 @@ def save(anim, filename: str | Path, *, fps: int = 14, gif: bool = False, dpi: i
 
     if not gif and writers.is_available("ffmpeg"):
         path = path.with_suffix(".mp4")
-        anim.save(str(path), writer="ffmpeg", fps=fps, dpi=dpi)
+        # h264/yuv420p requires even width & height; pad up if the figure*dpi is odd.
+        anim.save(str(path), writer="ffmpeg", fps=fps, dpi=dpi,
+                  extra_args=["-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2"])
     else:
         path = path.with_suffix(".gif")
         anim.save(str(path), writer="pillow", fps=fps, dpi=max(dpi - 30, 70))

@@ -67,21 +67,35 @@ def video_compare_hypertension():
 
 
 def video_compare_aneurysm():
-    """Twin of fig04 (bottom) — all theories under a mild aneurysm (elastin 30%)."""
+    """Twin of fig04 (bottom) — a mild aneurysm (elastin 30%).
+
+    Kinematic growth is DROPPED here: it is a single material, so an elastin-loss
+    insult is not meaningful for it.  Only the constrained-mixture theories.
+    """
     art = artery(SEMINAR_MODEL)
     results, eq = run_all(art, ANEURYSM, t_end=5000, cmm_dt=2.0)
+    results = [r for r in results if r.theory != "kinematic growth"]
     fig, anim = animate(results, ANEURYSM, art, quantities=("mass", "radius", "thickness"),
-                        equilibrium=eq, title="Aneurysm (elastin → 30%) — four theories")
+                        equilibrium=eq, title="Aneurysm (elastin → 30%) — constrained mixtures")
     _save(anim, "video04_compare_aneurysm")
 
 
+def video_stable_aneurysm():
+    """Full CMM, mild aneurysm (elastin 30%) — a STABLE adaptation (has an equilibrium)."""
+    art = artery(SEMINAR_MODEL)
+    r = constrained_mixture.simulate(art, ANEURYSM, t_end=4000, dt=2.0)
+    fig, anim = animate([r], ANEURYSM, art, quantities=("stress_k", "mass_k", "radius", "thickness"),
+                        title="Stable aneurysm — full CMM (elastin → 30%)")
+    _save(anim, "video05_stable_aneurysm")
+
+
 def video_runaway():
-    """Twin of fig06 (unstable trace) — severe elastin loss with no equilibrium."""
+    """Full CMM, severe elastin loss (3%) — an UNSTABLE runaway (no equilibrium)."""
     art = artery(SEMINAR_MODEL)
     severe = Insult(elastin_surviving=0.03, t_on=1.0, ramp=10.0)
-    r = homogenized_cmm.simulate(art, severe, t_end=5000)
+    r = constrained_mixture.simulate(art, severe, t_end=8000, dt=3.0)
     fig, anim = animate([r], severe, art, quantities=("stress_k", "mass_k", "radius", "thickness"),
-                        title="Runaway aneurysm (elastin → 3%, no equilibrium)")
+                        title="Runaway aneurysm — full CMM (elastin → 3%, no equilibrium)")
     _save(anim, "video06_runaway_aneurysm")
 
 
@@ -90,6 +104,7 @@ VIDEOS = [
     video_cmm_turnover,
     video_compare_hypertension,
     video_compare_aneurysm,
+    video_stable_aneurysm,
     video_runaway,
 ]
 

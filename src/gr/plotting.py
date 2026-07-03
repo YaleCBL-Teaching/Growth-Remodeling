@@ -16,13 +16,23 @@ import matplotlib.pyplot as plt
 from .equilibrated_cmm import Equilibrium
 from .history import Result
 
-# One fixed colour / style per theory, used everywhere.
+# Two DISTINCT palettes so theories and constituents never share a colour.
+# Theories (comparison plots):
 STYLE = {
-    "kinematic growth": dict(color="#4C72B0", ls="-"),
-    "full CMM": dict(color="#2E7D32", ls="-"),          # green (black is used for the insult)
-    "homogenized CMM": dict(color="#DD8452", ls="--"),
-    "equilibrated CMM": dict(color="#C44E52", ls=":"),
+    "kinematic growth": dict(color="#6A3D9A", ls="-"),   # purple
+    "full CMM": dict(color="#A6761D", ls="-"),           # brown/gold
+    "homogenized CMM": dict(color="#E7298A", ls="--"),   # magenta
+    "equilibrated CMM": dict(color="#C44E52", ls=":"),   # red (target)
 }
+# Constituents (per-constituent plots) -- collagen dashed so it never hides
+# behind smooth muscle when they overlap:
+CONSTITUENT_STYLE = {
+    "elastin": dict(color="#4C72B0", ls="-"),            # blue
+    "collagen": dict(color="#DD8452", ls="--"),          # orange, dashed
+    "smc": dict(color="#55A868", ls="-"),                # green
+}
+# Neutral colour for a single theory's aggregate quantities (mass, radius, ...).
+NEUTRAL = "#4C72B0"
 
 # Nice defaults for slides (large fonts, clean spines).
 plt.rcParams.update(

@@ -12,7 +12,7 @@ Run:  uv run python solutions/fig03_constrained_mixture.py
 from __future__ import annotations
 
 from gr import HYPERTENSION, artery, constrained_mixture
-from gr.plotting import plt, save_pdf
+from gr.plotting import CONSTITUENT_STYLE, plt, save_pdf
 
 from _scenarios import SEMINAR_MODEL
 
@@ -27,7 +27,7 @@ def main() -> None:
 
     # (a) per-constituent masses
     for name, m in r.masses.items():
-        axes[0].plot(r.t, m, label=name)
+        axes[0].plot(r.t, m, label=name, **CONSTITUENT_STYLE.get(name, {}))
     axes[0].set_ylabel(r"Constituent mass  $M^k/M_0$")
     axes[0].legend()
 
@@ -37,7 +37,7 @@ def main() -> None:
     axes[1].set_ylabel(r"Wall stress  $\bar\sigma/\bar\sigma_h$")
 
     # (c) geometry
-    axes[2].plot(r.t, r.radius, label="Inner radius $r$")
+    axes[2].plot(r.t, r.radius, label="Mid-wall radius $a$")
     axes[2].plot(r.t, r.thickness, label="Thickness $h$")
     axes[2].set_ylabel("Length  [mm]")
     axes[2].legend()
