@@ -122,7 +122,7 @@ class Model:
 
     constituents: list[Constituent] = field(default_factory=default_constituents)
     P_h: float = 13.3          # homeostatic luminal pressure [kPa] (~100 mmHg)
-    R: float = 1.0             # reference inner radius [mm]
+    R: float = 1.0             # reference MID-WALL radius [mm]
 
     # ---- derived homeostatic quantities -------------------------------------
     @property

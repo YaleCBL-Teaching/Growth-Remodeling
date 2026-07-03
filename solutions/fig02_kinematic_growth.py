@@ -29,7 +29,7 @@ def main() -> None:
         axes[2].plot(r.t, r.lam, ls, label=geom.name)
 
     axes[0].axhline(1.0, color="gray", lw=1, alpha=0.6)
-    axes[0].set_ylabel(r"Mixture stress  $\bar\sigma/\bar\sigma_h$")
+    axes[0].set_ylabel(r"Wall stress  $\bar\sigma/\bar\sigma_h$")
     axes[1].set_ylabel(r"Growth (mass ratio)  $\theta$")
     axes[2].set_ylabel(r"Stretch  $\lambda$")
     for ax in axes:

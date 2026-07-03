@@ -43,7 +43,7 @@ def video_kinematic():
     """Twin of fig02 — kinematic growth adapting to hypertension (artery)."""
     art = artery(SEMINAR_MODEL)
     r = kinematic_growth.simulate(art, HYPERTENSION, t_end=1000)
-    fig, anim = animate([r], HYPERTENSION, art, quantities=("sigma_norm", "mass", "lam"),
+    fig, anim = animate([r], HYPERTENSION, art, quantities=("stress_k", "thickness"),
                         title="Kinematic growth — hypertension")
     _save(anim, "video02_kinematic_growth")
 
@@ -52,8 +52,7 @@ def video_cmm_turnover():
     """Twin of fig03 — full CMM turnover under hypertension (per constituent)."""
     art = artery(SEMINAR_MODEL)
     r = constrained_mixture.simulate(art, HYPERTENSION, t_end=1200, dt=2.0)
-    fig, anim = animate([r], HYPERTENSION, art, quantities=("mass", "sigma_norm"),
-                        per_constituent=True,
+    fig, anim = animate([r], HYPERTENSION, art, quantities=("stress_k", "mass_k"),
                         title="Full constrained mixture — turnover under hypertension")
     _save(anim, "video03_constrained_mixture")
 
@@ -62,7 +61,7 @@ def video_compare_hypertension():
     """Twin of fig04 (top) — all theories under hypertension."""
     art = artery(SEMINAR_MODEL)
     results, eq = run_all(art, HYPERTENSION, t_end=1000)
-    fig, anim = animate(results, HYPERTENSION, art, quantities=("sigma_norm", "mass"),
+    fig, anim = animate(results, HYPERTENSION, art, quantities=("mass", "radius", "thickness"),
                         equilibrium=eq, title="Hypertension — four theories")
     _save(anim, "video04_compare_hypertension")
 
@@ -71,7 +70,7 @@ def video_compare_aneurysm():
     """Twin of fig04 (bottom) — all theories under a mild aneurysm (elastin 30%)."""
     art = artery(SEMINAR_MODEL)
     results, eq = run_all(art, ANEURYSM, t_end=5000, cmm_dt=2.0)
-    fig, anim = animate(results, ANEURYSM, art, quantities=("sigma_norm", "mass", "radius"),
+    fig, anim = animate(results, ANEURYSM, art, quantities=("mass", "radius", "thickness"),
                         equilibrium=eq, title="Aneurysm (elastin → 30%) — four theories")
     _save(anim, "video04_compare_aneurysm")
 
@@ -81,7 +80,7 @@ def video_runaway():
     art = artery(SEMINAR_MODEL)
     severe = Insult(elastin_surviving=0.03, t_on=1.0, ramp=10.0)
     r = homogenized_cmm.simulate(art, severe, t_end=5000)
-    fig, anim = animate([r], severe, art, quantities=("sigma_norm", "radius"),
+    fig, anim = animate([r], severe, art, quantities=("stress_k", "radius"),
                         n_frames=190,
                         title="Runaway aneurysm (elastin → 3%, no equilibrium)")
     _save(anim, "video06_runaway_aneurysm")

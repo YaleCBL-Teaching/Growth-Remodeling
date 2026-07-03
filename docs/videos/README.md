@@ -14,18 +14,29 @@ timeline is split into three clearly labelled phases so you can tell apart what 
    window, so the video does not sit on a flat tail.
 
 Each frame shows a **deforming vessel** (white lumen, Stanford-red wall, thick
-inner/outer lines) with a **dotted reference outline** so the change from the
-reference configuration is always visible, the **insult** drawn over time (its
-ratio in the y-axis label), and the **response** curves revealed live under one
-shared legend placed outside the panels.
+lines) with a **dashed reference outline** and a live "% vs reference" readout so
+the change from the reference configuration is always visible, and the **insult**
+drawn over time (its ratio in the y-axis label). The response panels depend on the
+video:
+
+- **single-theory** videos plot the **per-constituent** stress
+  $\sigma^k/\sigma_h^k$ and mass $M^k/M_0$ — each constituent has its own
+  homeostatic stress, so you see collagen and smooth muscle **remodel back** to
+  $\sigma_h^k$ while **elastin cannot** (its stress stays elevated, and in the
+  aneurysm case runs away — the mechanistic signature of the instability);
+- **comparison** videos plot the geometry (mid-wall radius, wall thickness) and
+  total mass across the theories, with the reference and equilibrated targets
+  marked.
+
+A single shared legend sits outside the panels.
 
 | video | twin of | what it shows |
 |---|---|---|
-| `video02_kinematic_growth.mp4` | fig02 | kinematic growth restoring the prescribed set-point under hypertension |
-| `video03_constrained_mixture.mp4` | fig03 | full-CMM turnover: collagen & SMC grow, elastin is diluted |
-| `video04_compare_hypertension.mp4` | fig04 (top) | four theories adapting to hypertension; converging onto the equilibrated target |
-| `video04_compare_aneurysm.mp4` | fig04 (bottom) / fig05 | four theories under a mild aneurysm (elastin → 30%), settling onto the equilibrated line |
-| `video06_runaway_aneurysm.mp4` | fig06 (unstable) | severe elastin loss (→ 3%): no equilibrium exists, the vessel dilates without bound |
+| `video02_kinematic_growth.mp4` | fig02 | kinematic growth under hypertension: per-constituent stresses all return to homeostatic as the wall thickens |
+| `video03_constrained_mixture.mp4` | fig03 | full-CMM turnover: collagen & SMC stresses remodel back to σ_h^k (and grow in mass); elastin stress stays elevated |
+| `video04_compare_hypertension.mp4` | fig04 (top) | four theories adapting to hypertension (mass, mid-wall radius, thickness), converging onto the equilibrated target |
+| `video04_compare_aneurysm.mp4` | fig04 (bottom) / fig05 | four theories under a mild aneurysm (elastin → 30%): mass drops then rebuilds, settling onto the equilibrated line |
+| `video06_runaway_aneurysm.mp4` | fig06 (unstable) | severe elastin loss (→ 3%): elastin stress runs away without bound — the mechanistic signature of the instability |
 
 Regenerate them all with:
 

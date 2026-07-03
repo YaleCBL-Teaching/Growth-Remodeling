@@ -17,9 +17,12 @@ is *reference*, what is *elastic*, and what is *G&R*:
      adapts.  Frames are dense early (where the action is) and the time axis is
      cropped to the active window, so the video does not sit on a flat tail.
 
-Each frame shows a deforming vessel (Stanford-red lumen, thick walls) with a dashed
-**reference** outline so the change from reference is always visible, the insult
-drawn over time, and the response curves revealed live.
+Each frame shows a deforming vessel (white lumen, Stanford-red wall, thick lines)
+with a dashed **reference** outline and a live "% vs reference" readout so the
+change is always visible; single-theory videos plot the **per-constituent** stress
+sigma^k/sigma_h^k (each constituent has its own homeostatic stress) and mass, while
+comparison videos plot the geometry (mid-wall radius, wall thickness, mass) across
+theories.
 """
 from __future__ import annotations
 
@@ -37,13 +40,18 @@ STANFORD_RED = "#8C1515"
 _WALL_EXAGG = 3.0          # wall drawn this much thicker than scale, so it's visible
 
 # Capitalised, descriptive y-axis labels (no plot titles — the label is enough).
-# "Mixture stress" makes clear it is the mixture (not a single constituent).
+# Single-valued quantities (one line per theory):
 QUANTITIES = {
-    "sigma_norm": (r"Mixture stress  $\bar\sigma/\bar\sigma_h$", lambda r: r.sigma_norm),
     "mass": (r"Mass ratio  $M/M_0$", lambda r: r.mass),
     "lam": (r"Stretch  $\lambda$", lambda r: r.lam),
-    "radius": ("Inner radius  [mm]", lambda r: r.radius),
+    "radius": ("Mid-wall radius  [mm]", lambda r: r.radius),
     "thickness": ("Wall thickness  [mm]", lambda r: r.thickness),
+}
+# Per-constituent quantities (one line per constituent, single theory). Each has
+# its OWN homeostatic set-point, so the stress is normalised by sigma_h^k.
+PER_CONSTITUENT = {
+    "stress_k": (r"Constituent stress  $\sigma^k/\sigma_h^k$", "stresses"),
+    "mass_k": (r"Constituent mass  $M^k/M_0$", "masses"),
 }
 
 
@@ -99,96 +107,119 @@ def animate(
     insult: Insult,
     geom,
     *,
-    quantities: tuple[str, ...] = ("sigma_norm", "mass"),
+    quantities: tuple[str, ...] = ("stress_k", "mass_k"),
     vessel_from: Result | None = None,
-    per_constituent: bool = False,
     equilibrium=None,
     n_frames: int = 150,
     title: str | None = None,
 ):
-    """Build a Reference -> Elastic -> G&R animation (vessel + insult + response)."""
+    """Reference -> Elastic -> G&R animation (vessel + insult + response).
+
+    ``quantities`` may mix single-valued keys from ``QUANTITIES`` (one line per
+    theory) and per-constituent keys from ``PER_CONSTITUENT`` (one line per
+    constituent; single theory only).
+    """
     model = geom.model
     R0, H0 = model.R, model.H
-    t_end = max(float(r.t[np.isfinite(r.t)][-1]) for r in results)
-    # The G&R curves start at t0 (insult fully applied ~ the elastic instant), so
-    # they begin from the elastic state instead of dipping back to the reference
-    # baseline right before G&R switches on.
-    t0 = insult.t_on + max(insult.ramp, 0.0)
-    settle = _settle_time(results, t_end)
-    t_vis = max(settle - t0, 0.15 * settle, 30.0)      # G&R window shown (days since insult)
-    W = 0.20 * t_vis                                   # width of the reference+elastic setup
-
+    cons = model.constituents
+    s = insult.elastin_surviving
     if vessel_from is None:
         vessel_from = next((r for r in results if r.theory == "full CMM"), results[-1])
 
-    lam_e, sig_e, m_e = _elastic_state(geom, insult)
-    # reference and elastic value of each quantity (elastin loss drops the mass)
-    REF = {"sigma_norm": 1.0, "mass": 1.0, "lam": 1.0, "radius": R0, "thickness": H0}
-    ELA = {"sigma_norm": sig_e, "mass": m_e, "lam": lam_e,
-           "radius": lam_e * R0, "thickness": geom.thickness(lam_e, m_e)}
+    t_end = max(float(r.t[np.isfinite(r.t)][-1]) for r in results)
+    t0 = insult.t_on + max(insult.ramp, 0.0)           # insult fully applied ~ elastic instant
+    settle = _settle_time(results, t_end)
+    t_vis = max(settle - t0, 0.15 * settle, 30.0)      # G&R window shown (days since insult)
+    W = 0.20 * t_vis
 
-    # --- frame clock: [reference | elastic] in negative time, then G&R ------------
+    lam_e, sig_e, m_e = _elastic_state(geom, insult)
+
+    # --- frame clock: [reference | elastic] in negative time, then G&R --------
     n_ref, n_el = 6, 9
     setup_t = np.concatenate([np.linspace(-W, -0.52 * W, n_ref),
                               np.linspace(-0.5 * W, -1e-4, n_el)])
-    gr_t = t_vis * np.linspace(0.0, 1.0, n_frames) ** 1.7      # dense early
+    gr_t = t_vis * np.linspace(0.0, 1.0, n_frames) ** 1.7
     end_t = np.full(4, t_vis)
     frame_t = np.concatenate([setup_t, gr_t, end_t])
     gr_all = np.concatenate([gr_t, end_t])
 
-    def build(result, getter, key):
-        t, y = _finite(result.t, getter(result))
+    def build(ref_v, ela_v, t, y):
         gr = np.interp(gr_all + t0, t, y, left=y[0], right=y[-1])
-        return np.concatenate([np.full(n_ref, REF[key]), np.full(n_el, ELA[key]), gr])
+        return np.concatenate([np.full(n_ref, ref_v), np.full(n_el, ela_v), gr])
 
-    series = {q: [build(r, QUANTITIES[q][1], q) for r in results] for q in quantities}
-    r_v = build(vessel_from, lambda r: r.radius, "radius")
-    h_v = build(vessel_from, lambda r: r.thickness, "thickness")
+    # single-valued reference/elastic values (elastin loss drops the mass)
+    REF = {"mass": 1.0, "lam": 1.0, "radius": R0, "thickness": H0}
+    ELA = {"mass": m_e, "lam": lam_e, "radius": lam_e * R0,
+           "thickness": geom.thickness(lam_e, m_e)}
 
-    # insult drivers step at the start of the elastic phase (t = -0.5 W)
+    def build_regular(result, q):
+        t, y = _finite(result.t, QUANTITIES[q][1](result))
+        return build(REF[q], ELA[q], t, y)
+
+    def pc_ref_ela(qk, name):
+        c = model.by_name(name)
+        if qk == "stress_k":                            # sigma^k/sigma_h^k
+            return 1.0, c.law.stress_cauchy(c.G * lam_e) / c.sigma_h
+        return c.phi0, c.phi0 * (s if name == "elastin" else 1.0)   # mass_k
+
+    def build_pc(result, qk, name):
+        arr = getattr(result, PER_CONSTITUENT[qk][1])[name]
+        t, y = _finite(result.t, arr)
+        ref, ela = pc_ref_ela(qk, name)
+        return build(ref, ela, t, y)
+
+    # vessel geometry over the whole clock (mid-wall radius, thickness, mass)
+    a_v = build(R0, lam_e * R0, *_finite(vessel_from.t, vessel_from.radius))
+    h_v = build(H0, geom.thickness(lam_e, m_e), *_finite(vessel_from.t, vessel_from.thickness))
+    m_v = build(1.0, m_e, *_finite(vessel_from.t, vessel_from.mass))
+
+    # insult drivers (step at the start of the elastic phase)
     applied = np.arange(len(frame_t)) >= n_ref
     gamma = np.where(applied, insult.pressure_factor, 1.0)
     ela_frac = np.where(applied, insult.elastin_surviving, 1.0)
     has_p = insult.pressure_factor != 1.0
     has_e = insult.elastin_surviving != 1.0
 
-    # ---------------------------------------------------------------- layout
+    # --------------------------------------------------------------- layout
     ncol = 1 + len(quantities)
-    fig = plt.figure(figsize=(3.8 * ncol, 5.0))
-    gs = fig.add_gridspec(2, ncol, height_ratios=[2.4, 1.0], hspace=0.5, wspace=0.36)
+    fig = plt.figure(figsize=(3.8 * ncol, 5.2))
+    gs = fig.add_gridspec(2, ncol, height_ratios=[2.4, 1.0], hspace=0.55, wspace=0.4)
     ax_v = fig.add_subplot(gs[0, 0]); ax_v.set_aspect("equal"); ax_v.axis("off")
     ax_ins = fig.add_subplot(gs[1, 0])
     ax_q = [fig.add_subplot(gs[:, 1 + i]) for i in range(len(quantities))]
     time_axes = [ax_ins, *ax_q]
-
     is_artery = results[0].setting == "artery"
 
-    # vessel: dashed reference ghost + current (Stanford-red lumen, thick walls)
+    # vessel: RED wall, WHITE lumen (mid-wall radius +/- thickness), with a clearly
+    # visible dashed REFERENCE outline on top so the change is always obvious.
+    EX = 4.0                                            # wall-thickness exaggeration
     def _disc(radius, **kw):
         p = Circle((0, 0), radius, **kw); ax_v.add_patch(p); return p
 
     if is_artery:
-        out_ref = 1.0 + _WALL_EXAGG * H0 / R0
-        max_out = np.nanmax(r_v / R0 + _WALL_EXAGG * h_v / R0)
-        lim = 1.18 * max_out
+        inner0, outer0 = (a_v[0] - EX * h_v[0] / 2) / R0, (a_v[0] + EX * h_v[0] / 2) / R0
+        lim = 1.15 * np.nanmax((a_v + EX * h_v / 2) / R0)
         ax_v.set_xlim(-lim, lim); ax_v.set_ylim(-lim, lim)
-        # dotted reference outline in the background; wall RED, lumen WHITE
-        _disc(out_ref, facecolor="none", edgecolor="gray", ls=":", lw=1.4, zorder=1)
-        _disc(1.0, facecolor="none", edgecolor="gray", ls=":", lw=1.4, zorder=1)
-        wall = _disc(out_ref, facecolor=STANFORD_RED, edgecolor="#111", lw=3.0, zorder=2)
-        lumen = _disc(1.0, facecolor="white", edgecolor="#111", lw=3.0, zorder=3)
+        wall = _disc(outer0, facecolor=STANFORD_RED, edgecolor="#111", lw=2.5, zorder=2)
+        lumen = _disc(inner0, facecolor="white", edgecolor="#111", lw=2.5, zorder=3)
+        ir, orf = 1.0 - EX * H0 / (2 * R0), 1.0 + EX * H0 / (2 * R0)
+        _disc(orf, facecolor="none", edgecolor="#16405e", ls=(0, (5, 3)), lw=1.8, zorder=5)
+        _disc(ir, facecolor="none", edgecolor="#16405e", ls=(0, (5, 3)), lw=1.8, zorder=5)
     else:
         ax_v.set_xlim(-0.15, 2.8); ax_v.set_ylim(-1.2, 1.2)
-        h_ref = 0.5
-        ax_v.add_patch(Rectangle((0, -h_ref / 2), 1.8, h_ref, facecolor="none",
-                                 edgecolor="gray", ls=":", lw=1.4))
-        wall = Rectangle((0, -h_ref / 2), 1.8, h_ref, facecolor=STANFORD_RED,
-                         edgecolor="#111", lw=3.0)
+        ax_v.add_patch(Rectangle((0, -0.25), 1.8, 0.5, facecolor="none",
+                                 edgecolor="#16405e", ls=(0, (5, 3)), lw=1.8, zorder=5))
+        wall = Rectangle((0, -0.25), 1.8, 0.5, facecolor=STANFORD_RED, edgecolor="#111", lw=2.5)
         ax_v.add_patch(wall); lumen = None
-    phase_txt = ax_v.text(0.5, -0.04, "", transform=ax_v.transAxes, ha="center",
-                          va="top", fontsize=12, color="#222", weight="bold")
 
-    # insult panel: no legend — the ratio goes straight into the y-label
+    ax_v.set_title(r"artery cross-section  (— — reference)" if is_artery else "bar",
+                   fontsize=10)
+    phase_txt = ax_v.text(0.5, -0.02, "", transform=ax_v.transAxes, ha="center",
+                          va="top", fontsize=12, color="#222", weight="bold")
+    readout = ax_v.text(0.5, -0.16, "", transform=ax_v.transAxes, ha="center",
+                        va="top", fontsize=9.5, color="#16405e")
+
+    # insult panel: no legend — the ratio goes into the y-label
     if has_p and not has_e:
         ax_ins.plot(frame_t, gamma, color="#2a6fb0", lw=2)
         ax_ins.set_ylabel(r"Pressure  $P/P_h$")
@@ -202,57 +233,56 @@ def animate(
             ax_ins.plot(frame_t, ela_frac, color=STANFORD_RED, lw=2)
         ax_ins.set_ylabel(r"Insult ($P/P_h$, elastin)")
 
-    # region shading (two-tone: reference vs elastic) + G&R-on divider
+    # region shading (reference vs elastic) + G&R-on divider
     for ax in time_axes:
         ax.set_xlim(-W, t_vis)
-        ax.axvspan(-W, -0.5 * W, color="0.93", zorder=0)       # reference
-        ax.axvspan(-0.5 * W, 0.0, color="0.85", zorder=0)      # elastic
-        ax.axvline(0.0, color="gray", lw=1.2, ls="--")         # G&R switched on
+        ax.axvspan(-W, -0.5 * W, color="0.93", zorder=0)
+        ax.axvspan(-0.5 * W, 0.0, color="0.85", zorder=0)
+        ax.axvline(0.0, color="gray", lw=1.2, ls="--")
         ax.set_xlabel("Time  [day]")
-    # region labels: "reference"/"elastic" set vertically inside their (narrow)
-    # bands so they never collide (the G&R region is marked by the t=0 divider and
-    # the bold phase caption under the vessel)
     ax_q[0].annotate("reference", (-0.75 * W, 0.5), xycoords=("data", "axes fraction"),
                      ha="center", va="center", rotation=90, fontsize=8, color="#666")
     ax_q[0].annotate("elastic", (-0.25 * W, 0.5), xycoords=("data", "axes fraction"),
                      ha="center", va="center", rotation=90, fontsize=8, color="#666")
 
     # response panels
-    lines, cursors = {}, []
+    lines = {}
     for ax, q in zip(ax_q, quantities):
-        ylabel, _ = QUANTITIES[q]
         lines[q] = []
-        if per_constituent and q == "mass" and len(results) == 1:
+        if q in PER_CONSTITUENT:
             r0 = results[0]
-            for name, m in r0.masses.items():
-                # constituent curve: reference & elastic = phi0, then G&R = mass history
-                phi0 = model.by_name(name).phi0
-                t, yy = _finite(r0.t, m)
-                grc = np.interp(gr_all + t0, t, yy, left=yy[0], right=yy[-1])
-                y = np.concatenate([np.full(n_ref, phi0), np.full(n_el, phi0), grc])
-                ax.plot(frame_t, y, color="gray", lw=0.8, alpha=0.2)
+            store = getattr(r0, PER_CONSTITUENT[q][1])
+            names = [c.name for c in cons if c.name in store]
+            for name in names:
+                y = build_pc(r0, q, name)
+                ax.plot(frame_t, y, color="gray", lw=0.8, alpha=0.18)
                 ln, = ax.plot([], [], lw=2.4, label=name)
                 lines[q].append((ln, y))
+            if q == "stress_k":                          # shared homeostatic set-point
+                ax.axhline(1.0, color="gray", lw=1, ls=":", alpha=0.8)
+            ax.set_ylabel(PER_CONSTITUENT[q][0])
         else:
-            for r, ys in zip(results, series[q]):
-                ax.plot(frame_t, ys, color="gray", lw=0.8, alpha=0.16)
+            for r in results:
+                y = build_regular(r, q)
+                ax.plot(frame_t, y, color="gray", lw=0.8, alpha=0.16)
                 ln, = ax.plot([], [], label=r.theory, **STYLE.get(r.theory, {}))
-                lines[q].append((ln, ys))
-        # reference configuration, kept dotted in the background
-        ax.axhline(REF[q], color="gray", lw=1, ls=":", alpha=0.7, zorder=0)
-        if equilibrium is not None and getattr(equilibrium, "exists", False):
-            val = {"sigma_norm": equilibrium.sigma_norm, "mass": equilibrium.mass,
-                   "lam": equilibrium.lam, "radius": equilibrium.radius,
-                   "thickness": equilibrium.thickness}.get(q)
-            if val is not None and np.isfinite(val):
-                ax.axhline(val, **STYLE["equilibrated CMM"], alpha=0.9, label="equilibrated CMM")
-        ax.set_ylabel(ylabel)
-        cursors.append(ax.axvline(frame_t[0], color="k", lw=1, alpha=0.6))
+                lines[q].append((ln, y))
+            ax.axhline(REF[q], color="gray", lw=1, ls=":", alpha=0.8)
+            if equilibrium is not None and getattr(equilibrium, "exists", False):
+                val = {"mass": equilibrium.mass, "lam": equilibrium.lam,
+                       "radius": equilibrium.radius, "thickness": equilibrium.thickness}.get(q)
+                if val is not None and np.isfinite(val):
+                    ax.axhline(val, **STYLE["equilibrated CMM"], alpha=0.9,
+                               label="equilibrated CMM")
+            ax.set_ylabel(QUANTITIES[q][0])
+        ax.axvline(frame_t[0], color="k", lw=1, alpha=0.6)  # placeholder cursor added below
 
-    # one shared legend for the response panels, placed OUTSIDE the axes so it is
-    # fixed (never moves or overlaps the growing curves)
-    if per_constituent:
-        handles = [ln for ln, _ in lines.get("mass", [])]
+    cursors = [ax.axvline(frame_t[0], color="k", lw=1, alpha=0.6) for ax in ax_q]
+
+    # one shared legend, OUTSIDE the axes (constituents if per-constituent, else theories)
+    if any(q in PER_CONSTITUENT for q in quantities):
+        pcq = next(q for q in quantities if q in PER_CONSTITUENT)
+        handles = [ln for ln, _ in lines[pcq]]
         labels = [h.get_label() for h in handles]
     else:
         handles, labels = [], []
@@ -271,12 +301,12 @@ def animate(
         fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.93),
                    ncol=min(len(labels), 4), fontsize=9, frameon=False)
 
-    # ---------------------------------------------------------------- frames
+    # --------------------------------------------------------------- frames
     def phase_label(k):
         if k < n_ref:
-            return "Reference"
+            return "reference"
         if k < n_ref + n_el:
-            return "Insult applied\n(elastic response)"
+            return "insult applied\n(elastic response)"
         if vessel_from.diverged and k >= len(frame_t) - 6:
             return "G&R  →  runaway"
         return "G&R"
@@ -288,14 +318,18 @@ def animate(
                 ln.set_data(frame_t[: k + 1], ys[: k + 1])
         for c in cursors:
             c.set_xdata([t, t])
-        rr, hh = r_v[k] / R0, _WALL_EXAGG * h_v[k] / R0
         if is_artery:
-            wall.set_radius(rr + hh)
-            lumen.set_radius(rr)
+            inner = (a_v[k] - EX * h_v[k] / 2) / R0
+            outer = (a_v[k] + EX * h_v[k] / 2) / R0
+            wall.set_radius(outer); lumen.set_radius(max(inner, 1e-3))
         else:
-            wall.set_width(1.8 * rr)
+            wall.set_width(1.8 * a_v[k] / R0)
             ht = 0.5 * h_v[k] / H0
             wall.set_height(ht); wall.set_xy((0, -ht / 2))
+        readout.set_text(
+            f"vs reference:  radius {a_v[k]/R0-1:+.0%},  "
+            f"thickness {h_v[k]/H0-1:+.0%},  mass {m_v[k]-1:+.0%}"
+        )
         phase_txt.set_text(phase_label(k))
         return []
 

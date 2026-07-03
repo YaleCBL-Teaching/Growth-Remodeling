@@ -45,7 +45,7 @@ def main() -> None:
     for row, (title, insult, t_end, cmm_dt) in enumerate(scenarios):
         results, eq = run_all(art, insult, t_end=t_end, cmm_dt=cmm_dt)
         _panel(axes[row][0], results, eq, lambda r: r.sigma_norm,
-               r"Mixture stress  $\bar\sigma/\bar\sigma_h$", eq_val=eq.sigma_norm if eq.exists else None)
+               r"Wall stress  $\bar\sigma/\bar\sigma_h$", eq_val=eq.sigma_norm if eq.exists else None)
         axes[row][0].axhline(1.0, color="gray", lw=1, alpha=0.5)
         _panel(axes[row][1], results, eq, lambda r: r.mass,
                r"Mass ratio  $M/M_0$", eq_val=eq.mass if eq.exists else None)

@@ -81,7 +81,12 @@ class Geometry:
 
     # -- reporting helpers (for plots / tables) -------------------------------
     def radius(self, lam: float) -> float:
-        """Current inner radius [mm] (artery: r = lambda R; bar: length factor)."""
+        """Current **mid-wall** radius [mm] (artery: a = lambda R; bar: length factor).
+
+        A thin-walled tube is described by a single mid-wall radius ``a`` and a
+        thickness ``h`` -- exactly the two quantities the Laplace balance
+        sigma = P a / h uses. ``R`` is the reference mid-wall radius.
+        """
         return lam * self.model.R
 
     def thickness(self, lam: float, mass_ratio: float) -> float:

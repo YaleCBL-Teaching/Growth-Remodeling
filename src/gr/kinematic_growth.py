@@ -84,6 +84,7 @@ def simulate(
     t = np.zeros(nsteps + 1)
     theta = 1.0                      # thickening growth variable; homeostasis: theta = 1
     out = {k: np.zeros(nsteps + 1) for k in ("lam", "mass", "sigma", "r", "h")}
+    stress_hist = {c.name: np.zeros(nsteps + 1) for c in cons}
     diverged = False
 
     for i in range(nsteps + 1):
@@ -100,6 +101,8 @@ def simulate(
             diverged = True
             for key in out:
                 out[key][i:] = out[key][i - 1] if i > 0 else np.nan
+            for nm in stress_hist:
+                stress_hist[nm][i:] = stress_hist[nm][i - 1] if i > 0 else np.nan
             t[i:] = np.linspace(ti, t_end, nsteps + 1 - i)
             break
 
@@ -109,6 +112,11 @@ def simulate(
         out["sigma"][i] = sig
         out["r"][i] = geom.radius(lam)
         out["h"][i] = geom.thickness(lam, theta)
+        # per-constituent stress: all share the elastic stretch G^k*lambda (no
+        # constituent remodeling), so sigma^k does NOT return to sigma_h^k unless
+        # lambda -> 1 -- the visible signature of kinematic growth's limitation.
+        for c in cons:
+            stress_hist[c.name][i] = c.law.stress_cauchy(c.G * lam) / c.sigma_h
 
         # (ii) advance growth one step, Eq. (KG3)
         if i < nsteps:
@@ -126,5 +134,6 @@ def simulate(
         radius=out["r"],
         thickness=out["h"],
         masses={"grown_volume": out["mass"]},
+        stresses=stress_hist,
         diverged=diverged,
     )
