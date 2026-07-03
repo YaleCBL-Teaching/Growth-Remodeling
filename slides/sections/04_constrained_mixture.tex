@@ -2,7 +2,7 @@
 %  SECTION 4 — Full constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 4.\ \ Constrained mixture (full)}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} 5.\ \ Constrained mixture (full)}\\[0.5em]
   {\color{BoxGray} Humphrey \& Rajagopal (2002) --- the heart of the lecture}\end{center}\vfill
 \end{frame}
 
@@ -69,7 +69,33 @@
   collagen and muscle grow, elastin is diluted, and tissue stress returns to
   homeostatic.}
   {\color{AccentRed}\small The price: history integrals make the model $O(N^2)$ in
-  time steps --- the motivation for the homogenized model (§5).}
+  time steps --- the motivation for the homogenized model (§6).}
   \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 
+
+% ---- interactive coding exercise: ex03 -------------------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Constrained mixture --- code}
+    \qq{Change how fast the tissue turns over and how hard it responds; compare
+    hypertension against an elastin-loss (aneurysm) insult. \qkind{\texttt{ex03}}}
+    \qres{\texttt{exercises/ex03\_constrained\_mixture.py}. Tunables:
+    \texttt{TURNOVER\_DAYS=20}, \texttt{GAIN=1.0}; \texttt{INSULT} =
+    hypertension (\texttt{pressure\_factor=1.5}) vs.\ aneurysm
+    (\texttt{elastin\_surviving=0.3}).}
+    \qhint{Try turnover 10 / 20 / 70 d and gain 0.3 / 1.0 / 3.0. Does the same
+    tissue adapt to one insult but not the other?}
+    \qrun{uv run python exercises/ex03\_constrained\_mixture.py}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{Constrained mixture}
+    Mild hypertension \textbf{adapts}: collagen and SMC grow, tissue stress returns
+    to homeostatic. A severe elastin insult can \textbf{run away}. Faster turnover
+    / higher gain reach the new state sooner.
+    \par\smallskip
+    {\color{ABlue}\bfseries Learning.} Stability is \emph{predicted}, and it
+    \textbf{depends on the insult} --- not fixed in advance.
+  \end{answerbox}
+\end{frame}

@@ -2,7 +2,7 @@
 %  SECTION 7 — Stability capstone
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 7.\ \ Stability}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} 8.\ \ Stability}\\[0.5em]
   {\color{BoxGray} adaptation vs.\ aneurysm --- the one big question}\end{center}\vfill
 \end{frame}
 
@@ -57,3 +57,28 @@
   \end{center}
 \end{frame}
 
+
+% ---- interactive coding exercise: ex06 -------------------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Stability map --- code}
+    \qq{Reproduce the stable/unstable map, then change \emph{one} tissue property
+    and watch the ``aneurysm'' region move. \qkind{\texttt{ex06}}}
+    \qres{\texttt{exercises/ex06\_stability\_and\_aneurysm.py}. Tunables:
+    \texttt{GAIN=1.0}$\to$3.0, \texttt{COLLAGEN\_C1=250}$\to$600,
+    \texttt{COLLAGEN\_G=1.08}$\to$1.15.}
+    \qhint{Each change shifts the boundary between adaptation and runaway. Which
+    property shrinks the unstable region most?}
+    \qrun{uv run python exercises/ex06\_stability\_and\_aneurysm.py}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{Stability map}
+    Higher gain, stiffer collagen, or larger deposition stretch all enlarge the
+    \emph{adapts} region --- the tissue tolerates a stronger insult before running
+    away.
+    \par\smallskip
+    {\color{ABlue}\bfseries Learning.} The same existence test that defines the
+    equilibrium boundary \emph{is} the stability criterion.
+  \end{answerbox}
+\end{frame}

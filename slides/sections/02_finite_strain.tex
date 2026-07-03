@@ -1,45 +1,81 @@
 % ============================================================================
-%  SECTION 2 — Mathematical details / finite-strain fundamentals
+%  SECTION 3 — Finite-strain continuum mechanics
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 2.\ \ Finite-strain fundamentals}\\[0.5em]
-  {\color{BoxGray} just enough continuum mechanics to read the four theories}\end{center}\vfill
+  \vfill\begin{center}{\Huge\color{YaleBlue} 3.\ \ Finite-strain fundamentals}\\[0.5em]
+  {\color{BoxGray} configuration, deformation, strain, stress, hyperelasticity}\end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Deformation, stretch, and (in)compressibility}
-  Everything here collapses to one dominant direction (bar axis, or artery
-  circumference), so we track a single scalar \textbf{stretch}
-  \giveneq{\lambda = \frac{\text{current length}}{\text{reference length}},\qquad
-    \lambda=1\ \text{undeformed},\quad \lambda>1\ \text{extension}.}
-  The tissue is \textbf{elastically incompressible} (only growth changes volume),
-  so one number suffices. We report the \textbf{Cauchy (true) stress} $\sigma$ ---
-  the load-bearing area itself changes as the tissue remodels.
-  \srccite{finite-strain background adapted from YaleCBL-Teaching/BENG\_5570}
+\begin{frame}[t]{Reference and current configuration}
+  A body is described in two configurations: the \textbf{reference}
+  $\mathcal{B}_0$ (material points $\bm{X}$) and the \textbf{current}
+  $\mathcal{B}_t$ (spatial points $\bm{x}$). The \textbf{motion}
+  $\bm{x}=\bm{\varphi}(t,\bm{X})$ carries one to the other.
+  \vfill
+  \begin{center}\configmap[1.02]\end{center}
+  \vfill
+  \srccite{continuum-mechanics background adapted from YaleCBL-Teaching/BENG\_5570}
 \end{frame}
 
-\begin{frame}[t]{Wall stress from loading --- the Laplace law}
-  For a pressurised thin tube, the circumferential wall stress is
-  \slboxeq{2.6em}{eq:laplace}{\sigma_\theta = \frac{P\,r}{h}}
-  so the ``required stress'' grows \textbf{linearly} in $\lambda$ for the bar but
-  \textbf{quadratically} for the artery ($\sigma_{\text{req}}\propto
-  \lambda^2/(M/M_0)$). {\color{AccentRed}That extra power of $\lambda$ is the whole
-  story of arterial instability (§7).}
-  \bigfigw{fig01_constitutive.pdf}{0.72\linewidth}{Constituent stress--stretch
-  response and the required-stress curves.}
-  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+\begin{frame}[t]{The deformation gradient}
+  How a line element transforms is the key kinematic quantity --- the
+  \textbf{deformation gradient} $\bm{F}=\partial\bm{x}/\partial\bm{X}$ maps
+  reference line elements to current ones:
+  \slboxeq{2.4em}{eq:defgrad}{\dd\bm{x} = \bm{F}\,\dd\bm{X},\qquad
+    \bm{F}=\frac{\partial\bm{\varphi}}{\partial\bm{X}}}
+  Its determinant $J=\det\bm{F}$ is the volume ratio; \textbf{elastic
+  incompressibility} means $J_e=1$ (only growth changes volume). Reducing to one
+  dominant direction, $\bm{F}$ collapses to a single scalar \textbf{stretch}
+  \giveneq{\lambda=\frac{\text{current length}}{\text{reference length}},\qquad
+    \lambda=1\ \text{undeformed}.}
 \end{frame}
 
-\begin{frame}[t]{Hyperelastic constituents}
-  Each constituent's stress is the derivative of a strain-energy function.
-  \vspace{0.3em}
+\begin{frame}[t]{Strain --- a rotation-free measure of stretching}
+  $\bm{F}$ still contains rigid rotation. Removing it gives the \textbf{right
+  Cauchy--Green} tensor and the \textbf{Green--Lagrange strain}:
+  \slboxeq{2.4em}{eq:strain}{\bm{C}=\bm{F}^{\!\top}\bm{F},\qquad
+    \bm{E}=\tfrac12\!\left(\bm{C}-\bm{I}\right)}
+  $\bm{E}=\bm{0}$ at no deformation. In 1D, $C=\lambda^2$ and
+  $E=\tfrac12(\lambda^2-1)$ --- and the fiber invariant $I_4=\lambda_e^2$ used
+  below is exactly $\bm{C}$ read along a fiber.
+\end{frame}
 
-  \textbf{Elastin --- neo-Hookean} (soft):
-  \giveneq{\sigma_e(\lambda_e) = c_e\!\left(\lambda_e^2 - \tfrac{1}{\lambda_e}\right).}
+\begin{frame}[t]{Stress --- force per current area}
+  We report the \textbf{Cauchy (true) stress} $\sigma$: force per unit
+  \emph{current} area --- the physically meaningful measure for a growing body,
+  because the load-bearing area itself changes as the tissue remodels. It is what
+  enters the Laplace law \eqref{eq:laplace}.
+  \vspace{0.4em}
 
+  \begin{itemize}\small
+    \item Reference-area measures (1st/2nd Piola--Kirchhoff) exist too, but for a
+    remodeling tissue ``per current area'' is the natural bookkeeping.
+    \item Balance of linear momentum in the current configuration reduces, for our
+    quasi-static thin-walled vessel, to exactly the Laplace relation.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Hyperelasticity: stress from a stored-energy function}
+  A \textbf{hyperelastic} material stores energy $W(\lambda_e)$ and its stress is
+  the derivative --- no dissipation, path-independent:
+  \slboxeq{2.4em}{eq:hyper}{\sigma \;=\; \lambda_e\,\frac{\dd W}{\dd\lambda_e}}
+  \textbf{Elastin --- neo-Hookean} $W_e=c_e(I_1-3)$ (soft, barely stiffening):
+  \giveneq{\sigma_e(\lambda_e)=c_e\!\left(\lambda_e^2-\tfrac{1}{\lambda_e}\right).}
   \textbf{Collagen \& SMC --- Fung fiber} (crimped, then stiffens steeply):
-  \slboxeq{2.8em}{eq:fung}{\sigma(\lambda_e) = c_1\,\lambda_e^2\,(\lambda_e^2-1)\,
+  \slboxeq{2.6em}{eq:fung}{\sigma(\lambda_e)=c_1\,\lambda_e^2(\lambda_e^2-1)\,
     e^{\,c_2(\lambda_e^2-1)^2},\qquad I_4=\lambda_e^2}
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
+\end{frame}
+
+\begin{frame}[t]{Constituent laws \& why the artery is special}
+  \bigfigw{fig01_constitutive.pdf}{0.74\linewidth}{Left: soft elastin vs.\ steeply
+  stiffening collagen/muscle, with $G^k$ and $\sigma_h^k$ marked. Right: the
+  required stress grows \emph{linearly} for the bar but \emph{quadratically} for
+  the artery (Laplace).}
+  \begin{center}\small\color{AccentRed}
+  That extra power of $\lambda$ is the whole story of arterial instability (§8).
+  \end{center}
+  \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 
 \begin{frame}[t]{The deposition stretch $G^k$}
@@ -52,13 +88,13 @@
   \srccite{deposition-stretch concept: Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
-\begin{frame}[t]{Multiplicative decomposition}
+\begin{frame}[t]{Multiplicative decomposition --- growth vs.\ elasticity}
   Split the deformation into a stress-free \textbf{inelastic} part (growth /
   remodeling) and an \textbf{elastic} part --- the only part that carries stress:
   \slboxeq{2.4em}{eq:split}{\lambda = \lambda_e \,\lambda_{\text{inel}}}
   \begin{itemize}\small
-    \item \textbf{Kinematic growth} (§3): \emph{one} split, an inelastic growth stretch.
-    \item \textbf{Constrained mixtures} (§4): each cohort its own natural
+    \item \textbf{Kinematic growth} (§4): \emph{one} split, an inelastic growth stretch.
+    \item \textbf{Constrained mixtures} (§5): each cohort its own natural
     configuration, superposed.
   \end{itemize}
   \vspace{0.3em}

@@ -2,7 +2,7 @@
 %  SECTION 3 — Kinematic growth
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 3.\ \ Kinematic growth}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} 4.\ \ Kinematic growth}\\[0.5em]
   {\color{BoxGray} Rodriguez, Hoger \& McCulloch (1994)}\end{center}\vfill
 \end{frame}
 
@@ -38,4 +38,31 @@
   converges to the \emph{prescribed} set-point or diverges --- it cannot
   \emph{predict} stability from turnover.}
   \figcredit{Reproduced with the \texttt{gr} package (this repo)}
+\end{frame}
+
+% ---- interactive coding exercise: ex02 -------------------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Kinematic growth --- code}
+    \qq{Drive the same tissue and watch it either reach the \emph{prescribed}
+    set-point or run away. \qkind{\texttt{ex02}}}
+    \qres{\texttt{gr} package, \texttt{exercises/ex02\_kinematic\_growth.py}.
+    Tunables: \texttt{K\_G=0.05}, \texttt{PRESSURE\_FACTOR=1.5},
+    \texttt{GEOMETRY="artery"/"bar"}.}
+    \qhint{Watch the stress plateau land on $\bar\sigma_h$. Then crank
+    \texttt{PRESSURE\_FACTOR} on the \texttt{artery} until it diverges --- the
+    \texttt{bar} never does.}
+    \qrun{uv run python exercises/ex02\_kinematic\_growth.py}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{Kinematic growth}
+    The stress plateau \emph{always} lands on the set-point --- stability is
+    \textbf{imposed}, not predicted. The bar is unconditionally stable; the artery
+    (Laplace $\lambda^2$) tips into runaway once \texttt{PRESSURE\_FACTOR} is large
+    enough.
+    \par\smallskip
+    {\color{ABlue}\bfseries Learning.} Kinematic growth reaches the a-priori
+    prescribed homeostasis, \emph{or} it is unstable --- nothing in between.
+  \end{answerbox}
 \end{frame}

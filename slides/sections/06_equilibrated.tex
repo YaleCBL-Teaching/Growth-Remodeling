@@ -2,7 +2,7 @@
 %  SECTION 6 — Equilibrated constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 6.\ \ Equilibrated CMM}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} 7.\ \ Equilibrated CMM}\\[0.5em]
   {\color{BoxGray} Latorre \& Humphrey (2018)}\end{center}\vfill
 \end{frame}
 
@@ -51,3 +51,30 @@
   \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 
+
+% ---- interactive coding exercise: ex05 -------------------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Equilibrated --- code}
+    \qq{Check that the algebraic equilibrium matches the transient end-state --- then
+    find the elastin loss at which the equilibrium \emph{disappears}.
+    \qkind{\texttt{ex05}}}
+    \qres{\texttt{exercises/ex05\_equilibrated.py}. Tunable:
+    \texttt{ELASTIN\_SURVIVING=0.3} (try 0.4 / 0.3 / 0.2).}
+    \qhint{Part A: the equilibrated $\lambda^*$ should sit on the transient
+    plateau. Part B: lower $s$ until the root vanishes --- that is $s_{\text{crit}}$;
+    run just below it and watch the transient diverge.}
+    \qrun{uv run python exercises/ex05\_equilibrated.py}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{Equilibrated}
+    Where a root exists, the equilibrated solve lands exactly on the transient
+    end-state. Below $s_{\text{crit}}$ there is \emph{no} root --- and the transient
+    dilates without bound.
+    \par\smallskip
+    {\color{ABlue}\bfseries Learning.} The equilibrated model \textbf{matches} the
+    transient theories \emph{if} an equilibrium exists --- and flags, by failing to
+    find one, exactly when it does not.
+  \end{answerbox}
+\end{frame}

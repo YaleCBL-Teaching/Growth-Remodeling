@@ -2,7 +2,7 @@
 %  SECTION 5 — Homogenized constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} 5.\ \ Homogenized CMM}\\[0.5em]
+  \vfill\begin{center}{\Huge\color{YaleBlue} 6.\ \ Homogenized CMM}\\[0.5em]
   {\color{BoxGray} Cyron, Aydin \& Humphrey (2016)}\end{center}\vfill
 \end{frame}
 
@@ -47,3 +47,26 @@
   \figcredit{Reproduced with the \texttt{gr} package (this repo)}
 \end{frame}
 
+
+% ---- interactive coding exercise: ex04 -------------------------------------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Homogenized vs.\ full --- code}
+    \qq{Overlay the homogenized model on the full constrained mixture for the same
+    insult, and measure both the agreement and the speed-up. \qkind{\texttt{ex04}}}
+    \qres{\texttt{exercises/ex04\_homogenized\_vs\_full.py}. Tunables:
+    \texttt{INSULT} (hypertension / aneurysm), \texttt{T\_END=2000}.}
+    \qhint{Read off the gap between the two curves. Try the aneurysm insult or a
+    longer \texttt{T\_END} --- does the agreement hold?}
+    \qrun{uv run python exercises/ex04\_homogenized\_vs\_full.py}
+  \end{yourturnbox}
+\end{frame}
+
+\begin{frame}[t]{}
+  \begin{answerbox}{Homogenized vs.\ full}
+    The homogenized curve overlays the full CMM closely across the transient, at a
+    fraction of the runtime ($O(N)$ vs.\ $O(N^2)$).
+    \par\smallskip
+    {\color{ABlue}\bfseries Learning.} The homogenized model reproduces a
+    \textbf{similar time trajectory} to the full model --- cheaply.
+  \end{answerbox}
+\end{frame}

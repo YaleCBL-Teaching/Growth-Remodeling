@@ -130,3 +130,104 @@
 \newcommand{\lam}{\lambda}
 \newcommand{\Ups}{\Upsilon}
 \newcommand{\kd}{k_d}
+
+% ============================================================================
+%  Interactive-exercise format
+%  A standard "Your turn" question frame (Question / Resources / Hints) and a
+%  matching worked "Answer" frame. Used throughout so there is always something
+%  to do every few slides.
+% ============================================================================
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}
+\tcbuselibrary{skins,breakable}
+\definecolor{QBlue}{RGB}{40,109,192}
+\definecolor{ABlue}{RGB}{22,120,70}   % green accent for answers
+\definecolor{QFill}{RGB}{236,242,250}
+\definecolor{AFill}{RGB}{234,246,238}
+
+% \begin{yourturn}{<short title>} ... \fields ... \end{yourturn}
+\newtcolorbox{yourturnbox}[1]{%
+  enhanced, breakable, colback=QFill, colframe=QBlue, boxrule=1pt,
+  arc=2pt, left=6pt,right=6pt,top=4pt,bottom=4pt,
+  fonttitle=\bfseries\color{white},
+  title={\faPencilRuler~~Your turn: #1}}
+\newtcolorbox{answerbox}[1]{%
+  enhanced, breakable, colback=AFill, colframe=ABlue, boxrule=1pt,
+  arc=2pt, left=6pt,right=6pt,top=4pt,bottom=4pt,
+  fonttitle=\bfseries\color{white},
+  title={\faCheckCircle~~Answer: #1}}
+
+% field labels inside a yourturn box
+\newcommand{\qq}[1]{\par\smallskip{\color{QBlue}\bfseries Question.}\ #1}
+\newcommand{\qres}[1]{\par\smallskip{\color{QBlue}\bfseries Resources.}\ #1}
+\newcommand{\qhint}[1]{\par\smallskip{\color{QBlue}\bfseries Hints.}\ #1}
+\newcommand{\qkind}[1]{\hfill{\footnotesize\color{BoxGray}\itshape #1}}
+
+
+% ===========================================================================
+%  Idealized blood vessel drawn in TikZ (thick-walled cylinder cross-section)
+%    \idealvessel        -> full annotated version (P, Q, r, h, sigma_theta, tau_w)
+% ============================================================================
+\newcommand{\idealvessel}[1][1.0]{%
+\begin{tikzpicture}[scale=#1]
+  % wall (annulus) and lumen
+  \fill[YaleLightBlue!18] (0,0) circle (2.55);
+  \fill[white] (0,0) circle (1.8);
+  \draw[YaleBlue,very thick] (0,0) circle (2.55);
+  \draw[YaleBlue,very thick] (0,0) circle (1.8);
+  % inner radius r
+  \draw[-{Latex[length=2mm]},thick] (0,0) -- (128:1.8) node[midway,above,sloped]{\small $r$};
+  \fill (0,0) circle (1.2pt);
+  % wall thickness h
+  \draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]},thick,AccentRed]
+     (-18:1.8) -- (-18:2.55);
+  \node[AccentRed] at (-18:2.9) {\small $h$};
+  % lumen pressure P (radial arrows outward on inner wall)
+  \foreach \a in {30,70,110,150,190,230,270,310}{
+     \draw[-{Latex[length=1.6mm]},YaleLightBlue] (\a:0.55) -- (\a:1.55);}
+  \node[YaleLightBlue] at (0,0.0) {\small $P$};
+  % blood flow Q (into the page / axial) + WSS tau_w at inner wall
+  \node[YaleLightBlue] at (0,-0.75) {\small $Q$};
+  \draw[-{Latex[length=1.6mm]},AccentRed] (60:1.75) arc (60:20:1.75);
+  \node[AccentRed] at (40:1.45) {\scriptsize $\tau_w$};
+  % circumferential stress sigma_theta (tangential arrows in the wall)
+  \draw[-{Latex[length=1.6mm]},YaleBlue] (95:2.18) arc (95:60:2.18);
+  \draw[-{Latex[length=1.6mm]},YaleBlue] (85:2.18) arc (85:120:2.18);
+  \node[YaleBlue] at (90:2.02) {\scriptsize $\sigma_\theta$};
+\end{tikzpicture}}
+
+% ============================================================================
+%  Reference -> current configuration mapping (TikZ)  \configmap
+% ============================================================================
+\newcommand{\configmap}[1][1.0]{%
+\begin{tikzpicture}[scale=#1]
+  % reference body B_0 (left blob)
+  \begin{scope}[shift={(0,0)}]
+    \draw[YaleBlue,very thick,fill=YaleLightBlue!10]
+      plot[smooth cycle,tension=0.9] coordinates {(-0.1,0)(0.9,0.5)(1.7,0.1)(1.5,-0.9)(0.5,-1.1)(-0.2,-0.6)};
+    \node[YaleBlue] at (0.1,-1.05) {$\mathcal{B}_0$};
+    \node[font=\scriptsize] at (0.75,-1.55) {reference};
+    \fill (0.8,-0.25) circle (1.6pt) node[above,font=\scriptsize]{$\bm{X}$};
+    % base vectors at X
+    \draw[-{Latex[length=1.4mm]}] (0.8,-0.25)--(1.15,-0.25);
+    \draw[-{Latex[length=1.4mm]}] (0.8,-0.25)--(0.8,0.1);
+  \end{scope}
+  % current body B_t (right blob)
+  \begin{scope}[shift={(4.8,-0.1)}]
+    \draw[AccentRed,very thick,fill=AccentRed!7]
+      plot[smooth cycle,tension=0.9] coordinates {(0,0.2)(1.2,0.7)(2.2,0.2)(2.1,-1.0)(1.0,-1.5)(-0.1,-0.8)};
+    \node[AccentRed] at (2.0,-1.15) {$\mathcal{B}_t$};
+    \node[font=\scriptsize] at (1.0,-1.9) {current};
+    \fill (1.25,-0.35) circle (1.6pt) node[above,font=\scriptsize]{$\bm{x}$};
+    \draw[-{Latex[length=1.4mm]}] (1.25,-0.35)--(1.75,-0.2);
+    \draw[-{Latex[length=1.4mm]}] (1.25,-0.35)--(1.35,0.15);
+  \end{scope}
+  % motion arrow
+  \draw[-{Latex[length=2.4mm]},thick,YaleBlue]
+    (2.0,0.2) to[bend left=22] node[above,font=\small]{$\bm{\varphi}(t,\bm{X})$} (4.6,0.4);
+  \draw[-{Latex[length=2mm]},thick,BoxGray]
+    (1.7,-0.35) to[bend right=12] node[below,font=\scriptsize]{$\dd\bm{x}=\bm{F}\,\dd\bm{X}$} (5.85,-0.55);
+\end{tikzpicture}}
+
+% ---- compact coding-exercise field (adds a monospace "run this" line) ------
+\newcommand{\qrun}[1]{\par\smallskip{\color{QBlue}\bfseries Run.}\ \texttt{#1}}
