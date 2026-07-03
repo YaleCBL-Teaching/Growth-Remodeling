@@ -34,7 +34,7 @@ def main() -> None:
     # (b) tissue stress back to homeostatic
     axes[1].plot(r.t, r.sigma_norm, color="black")
     axes[1].axhline(1.0, color="gray", lw=1, alpha=0.6)
-    axes[1].set_ylabel(r"Tissue stress  $\bar\sigma/\bar\sigma_h$")
+    axes[1].set_ylabel(r"Mixture stress  $\bar\sigma/\bar\sigma_h$")
 
     # (c) geometry
     axes[2].plot(r.t, r.radius, label="Inner radius $r$")

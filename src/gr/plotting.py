@@ -77,7 +77,7 @@ def save_pdf(fig, path: str | Path) -> Path:
 
 # Which Result field to plot, and how to label the y-axis.
 _QUANTITIES = {
-    "sigma_norm": (r"Tissue stress  $\bar\sigma/\bar\sigma_h$", lambda r: r.sigma_norm),
+    "sigma_norm": (r"Mixture stress  $\bar\sigma/\bar\sigma_h$", lambda r: r.sigma_norm),
     "mass": (r"Mass ratio  $M/M_0$", lambda r: r.mass),
     "lam": (r"Stretch  $\lambda$", lambda r: r.lam),
     "radius": ("Inner radius / length  [mm]", lambda r: r.radius),

@@ -13,9 +13,11 @@ timeline is split into three clearly labelled phases so you can tell apart what 
    adapts. Frames are dense early and the time axis is cropped to the active
    window, so the video does not sit on a flat tail.
 
-Each frame shows a **deforming vessel** (Stanford-red lumen, thick inner/outer
-walls) with a dashed **reference** outline so the change from reference is always
-visible, the **insult** drawn over time, and the **response** curves revealed live.
+Each frame shows a **deforming vessel** (white lumen, Stanford-red wall, thick
+inner/outer lines) with a **dotted reference outline** so the change from the
+reference configuration is always visible, the **insult** drawn over time (its
+ratio in the y-axis label), and the **response** curves revealed live under one
+shared legend placed outside the panels.
 
 | video | twin of | what it shows |
 |---|---|---|

@@ -37,8 +37,9 @@ STANFORD_RED = "#8C1515"
 _WALL_EXAGG = 3.0          # wall drawn this much thicker than scale, so it's visible
 
 # Capitalised, descriptive y-axis labels (no plot titles — the label is enough).
+# "Mixture stress" makes clear it is the mixture (not a single constituent).
 QUANTITIES = {
-    "sigma_norm": (r"Tissue stress  $\bar\sigma/\bar\sigma_h$", lambda r: r.sigma_norm),
+    "sigma_norm": (r"Mixture stress  $\bar\sigma/\bar\sigma_h$", lambda r: r.sigma_norm),
     "mass": (r"Mass ratio  $M/M_0$", lambda r: r.mass),
     "lam": (r"Stretch  $\lambda$", lambda r: r.lam),
     "radius": ("Inner radius  [mm]", lambda r: r.radius),
@@ -109,7 +110,12 @@ def animate(
     model = geom.model
     R0, H0 = model.R, model.H
     t_end = max(float(r.t[np.isfinite(r.t)][-1]) for r in results)
-    t_vis = _settle_time(results, t_end)
+    # The G&R curves start at t0 (insult fully applied ~ the elastic instant), so
+    # they begin from the elastic state instead of dipping back to the reference
+    # baseline right before G&R switches on.
+    t0 = insult.t_on + max(insult.ramp, 0.0)
+    settle = _settle_time(results, t_end)
+    t_vis = max(settle - t0, 0.15 * settle, 30.0)      # G&R window shown (days since insult)
     W = 0.20 * t_vis                                   # width of the reference+elastic setup
 
     if vessel_from is None:
@@ -132,7 +138,7 @@ def animate(
 
     def build(result, getter, key):
         t, y = _finite(result.t, getter(result))
-        gr = np.interp(gr_all, t, y, left=y[0], right=y[-1])
+        gr = np.interp(gr_all + t0, t, y, left=y[0], right=y[-1])
         return np.concatenate([np.full(n_ref, REF[key]), np.full(n_el, ELA[key]), gr])
 
     series = {q: [build(r, QUANTITIES[q][1], q) for r in results] for q in quantities}
@@ -166,28 +172,35 @@ def animate(
         max_out = np.nanmax(r_v / R0 + _WALL_EXAGG * h_v / R0)
         lim = 1.18 * max_out
         ax_v.set_xlim(-lim, lim); ax_v.set_ylim(-lim, lim)
-        _disc(out_ref, facecolor="none", edgecolor="gray", ls=(0, (4, 3)), lw=1.3, zorder=1)
-        _disc(1.0, facecolor="none", edgecolor="gray", ls=(0, (4, 3)), lw=1.3, zorder=1)
-        wall = _disc(out_ref, facecolor="white", edgecolor="#111", lw=3.0, zorder=2)
-        lumen = _disc(1.0, facecolor=STANFORD_RED, edgecolor="#111", lw=3.0, zorder=3)
+        # dotted reference outline in the background; wall RED, lumen WHITE
+        _disc(out_ref, facecolor="none", edgecolor="gray", ls=":", lw=1.4, zorder=1)
+        _disc(1.0, facecolor="none", edgecolor="gray", ls=":", lw=1.4, zorder=1)
+        wall = _disc(out_ref, facecolor=STANFORD_RED, edgecolor="#111", lw=3.0, zorder=2)
+        lumen = _disc(1.0, facecolor="white", edgecolor="#111", lw=3.0, zorder=3)
     else:
         ax_v.set_xlim(-0.15, 2.8); ax_v.set_ylim(-1.2, 1.2)
         h_ref = 0.5
         ax_v.add_patch(Rectangle((0, -h_ref / 2), 1.8, h_ref, facecolor="none",
-                                 edgecolor="gray", ls=(0, (4, 3)), lw=1.3))
+                                 edgecolor="gray", ls=":", lw=1.4))
         wall = Rectangle((0, -h_ref / 2), 1.8, h_ref, facecolor=STANFORD_RED,
                          edgecolor="#111", lw=3.0)
         ax_v.add_patch(wall); lumen = None
     phase_txt = ax_v.text(0.5, -0.04, "", transform=ax_v.transAxes, ha="center",
                           va="top", fontsize=12, color="#222", weight="bold")
 
-    # insult panel (y-label only, no title)
-    if has_p:
-        ax_ins.plot(frame_t, gamma, color="#2a6fb0", lw=2, label=r"Pressure $P/P_h$")
-    if has_e:
-        ax_ins.plot(frame_t, ela_frac, color=STANFORD_RED, lw=2, label="Elastin fraction")
-    ax_ins.set_ylabel("Insult")
-    ax_ins.legend(fontsize=8, loc="center right")
+    # insult panel: no legend — the ratio goes straight into the y-label
+    if has_p and not has_e:
+        ax_ins.plot(frame_t, gamma, color="#2a6fb0", lw=2)
+        ax_ins.set_ylabel(r"Pressure  $P/P_h$")
+    elif has_e and not has_p:
+        ax_ins.plot(frame_t, ela_frac, color=STANFORD_RED, lw=2)
+        ax_ins.set_ylabel("Elastin fraction")
+    else:
+        if has_p:
+            ax_ins.plot(frame_t, gamma, color="#2a6fb0", lw=2)
+        if has_e:
+            ax_ins.plot(frame_t, ela_frac, color=STANFORD_RED, lw=2)
+        ax_ins.set_ylabel(r"Insult ($P/P_h$, elastin)")
 
     # region shading (two-tone: reference vs elastic) + G&R-on divider
     for ax in time_axes:
@@ -197,13 +210,12 @@ def animate(
         ax.axvline(0.0, color="gray", lw=1.2, ls="--")         # G&R switched on
         ax.set_xlabel("Time  [day]")
     # region labels: "reference"/"elastic" set vertically inside their (narrow)
-    # bands so they never collide; "G&R" horizontal above the wide main region
+    # bands so they never collide (the G&R region is marked by the t=0 divider and
+    # the bold phase caption under the vessel)
     ax_q[0].annotate("reference", (-0.75 * W, 0.5), xycoords=("data", "axes fraction"),
                      ha="center", va="center", rotation=90, fontsize=8, color="#666")
     ax_q[0].annotate("elastic", (-0.25 * W, 0.5), xycoords=("data", "axes fraction"),
                      ha="center", va="center", rotation=90, fontsize=8, color="#666")
-    ax_q[0].annotate("G&R", (0.5 * t_vis, 1.015), xycoords=("data", "axes fraction"),
-                     ha="center", fontsize=8.5, color="#555")
 
     # response panels
     lines, cursors = {}, []
@@ -216,36 +228,48 @@ def animate(
                 # constituent curve: reference & elastic = phi0, then G&R = mass history
                 phi0 = model.by_name(name).phi0
                 t, yy = _finite(r0.t, m)
-                grc = np.interp(gr_all, t, yy, left=yy[0], right=yy[-1])
+                grc = np.interp(gr_all + t0, t, yy, left=yy[0], right=yy[-1])
                 y = np.concatenate([np.full(n_ref, phi0), np.full(n_el, phi0), grc])
                 ax.plot(frame_t, y, color="gray", lw=0.8, alpha=0.2)
                 ln, = ax.plot([], [], lw=2.4, label=name)
                 lines[q].append((ln, y))
-            ax.legend(fontsize=8, loc="best")
         else:
             for r, ys in zip(results, series[q]):
                 ax.plot(frame_t, ys, color="gray", lw=0.8, alpha=0.16)
                 ln, = ax.plot([], [], label=r.theory, **STYLE.get(r.theory, {}))
                 lines[q].append((ln, ys))
-            if q == "sigma_norm":
-                ax.axhline(1.0, color="gray", lw=1, alpha=0.5)
-            if len(results) > 1:
-                ax.legend(fontsize=8, loc="best")
+        # reference configuration, kept dotted in the background
+        ax.axhline(REF[q], color="gray", lw=1, ls=":", alpha=0.7, zorder=0)
         if equilibrium is not None and getattr(equilibrium, "exists", False):
             val = {"sigma_norm": equilibrium.sigma_norm, "mass": equilibrium.mass,
                    "lam": equilibrium.lam, "radius": equilibrium.radius,
                    "thickness": equilibrium.thickness}.get(q)
             if val is not None and np.isfinite(val):
-                ax.axhline(val, **STYLE["equilibrated CMM"], alpha=0.9)
+                ax.axhline(val, **STYLE["equilibrated CMM"], alpha=0.9, label="equilibrated CMM")
         ax.set_ylabel(ylabel)
         cursors.append(ax.axvline(frame_t[0], color="k", lw=1, alpha=0.6))
 
+    # one shared legend for the response panels, placed OUTSIDE the axes so it is
+    # fixed (never moves or overlaps the growing curves)
+    if per_constituent:
+        handles = [ln for ln, _ in lines.get("mass", [])]
+        labels = [h.get_label() for h in handles]
+    else:
+        handles, labels = [], []
+        for ax in ax_q:
+            for h, lb in zip(*ax.get_legend_handles_labels()):
+                if lb and not lb.startswith("_") and lb not in labels:
+                    handles.append(h); labels.append(lb)
+
     if title:
-        fig.suptitle(title, fontsize=14, y=1.0)
+        fig.suptitle(title, fontsize=14, y=0.985)
     import warnings
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        fig.tight_layout()
+        fig.tight_layout(rect=(0, 0, 1, 0.86))
+    if len(labels) >= 2:
+        fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.93),
+                   ncol=min(len(labels), 4), fontsize=9, frameon=False)
 
     # ---------------------------------------------------------------- frames
     def phase_label(k):
