@@ -7,22 +7,22 @@
 \end{frame}
 
 \begin{frame}[t]{Where Instability Comes From: The Laplace Exponent}
-  Growth adds mass, \emph{lowering} required stress (stabilising); dilation
-  \emph{raises} it, \textbf{quadratically} for the artery. Lose elastin and dilation
-  wins the race --- the feedback turns positive: \textbf{runaway}.
+  For a pressurised tube the stress the wall \emph{must} carry scales with radius,
+  and radius grows with mass. Write the required (Laplace) stress as a power of the
+  stretch, $\bar\sigma_{\text{req}}\propto\lambda^{\,n}$, and use the equilibrium
+  mass--stretch relation $M/M_0=\gamma\,\lambda^{\,n}$:
+  \giveneq{\text{bar: }n=1\ (\text{tension}=Pa),\qquad
+    \text{artery: }n=2\ (\bar\sigma=\tfrac{Pa}{h},\ a\!\propto\!\lambda,\ h\!\propto\!M).}
+  Differentiate the growth balance at equilibrium. Adding mass \emph{lowers} the
+  required stress only if the geometric feedback stays sub-linear:
   \slboxeq{2.2em}{eq:stab}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
-    \ \Leftrightarrow\ \text{tissue adapts}}
-  \begin{columns}[c]
-    \begin{column}{0.5\textwidth}
-      \begin{center}\includegraphics[width=\linewidth]{figures/fig01b_required_stress.pdf}\end{center}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \begin{center}\includegraphics[width=\linewidth]{figures/stab_criterion_map.png}\end{center}
-    \end{column}
-  \end{columns}
+    \ \Longleftrightarrow\ n<n_{\text{crit}}\ \Longleftrightarrow\ \text{tissue adapts}}
+  \textbf{Bar} ($n=1$): always stable. \textbf{Artery} ($n=2$, the Laplace
+  exponent): stable only while enough elastin survives; lose elastin and the
+  quadratic term wins --- $\dd\bar\sigma/\dd\theta>0$, \textbf{runaway}.
   \begin{center}\footnotesize\color{BoxGray}
-  Required stress: linear (bar) vs.\ quadratic (artery). \quad Stable/unstable map
-  over insult strength.
+  The whole stability verdict follows analytically from the Laplace exponent $n$
+  --- no time integration needed. (Explored numerically in \texttt{ex06}.)
   \end{center}
   \srccite{Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
 \end{frame}
@@ -33,37 +33,6 @@
   \textbf{transient} --- integrate and watch it plateau or climb. The same tissue
   can do either: mild elastin loss adapts, severe loss dilates without bound.
 \end{frame}
-
-\begin{frame}[t]{How the Four Theories Answer --- The Takeaways}
-  \small
-  \begin{center}
-  \renewcommand{\arraystretch}{1.4}
-  \begin{tabular}{@{}p{0.24\textwidth}p{0.20\textwidth}p{0.48\textwidth}@{}}
-    \toprule
-    \textbf{Theory} & \textbf{Predicts stability?} & \textbf{What it says} \\
-    \midrule
-    \textbf{\color{YaleBlue}Kinematic growth} & No --- \emph{imposed} &
-      Reaches the \emph{prescribed} homeostatic set-point, or runs away. Stability
-      is built in, not learned from turnover. \\
-    \textbf{\color{YaleBlue}Constrained mixture (full)} & Yes &
-      Adapts or dilates \textbf{depending on the insult} --- the faithful
-      reference. \\
-    \textbf{\color{YaleBlue}Homogenized CMM} & Yes &
-      Same verdict as the full model, following its \textbf{time trajectory}
-      cheaply. \\
-    \textbf{\color{YaleBlue}Equilibrated CMM} & Yes --- \emph{instantly} &
-      \textbf{Matches} the transient theories \emph{if} a root exists; \emph{no}
-      root $\Rightarrow$ unbounded growth. \\
-    \bottomrule
-  \end{tabular}
-  \end{center}
-  \vfill
-  \begin{center}\color{AccentRed}
-  Stability \emph{depends on the insult}, and --- with turnover-based theories ---
-  it can be \emph{predicted}, not just assumed.
-  \end{center}
-\end{frame}
-
 
 % ---- interactive coding exercise: ex06 -------------------------------------
 \begin{frame}[t]{}

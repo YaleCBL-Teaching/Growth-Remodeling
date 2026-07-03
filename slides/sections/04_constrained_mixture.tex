@@ -2,7 +2,7 @@
 %  SECTION 4 — Full constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Constrained mixture (full)}
+  \vfill\begin{center}{\Huge\color{YaleBlue} The constrained mixture model}
   \end{center}\vfill
 \end{frame}
 
@@ -27,7 +27,9 @@
     \begin{column}{0.5\textwidth}
       \textbf{Survival} (Poisson removal at rate $k_d^k$):
       \giveneq{q^k(t,\tau) = e^{-k_d^k (t-\tau)}.}
-      Mean lifetime $1/k_d^k$; elastin does not turn over ($k_d^e=0$).
+      The index $d$ denotes \emph{degradation}: $k_d^k$ is the mass removal rate of
+      constituent $k$, so $1/k_d^k$ is its mean lifetime; elastin does not turn over
+      ($k_d^e=0$).
     \end{column}
     \begin{column}{0.5\textwidth}
       \textbf{Production} $\propto$ current mass, driven by the tissue-stress
@@ -45,7 +47,7 @@
   \dlab{general form --- constituent-specific deformation (Humphrey Fig.\ 1)}
   \giveneq{\bm{F}^{k}_{n(\tau)}(t) = \bm{F}(t)\,\bm{F}^{-1}(\tau)\,\bm{G}^{k}.}
   \zlab{reduction used here --- scalar elastic stretch}
-  \slboxeq{2.2em}{eq:cohort}{\lambda_e^{k}(t;\tau) = G^k\,\frac{\lambda(t)}{\lambda(\tau)}}
+  \slboxeq{2.2em}{eq:cohort}{\lambda_e^{k}(t,\tau) = G^k\,\frac{\lambda(t)}{\lambda(\tau)}}
   At birth ($t=\tau$) it sits exactly at $G^k$ (hence $\sigma_h^k$). This is the
   \textbf{constrained-mixture constraint}: every constituent shares the current
   deformation, but each cohort measures it from a different starting point.
@@ -79,14 +81,18 @@
 % ---- interactive coding exercise: ex03 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Constrained mixture --- code}
-    \qq{Change how fast the tissue turns over and how hard it responds; compare
-    hypertension against an elastin-loss (aneurysm) insult. \qkind{\texttt{ex03}}}
+    \qq{\textbf{Example:} the same artery, now with turnover. \textbf{Model:} full
+    constrained mixture --- the heredity integral \eqref{eq:heredity} over all
+    cohorts. \textbf{Parameters:} turnover time \texttt{TURNOVER\_DAYS}, gain
+    \texttt{GAIN}. \textbf{Insult:} hypertension vs.\ elastin-loss (aneurysm). Does
+    the same tissue adapt to one insult but run away on the other?
+    \qkind{\texttt{ex03}}}
     \qres{\texttt{exercises/ex03\_constrained\_mixture.py}. Tunables:
     \texttt{TURNOVER\_DAYS=20}, \texttt{GAIN=1.0}; \texttt{INSULT} =
     hypertension (\texttt{pressure\_factor=1.5}) vs.\ aneurysm
     (\texttt{elastin\_surviving=0.3}).}
-    \qhint{Try turnover 10 / 20 / 70 d and gain 0.3 / 1.0 / 3.0. Does the same
-    tissue adapt to one insult but not the other?}
+    \qhint{Try turnover 10 / 20 / 70 d and gain 0.3 / 1.0 / 3.0. Watch which insult
+    the tissue can absorb.}
     \qrun{uv run python exercises/ex03\_constrained\_mixture.py}
   \end{yourturnbox}
 \end{frame}

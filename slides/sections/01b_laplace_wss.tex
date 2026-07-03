@@ -1,71 +1,62 @@
 % ============================================================================
 %  SECTION 1b — Mechanical stimuli: Laplace law & wall shear stress (EARLY)
 % ============================================================================
-\begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Two mechanical stimuli}
-  \end{center}\vfill
-\end{frame}
-
 \begin{frame}[t]{An Idealized Blood Vessel}
   A vessel is a \textbf{pressurised, perfused tube}. Two loads act on the wall:
   \textbf{blood pressure} $P$ pushes it outward, and \textbf{blood flow} $Q$ drags
   its inner surface. Cells sense both.
-  \vspace{0.2em}
-  \begin{center}\idealvessel[0.58]\end{center}
-  \vspace{0.1em}
-  \begin{columns}[T]
-    \begin{column}{0.52\textwidth}
-      \begin{itemize}\small
-        \item[$P$] lumen pressure $\to$ \textbf{circumferential stress}
-        $\sigma_\theta$
-        \item[$Q$] volumetric flow $\to$ \textbf{wall shear stress} $\tau_w$
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{itemize}\small
-        \item[$a$] inner radius, \ $h$ wall thickness
-      \end{itemize}
-      {\color{AccentRed}\small Cells regulate \emph{both} $\sigma_\theta$ and
-      $\tau_w$ --- by changing $h$ and $a$.}
-    \end{column}
-  \end{columns}
+  \vfill
+  \begin{center}\idealvessel[0.60]\end{center}
+  \vfill
+  \begin{center}\small
+  $P$ lumen pressure $\to$ \textbf{circumferential stress} $\sigma_\theta$
+  \qquad
+  $Q$ volumetric flow $\to$ \textbf{wall shear stress} $\tau_w$
+  \qquad
+  $a$ inner radius, \ $h$ wall thickness
+  \end{center}
   \srccite{Humphrey, Cardiovascular Solid Mechanics (2002)}
 \end{frame}
 
-\begin{frame}[t]{Circumferential Stress --- The Laplace Law}
-  Balancing lumen pressure against wall tension for a thin-walled tube gives the
-  \textbf{circumferential (hoop) stress}:
-  \slboxeq{2.6em}{eq:laplace}{\sigma_\theta = \frac{P\,a}{h}}
-  Thicker wall $\Rightarrow$ lower stress; larger radius or pressure
-  $\Rightarrow$ higher stress. This is the load the intramural cells (SMC,
-  fibroblasts) feel.
-  \srccite{Laplace law; Humphrey, Cardiovascular Solid Mechanics (2002)}
-\end{frame}
-
-\begin{frame}[t]{Wall Shear Stress --- The Flow the Endothelium Feels}
-  For steady laminar (Poiseuille) flow $Q$ of a fluid with viscosity $\mu$ through
-  a tube of radius $a$, the shear stress the flowing blood exerts on the wall is
-  \slboxeq{2.6em}{eq:wss}{\tau_w = \frac{4\mu\,Q}{\pi\,a^3}}
-  The endothelium senses $\tau_w$; note the steep $a^{-3}$ dependence --- a small
-  radius change moves shear stress a lot.
-  \srccite{Poiseuille flow; Humphrey, Cardiovascular Solid Mechanics (2002)}
+\begin{frame}[t]{Two Loads, Two Formulae: Laplace and Poiseuille}
+  Balancing lumen pressure against wall tension (thin-walled tube) gives the
+  \textbf{circumferential (hoop) stress}; steady laminar (Poiseuille) flow gives the
+  \textbf{wall shear stress}:
+  \vfill
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{center}\textbf{\color{YaleBlue} Pressure load}\end{center}
+      \slboxeq{2.6em}{eq:laplace}{\sigma_\theta = P\,\frac{a}{h}}
+      Thicker wall $\Rightarrow$ lower stress; larger radius or pressure
+      $\Rightarrow$ higher stress. The load the intramural cells (SMC, fibroblasts) feel.
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{center}\textbf{\color{YaleBlue} Flow load}\end{center}
+      \slboxeq{2.6em}{eq:wss}{\tau_w = Q\,\frac{4\mu}{\pi\,a^3}}
+      The endothelium senses $\tau_w$; note the steep $a^{-3}$ dependence --- a small
+      radius change moves shear stress a lot.
+    \end{column}
+  \end{columns}
+  \vfill
+  \srccite{Laplace \& Poiseuille; Humphrey, Cardiovascular Solid Mechanics (2002)}
 \end{frame}
 
 \begin{frame}[t]{Two Homeostatic Set-Points, Two Adaptations}
-  Each stimulus has a preferred value the cells defend. Rearranging the two laws
-  shows \emph{what geometry restores each set-point}:
+  Each stimulus has a preferred value the cells defend --- the \emph{set-points}
+  $\sigma_{\theta,h}$ and $\tau_{w,h}$. Rearranging the two laws shows \emph{what
+  geometry restores each set-point}:
   \vfill
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
       \begin{center}\textbf{\color{YaleBlue} Pressure $\to$ thickness}\end{center}
-      Hold $\sigma_\theta=\sigma_h$:
-      \giveneq{h = \frac{P\,a}{\sigma_h}\ \propto\ P.}
+      Hold $\sigma_\theta=\sigma_{\theta,h}$:
+      \giveneq{h = \frac{P\,a}{\sigma_{\theta,h}}\ \propto\ P.}
       Higher pressure $\Rightarrow$ \textbf{thicker wall}.
     \end{column}
     \begin{column}{0.5\textwidth}
       \begin{center}\textbf{\color{YaleBlue} Flow $\to$ radius}\end{center}
-      Hold $\tau_w=\tau_h$:
-      \giveneq{a = \left(\frac{4\mu\,Q}{\pi\,\tau_h}\right)^{1/3}\!\!\propto\ Q^{1/3}.}
+      Hold $\tau_w=\tau_{w,h}$:
+      \giveneq{a = \left(\frac{4\mu\,Q}{\pi\,\tau_{w,h}}\right)^{1/3}\!\!\propto\ Q^{1/3}.}
       Higher flow $\Rightarrow$ \textbf{larger lumen}.
     \end{column}
   \end{columns}
@@ -80,20 +71,21 @@
 % ---- interactive analytical exercises (pen & paper) ------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Pressure adaptation}
-    \qq{A patient becomes hypertensive: pressure rises to $P' = (1+\gamma)P$, but
-    the radius $a$ is held fixed. By how much must the wall thicken to bring the
-    circumferential stress back to its set-point $\sigma_h$? \qkind{pen \& paper}}
-    \qres{The Laplace law \eqref{eq:laplace}; homeostatic stress $\sigma_h$.}
+    \qq{A patient becomes hypertensive: pressure rises by \textbf{50\%} to
+    $P' = 1.5\,P$, but the radius $a$ is held fixed. By how much must the wall
+    thicken to bring the circumferential stress back to its set-point
+    $\sigma_{\theta,h}$? \qkind{pen \& paper}}
+    \qres{The Laplace law \eqref{eq:laplace}; homeostatic stress $\sigma_{\theta,h}$.}
     \qhint{Write $\sigma_\theta$ before and after; set the after-value equal to
-    $\sigma_h$ and solve for the new thickness $h'$.}
+    $\sigma_{\theta,h}$ and solve for the new thickness $h'$.}
   \end{yourturnbox}
 \end{frame}
 
 \begin{frame}[t]{}
   \begin{answerbox}{Pressure adaptation}
-    Initially homeostatic: $\sigma_h = P a/h$. After the step, demanding
-    $\sigma_\theta = P' a / h' = \sigma_h$ with $P'=(1+\gamma)P$ gives
-    \slboxeq{2.2em}{eq:ans:pressure}{h' = (1+\gamma)\,h.}
+    Initially homeostatic: $\sigma_{\theta,h} = P a/h$. After the step, demanding
+    $\sigma_\theta = P' a / h' = \sigma_{\theta,h}$ with $P'=1.5\,P$ gives
+    \slboxeq{2.2em}{eq:ans:pressure}{h' = 1.5\,h\quad(\text{a }50\%\text{ rise}).}
     \par\smallskip
     {\color{ABlue}\bfseries Reading.} The wall thickens \emph{in proportion} to the
     pressure rise --- exactly Grossman's observation, and the outcome a healthy
@@ -104,23 +96,23 @@
 
 \begin{frame}[t]{}
   \begin{yourturnbox}{Flow adaptation}
-    \qq{Chronically increased flow raises $Q' = (1+\varepsilon)Q$. By how much must
-    the lumen radius change to restore the wall-shear-stress set-point $\tau_h$?
-    \qkind{pen \& paper}}
-    \qres{The wall-shear-stress law \eqref{eq:wss}; set-point $\tau_h$.}
-    \qhint{Only $a$ adapts. Set $\tau_w(Q',a') = \tau_h$ and use
-    $\tau_h = 4\mu Q/(\pi a^3)$ to eliminate constants.}
+    \qq{Chronically increased flow rises by \textbf{30\%} to $Q' = 1.3\,Q$. By how
+    much must the lumen radius change to restore the wall-shear-stress set-point
+    $\tau_{w,h}$? \qkind{pen \& paper}}
+    \qres{The wall-shear-stress law \eqref{eq:wss}; set-point $\tau_{w,h}$.}
+    \qhint{Only $a$ adapts. Set $\tau_w(Q',a') = \tau_{w,h}$ and use
+    $\tau_{w,h} = 4\mu Q/(\pi a^3)$ to eliminate constants.}
   \end{yourturnbox}
 \end{frame}
 
 \begin{frame}[t]{}
   \begin{answerbox}{Flow adaptation}
-    From $\tau_h = 4\mu Q'/(\pi a'^3) = 4\mu Q/(\pi a^3)$, the radius ratio is
-    $(a'/a)^3 = Q'/Q = 1+\varepsilon$, so
-    \slboxeq{2.2em}{eq:ans:flow}{a' = (1+\varepsilon)^{1/3}\,a.}
+    From $\tau_{w,h} = 4\mu Q'/(\pi a'^3) = 4\mu Q/(\pi a^3)$, the radius ratio is
+    $(a'/a)^3 = Q'/Q = 1.3$, so
+    \slboxeq{2.2em}{eq:ans:flow}{a' = 1.3^{1/3}\,a \approx 1.09\,a\quad(\text{a }9\%\text{ rise}).}
     \par\smallskip
     {\color{ABlue}\bfseries Reading.} The lumen enlarges as the \emph{cube root} of
-    the flow increase --- the classic flow-induced outward remodeling. A $\sim$30\%
+    the flow increase --- the classic flow-induced outward remodeling. A $30\%$
     flow rise widens the vessel by only $\sim$9\%.
   \end{answerbox}
   \srccite{Kamiya \& Togawa, Am J Physiol (1980); Humphrey, Cardiovascular Solid Mechanics (2002)}

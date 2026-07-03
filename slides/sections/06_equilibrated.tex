@@ -7,32 +7,42 @@
 \end{frame}
 
 \begin{frame}[t]{Skip the Transient --- Solve for the End State}
-  Set every rate to zero and solve the \textbf{algebraic} system --- one root-find
-  instead of thousands of time steps. At mechanobiological equilibrium:
-  {\small (A) growth balance $\Upsilon=1\Rightarrow\bar\sigma^*=\bar\sigma_h$;\;
-  (B) remodeling done $\lambda_e^k=G^k\Rightarrow\sigma^k=\sigma_h^k$;\;
-  (C) mechanical equilibrium at the evolved geometry.}
-  \bigfigw{equil_longterm.png}{0.72\linewidth}{The equilibrated model jumps
-  straight to the long-term evolved state (index $h$) that the transient theories
-  approach in time.}
+  Set every rate to zero and solve the \textbf{algebraic} equilibrium --- one
+  root-find instead of thousands of time steps.
+  \dlab{general form --- the 3D equilibrium conditions}
+  \vspace{-0.2em}
+  \giveneq{\underbrace{\Upsilon=1\Rightarrow\bar\sigma^*=\bar\sigma_h}_{\text{(A) growth balance}}
+    \quad
+    \underbrace{\bm{F}_n^{k}=\text{const}\Rightarrow\sigma^k=\sigma_h^k}_{\text{(B) remodeling done}}
+    \quad
+    \underbrace{\nabla\!\cdot\bm{\sigma}=\bm 0}_{\text{(C) mechanical equilib.}}}
+  \zlab{reduction --- scalar conditions at the evolved geometry}
+  \giveneq{\bar\sigma^*=\bar\sigma_h,\qquad \lambda_e^k=G^k,\qquad
+    \sigma_\theta=\tfrac{P a}{h}.}
+  \bigfigw{equil_longterm.png}{0.56\linewidth}{The equilibrated model jumps
+  straight to the long-term evolved state that the transient theories approach.}
   \srccite{Latorre, Humphrey, ZAMM (2018)}
 \end{frame}
 
 \begin{frame}[t]{Collapse to One Scalar Equation}
   Let the turnover constituents grow in fixed proportion (exact when they share
-  gain and turnover). Conditions (A)--(C) reduce to a \emph{single} equation for
-  the evolved stretch $\lambda^*$:
-  \slboxeq{2.8em}{eq:equil}{\phi_{e0}\,s
-    + s\,\frac{\bar\sigma_h - \sigma_e(G_e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
+  gain and turnover). The 3D conditions (A)--(C) collapse to a \emph{single}
+  equation for the evolved stretch $\lambda^*$ --- consistent with the same
+  $\lambda,\ G^k,\ \phi^k$ used throughout:
+  \zlab{scalar equilibrium equation for $\lambda^*$}
+  \slboxeq{2.8em}{eq:equil}{\phi^e\,s
+    + s\,\frac{\bar\sigma_h - \sigma^e(G^e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
     - \gamma\,(\lambda^*)^{n} = 0}
-  with $n$ the geometry exponent (1 bar, 2 artery), $\gamma$ the sustained load
-  factor, $s$ the surviving elastin fraction. Once $\lambda^*$ is known, the
-  evolved mass ratio is $M/M_0=\gamma(\lambda^*)^n$.
-  \vspace{0.4em}
+  with $n$ the geometry exponent ($n=1$ bar, $n=2$ artery), $\gamma$ the sustained
+  load factor, $s$ the surviving elastin fraction, $\phi^e$ the elastin mass
+  fraction. Once $\lambda^*$ is known, the evolved mass ratio is
+  $M/M_0=\gamma(\lambda^*)^n$.
+  \vspace{0.3em}
 
-  Because (6.1) is just the fixed point of the homogenized ODEs, the equilibrated
-  solution \textbf{coincides with the long-time limit of the transient theories}
-  --- to several digits.
+  This equation \emph{is} the fixed point of the homogenized ODEs
+  (\eqref{eq:homog_mass}--\eqref{eq:homog_remodel} with $\dd/\dd t=0$), so its root
+  \textbf{coincides with the long-time limit of the transient theories} --- to
+  several digits.
   \srccite{Latorre, Humphrey, ZAMM (2018)}
 \end{frame}
 

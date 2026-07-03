@@ -205,30 +205,57 @@
 % ============================================================================
 % Idealized vessel as a LONGITUDINAL CUT (pipe sliced along its axis):
 %   radial quantities (a, h, P) read vertically; axial (Q, tau_w) horizontally.
+% ---- homeostatic G&R feedback loop (TikZ) \gnrloop -------------------------
+% Applied hemodynamic load -> biomechanical state (regulated sigma, tau_w) ->
+% homeostatic checks (set-points vs stimuli) -> evolving geometry/composition
+% -> single return arrow back into the applied load. (Redraw of the slide-6
+% schematic cited to Humphrey, J Elasticity (2021); left-hand fluid/FSI/solid
+% detail and the this-work/prior-work split omitted per feedback.)
+\newcommand{\gnrloop}[1][1.0]{%
+\begin{tikzpicture}[scale=#1,>={Latex[length=2.2mm]},
+    box/.style={draw=YaleBlue,very thick,rounded corners=2pt,fill=YaleLightBlue!12,
+      align=center,inner sep=6pt,font=\small,text width=6.4cm,minimum height=0.95cm},
+    flow/.style={-{Latex[length=2.4mm]},very thick,black!75}]
+  \node[box] (load)  at (0,4.5)  {$\mathcal{F}$: applied hemodynamic load\\ \footnotesize (pressure $P$, flow $Q$)};
+  \node[box] (state) at (0,3.0)  {biomechanical state\\ \footnotesize regulated variables $\sigma_\theta,\ \tau_w$};
+  \node[box] (check) at (0,1.5)  {homeostatic checks\\ \footnotesize set-points vs.\ stimuli: $\Delta\sigma_\theta,\ \Delta\tau_w$};
+  \node[box] (evolve) at (0,0.0) {$\mathcal{S}$: evolving geometry,\\ composition, properties};
+  \draw[flow] (load)  -- (state);
+  \draw[flow] (state) -- (check);
+  \draw[flow] (check) -- (evolve);
+  % single return arrow: adaptation changes the load the tissue sees
+  \draw[flow] (evolve.east) -- ++(4.2,0) |- (load.east);
+\end{tikzpicture}}
+
 \newcommand{\idealvessel}[1][1.0]{%
 \begin{tikzpicture}[scale=#1,>={Latex[length=1.8mm]}]
   \def\L{8.4}      % axial length
   \def\a{1.9}      % inner radius (axis -> inner wall)
   \def\h{0.85}     % wall thickness
+  % --- shaded lumen (blood-filled interior) ---
+  \fill[AccentRed!7] (0,-\a) rectangle (\L,\a);
   % --- wall bands (top & bottom) ---
   \fill[YaleLightBlue!22] (0,\a) rectangle (\L,\a+\h);
   \fill[YaleLightBlue!22] (0,-\a) rectangle (\L,-\a-\h);
   \draw[YaleBlue,very thick] (0,\a) rectangle (\L,\a+\h);
   \draw[YaleBlue,very thick] (0,-\a) rectangle (\L,-\a-\h);
-  % --- lumen + axis ---
+  % --- axis ---
   \draw[dash dot,black!55] (-0.2,0) -- (\L+0.4,0);
   % --- blood pressure P: pushes outward on both inner surfaces ---
-  \foreach \x in {2.0,3.3,4.6}{
-    \draw[->,YaleLightBlue,thick] (\x,0.55) -- (\x,\a-0.06);
-    \draw[->,YaleLightBlue,thick] (\x,-0.55) -- (\x,-\a+0.06);}
-  \node[YaleLightBlue] at (3.3,0.0) {\small $P$};
-  % --- flow Q along the axis + wall shear stress tau_w on inner surface ---
-  \draw[->,AccentRed,very thick] (5.7,0) -- (7.6,0) node[midway,above=1pt]{\small $Q$};
-  \draw[->,AccentRed] (5.9,\a-0.28) -- (7.4,\a-0.28)
+  \foreach \x in {1.9,3.0,4.1}{
+    \draw[->,YaleLightBlue,thick] (\x,0.5) -- (\x,\a-0.06);
+    \draw[->,YaleLightBlue,thick] (\x,-0.5) -- (\x,-\a+0.06);}
+  \node[YaleLightBlue] at (3.0,0.0) {\small $P$};
+  % --- flow Q along the axis ---
+  \draw[->,AccentRed,very thick] (5.6,0) -- (7.7,0) node[midway,above=2pt]{\small $Q$};
+  % --- wall shear stress tau_w on BOTH inner surfaces ---
+  \draw[->,AccentRed] (5.8,\a-0.24) -- (7.3,\a-0.24)
        node[midway,above=0pt]{\scriptsize $\tau_w$};
+  \draw[->,AccentRed] (5.8,-\a+0.24) -- (7.3,-\a+0.24)
+       node[midway,below=0pt]{\scriptsize $\tau_w$};
   % --- circumferential (hoop) stress sigma_theta carried by the wall ---
   \draw[<->,YaleBlue,thick] (0.9,\a+\h/2) -- (3.4,\a+\h/2);
-  \node[YaleBlue] at (2.15,\a+\h/2+0.34) {\scriptsize $\sigma_\theta$ (hoop)};
+  \node[YaleBlue] at (2.15,\a+\h/2+0.36) {\scriptsize $\sigma_\theta$ (hoop)};
   % --- radius a (axis -> inner wall) ---
   \draw[<->,thick] (0.7,0) -- (0.7,\a) node[midway,left]{\small $a$};
   \fill (0.7,0) circle (1.4pt);
@@ -262,24 +289,25 @@
   % reference body (left)
   \draw[refbody] plot[smooth cycle,tension=0.9]
     coordinates {(0,0)(1.0,0.55)(1.8,0.15)(1.55,-0.85)(0.55,-1.05)(-0.15,-0.5)};
-  \fill (0.85,-0.2) circle (1.4pt);
-  \draw[-{Latex[length=1.6mm]},thick] (0.85,-0.2)--(1.35,-0.05)
-    node[anchor=west,font=\footnotesize]{$\dd\bm{X}$};
-  \node[font=\footnotesize] at (0.8,-1.5) {reference $\mathcal{B}_0$};
+  \fill (0.7,-0.35) circle (1.4pt);
+  \draw[-{Latex[length=1.6mm]},thick] (0.7,-0.35)--(1.15,-0.6)
+    node[anchor=north west,font=\footnotesize,inner sep=1pt]{$\dd\bm{X}$};
+  \node[font=\footnotesize] at (0.8,-1.55) {reference $\mathcal{B}_0$};
   % current body (right)
-  \begin{scope}[shift={(5.0,-0.05)}]
+  \begin{scope}[shift={(5.2,-0.05)}]
     \draw[curbody] plot[smooth cycle,tension=0.9]
       coordinates {(0,0.2)(1.25,0.7)(2.25,0.2)(2.1,-1.0)(1.0,-1.45)(-0.1,-0.75)};
-    \fill (1.25,-0.3) circle (1.4pt);
-    \draw[-{Latex[length=1.6mm]},thick] (1.25,-0.3)--(1.85,-0.05)
-      node[anchor=west,font=\footnotesize]{$\dd\bm{x}$};
-    \node[font=\footnotesize] at (1.05,-1.9) {current $\mathcal{B}_t$};
+    \fill (1.05,-0.45) circle (1.4pt);
+    \draw[-{Latex[length=1.6mm]},thick] (1.05,-0.45)--(1.6,-0.75)
+      node[anchor=north west,font=\footnotesize,inner sep=1pt]{$\dd\bm{x}$};
+    \node[font=\footnotesize] at (1.05,-2.0) {current $\mathcal{B}_t$};
   \end{scope}
-  % motion + line-element mapping
-  \draw[cfgmaparrow] (2.0,0.75) to[bend left=20]
-    node[above,font=\small]{$\bm{\varphi}(t,\bm{X})$} (5.1,0.95);
-  \draw[cfgmaparrow] (2.0,-0.55) to[bend right=10]
-    node[below,font=\footnotesize]{$\dd\bm{x}=\bm{F}\,\dd\bm{X}$} (6.0,-0.75);
+  % motion (top arc, well above both bodies)
+  \draw[cfgmaparrow] (2.0,0.85) to[bend left=20]
+    node[above,font=\small,pos=0.5]{$\bm{\varphi}(t,\bm{X})$} (5.3,1.05);
+  % line-element mapping (bottom arc, label below the arc, clear of bodies)
+  \draw[cfgmaparrow] (1.9,-1.15) to[bend right=16] (6.15,-1.35);
+  \node[font=\footnotesize] at (4.0,-1.95) {$\dd\bm{x}=\bm{F}\,\dd\bm{X}$};
 \end{tikzpicture}}
 
 % ---- kinematic growth: F = F_e F_g, with INCOMPATIBLE grown configuration ---
@@ -314,12 +342,14 @@
     \node[font=\footnotesize] at (1.02,-1.42) {current $\mathcal{B}_t$};
   \end{scope}
   % --- arrows ---
-  \draw[cfgmaparrow] (1.95,0.15) to[bend left=16]
-    node[above,font=\small]{$\bm{F}_g$ (growth, prescribed)} (3.7,0.35);
-  \node[font=\small,anchor=south] at (6.9,1.95) {$\bm{F}_e$ (elastic, restores fit)};
-  \draw[cfgmaparrow] (6.35,1.55) to[bend left=15] (7.65,0.7);
-  \draw[cfgmaparrow,black!55] (0.5,-2.35) to[bend right=8]
-    node[below,font=\footnotesize,pos=0.5]{$\bm{F}=\bm{F}_e\,\bm{F}_g$} (8.6,-2.15);
+  % F_g arrow low, label BELOW the arc in the clear gap (no piece overlap)
+  \draw[cfgmaparrow] (2.0,-0.45) to[bend right=10] (3.55,-0.55);
+  \node[font=\small,anchor=north] at (2.85,-0.75) {$\bm{F}_g$ (growth, prescribed)};
+  % F_e arrow from high above, label clear at top-right
+  \node[font=\small,anchor=south] at (7.0,2.15) {$\bm{F}_e$ (elastic, restores fit)};
+  \draw[cfgmaparrow] (6.45,1.95) to[bend left=15] (7.7,0.7);
+  \draw[cfgmaparrow,black!55] (0.5,-2.55) to[bend right=8]
+    node[below,font=\footnotesize,pos=0.5]{$\bm{F}=\bm{F}_e\,\bm{F}_g$} (8.6,-2.35);
 \end{tikzpicture}}
 
 % ---- homogenized CMM: ONE evolving mean natural config per constituent --------
@@ -378,42 +408,49 @@
     ellface/.style={draw=black!75,very thick,fill=black!18},
     grarr/.style={-{Latex[length=2.4mm]},very thick,black!78},
     tisarr/.style={-{Latex[length=2.2mm]},thick,black!70}]
-  \def\ry{0.85}   % ellipse vertical radius
-  \def\rx{0.30}   % ellipse horizontal radius
-  % --- barrel: many faint ellipses stacked left->right ---
-  \foreach \i in {0,1,...,16}{
-    \pgfmathsetmacro\xx{0.6+\i*0.32}
-    \draw[ell,fill opacity=0.85] (\xx,0) ellipse [x radius=\rx, y radius=\ry];}
-  % --- three labeled cross-sections: kappa(0), kappa(tau), kappa(s) ---
-  \draw[ellface] (0.6,0)  ellipse [x radius=\rx, y radius=\ry];   % kappa(0)
-  \draw[ellface] (3.16,0) ellipse [x radius=\rx, y radius=\ry];   % kappa(tau)  (i=8)
-  \draw[ellface] (5.72,0) ellipse [x radius=\rx, y radius=\ry];   % kappa(s)    (i=16)
-  \node[font=\footnotesize] at (0.6,0)  {$\kappa(0)$};
-  \node[font=\footnotesize] at (3.16,0) {$\kappa(\tau)$};
-  \node[font=\footnotesize] at (5.72,0) {$\kappa(s)$};
+  % Three labeled cross-sections at x = 0.6 (kappa 0), 5.0 (kappa tau), 9.4
+  % (kappa s); the barrel ellipses GROW gradually left->right (ry ramps up).
+  \def\xzero{0.6}\def\xtau{5.0}\def\xs{9.4}
+  \def\rx{0.30}
+  \pgfmathsetmacro\Nell{18}
+  % --- barrel: faint ellipses, vertical radius grows CLEARLY left->right ---
+  \foreach \i in {0,1,...,18}{
+    \pgfmathsetmacro\xx{\xzero+\i*(\xs-\xzero)/\Nell}
+    \pgfmathsetmacro\ryy{0.50+\i*0.055}   % visibly growing cross-section
+    \draw[ell,fill opacity=0.85] (\xx,0) ellipse [x radius=\rx, y radius=\ryy];}
+  % --- three labeled cross-sections (grown-face ellipses) ---
+  \draw[ellface] (\xzero,0) ellipse [x radius=\rx, y radius=0.50];
+  \draw[ellface] (\xtau,0)  ellipse [x radius=\rx, y radius={0.50+9*0.055}];
+  \draw[ellface] (\xs,0)    ellipse [x radius=\rx, y radius={0.50+18*0.055}];
+  \node[font=\footnotesize] at (\xzero,0) {$\kappa(0)$};
+  \node[font=\footnotesize] at (\xtau,0)  {$\kappa(\tau)$};
+  \node[font=\footnotesize] at (\xs,0)    {$\kappa(s)$};
   % dash-dot centre axis extending both ends
-  \draw[densely dashdotted,black!55] (-0.5,0)--(0.28,0);
-  \draw[densely dashdotted,black!55] (6.04,0)--(6.9,0);
-  \node[align=center,font=\footnotesize,black!75] at (7.0,-0.55)
+  \draw[densely dashdotted,black!55] (-0.4,0)--(\xzero-0.32,0);
+  \draw[densely dashdotted,black!55] (\xs+0.32,0)--(\xs+1.0,0);
+  \node[align=center,font=\footnotesize,black!75] at (\xs+1.1,-0.7)
     {Growth \&\\Remodeling};
   % --- deposited constituent at its stress-free natural config (top) ---
-  \node[circle,draw=black!70,thick,fill=black!22,minimum size=6pt,inner sep=0pt]
-    (kn) at (2.55,2.25) {};
-  \node[anchor=east,font=\footnotesize] at (2.42,2.35) {$\kappa_n^{\alpha}(\tau)$};
-  % two small chained blobs suggesting the constituent chain
-  \fill[black!22,draw=black!70] (2.68,1.95) circle (2.2pt);
-  \fill[black!22,draw=black!70] (2.82,1.68) circle (2.0pt);
-  % deposition stretch G^alpha(tau): from natural config down into kappa(tau)
-  \draw[grarr] (2.78,1.55) to[bend left=25]
-    node[left,font=\small,pos=0.55]{$\bm{G}^{\alpha}(\tau)$} (3.02,0.7);
-  % constituent-specific deformation F_{n(tau)}^alpha(s): natural config -> right
-  \draw[grarr] (2.95,2.35) to[bend left=20]
-    node[above,font=\small,pos=0.5]{$\bm{F}^{\alpha}_{n(\tau)}(s)$} (5.5,1.15);
-  % --- tissue-level deformations underneath ---
-  \draw[tisarr] (0.7,-1.05) to[bend right=22]
-    node[below,font=\small,pos=0.5]{$\bm{F}(\tau)$} (3.06,-1.05);
-  \draw[tisarr] (0.7,-1.55) to[bend right=20]
-    node[below,font=\small,pos=0.55]{$\bm{F}(s)$} (5.62,-1.55);
+  % Outlined constituent dot sits AT THE START of the G^alpha(tau) arrow.
+  \coordinate (kn) at (4.3,2.2);
+  \node[circle,draw=black!75,thick,fill=black!22,minimum size=7pt,inner sep=0pt] at (kn) {};
+  \node[anchor=south east,font=\footnotesize] at (4.18,2.28) {$\kappa_n^{\alpha}(\tau)$};
+  % two more small constituent dots, EACH with its own arrow into kappa(tau)
+  \fill[black!22,draw=black!70] (4.9,2.35) circle (2.6pt);
+  \fill[black!22,draw=black!70] (5.5,2.25) circle (2.4pt);
+  \draw[grarr] (4.9,2.14) to[bend left=12] (5.02,0.95);
+  \draw[grarr] (5.5,2.04) to[bend left=10] (5.12,0.95);
+  % deposition stretch G^alpha(tau): FROM the outlined dot down into kappa(tau)
+  \draw[grarr] (kn) to[bend right=18]
+    node[left,font=\small,pos=0.5]{$\bm{G}^{\alpha}(\tau)$} (4.9,0.95);
+  % constituent-specific deformation F_{n(tau)}^alpha(s): natural config -> kappa(s)
+  \draw[grarr] (4.55,2.3) to[bend left=18]
+    node[above,font=\small,pos=0.55]{$\bm{F}^{\alpha}_{n(\tau)}(s)$} (9.15,1.4);
+  % --- tissue-level deformations underneath (clear start/end at the ellipses) ---
+  \draw[tisarr] (\xzero+0.35,-0.85) to[bend right=18]
+    node[below,font=\small,pos=0.5]{$\bm{F}(\tau)$} (\xtau-0.35,-1.05);
+  \draw[tisarr] (\xzero+0.35,-1.5) to[bend right=16]
+    node[below,font=\small,pos=0.5]{$\bm{F}(s)$} (\xs-0.35,-1.75);
 \end{tikzpicture}}
 
 % ---- Cyron (2016) Fig. 2 (right): mechanical analog for mass turnover ---------

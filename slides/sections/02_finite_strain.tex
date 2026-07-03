@@ -16,6 +16,36 @@
   \vfill
 \end{frame}
 
+\begin{frame}[t]{Our 0D Model vs.\ the 3D Geometric Model}
+  Everything in this seminar has a \textbf{full 3D} form and a \textbf{reduced 0D}
+  form. We use the \emph{same notation} for both; the badges tell you which:
+  \vfill
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{center}\tagd\ \textbf{3D geometric model}\end{center}
+      \begin{itemize}\small
+        \item full deformation field $\bm{x}=\bm{\varphi}(t,\bm{X})$
+        \item tensor $\bm{F}=\partial\bm{\varphi}/\partial\bm{X}$; stresses
+        $\bm{\sigma},\bm{S}$
+        \item solved on a meshed artery (finite elements)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{center}\tagz\ \textbf{0D reduced model}\end{center}
+      \begin{itemize}\small
+        \item one dominant direction $\Rightarrow$ scalar stretch $\lambda$
+        \item tensor $\bm{F}\to\lambda$; stress $\bm{\sigma}\to\sigma$
+        \item a handful of ODEs / algebraic equations --- runs in milliseconds
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vfill
+  \begin{center}\small\color{AccentRed}
+  The 0D model is the thin-walled artery ($\sigma_\theta=Pa/h$) reduced to its one
+  load-bearing direction --- ideal for exploring the theories analytically.
+  \end{center}
+\end{frame}
+
 \begin{frame}[t]{The Deformation Gradient}
   How a line element transforms is the key kinematic quantity --- the
   \textbf{deformation gradient} maps reference line elements to current ones.
@@ -57,29 +87,22 @@
 
 \begin{frame}[t]{Hyperelasticity: Stress from a Stored-Energy Function}
   A \textbf{hyperelastic} material stores energy $W$; its stress is a derivative
-  of $W$ --- no dissipation, path-independent. Each constituent gets its own $W$.
+  of $W$ --- no dissipation, path-independent. Each constituent gets its own $W$:
+  \textbf{elastin} is an isotropic \emph{neo-Hookean} solid, \textbf{collagen} a
+  \emph{Fung-type} fiber.
   \dlab{general form --- energy $W(\bm{C})$, stress $\bm{S}=2\,\partial W/\partial\bm{C}$}
   \vspace{-0.3em}
   \[
-    W_e=\tfrac{c_e}{2}\,(I_1-3),\qquad
-    W_c=\tfrac{c_1}{4c_2}\!\left[e^{\,c_2(I_4-1)^2}-1\right]
+    W_{\text{elastin}}=\tfrac{c}{2}\,(I_1-3),\qquad
+    W_{\text{collagen}}=\tfrac{c_1}{4c_2}\!\left[e^{\,c_2(I_4-1)^2}-1\right]
   \]
   \vspace{-0.6em}\par
   {\footnotesize $I_1=\operatorname{tr}\bm{C}$ (isotropic elastin); $I_4$ reads
   $\bm{C}$ along the collagen fiber --- the one place anisotropy enters.}
   \zlab{reduction used here --- one stretch $\lambda_e$, scalar $\sigma=\lambda_e\,\dd W/\dd\lambda_e$}
   \vspace{-0.3em}
-  \slboxeq{2.6em}{eq:fung}{\sigma_e=c_e(\lambda_e^2-\lambda_e^{-1}),\qquad
-    \sigma_c=c_1\,\lambda_e^2(\lambda_e^2-1)\,e^{\,c_2(\lambda_e^2-1)^2}}
-  \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
-\end{frame}
-
-\begin{frame}[t]{The Three Constituent Laws, in One Picture}
-  The scalar laws $\sigma^k(\lambda_e)$ from the previous slide, plotted together:
-  soft near-linear elastin, steeply stiffening collagen and smooth muscle. Each
-  dot marks the deposition stretch $G^k$ where $\sigma^k=\sigma_h^k$.
-  \bigfigw{fig01a_constituent_laws.pdf}{0.56\linewidth}{Constituent Cauchy stress
-  vs.\ elastic stretch, with each deposition set-point $(G^k,\sigma_h^k)$ marked.}
+  \slboxeq{2.6em}{eq:fung}{\sigma_{\text{elastin}}=c\,(\lambda_e^2-\lambda_e^{-1}),\qquad
+    \sigma_{\text{collagen}}=c_1\,\lambda_e^2(\lambda_e^2-1)\,e^{\,c_2(\lambda_e^2-1)^2}}
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
 \end{frame}
 
@@ -88,23 +111,25 @@
   stretch $G^k>1$. At homeostasis the elastic stretch equals $G^k$, which
   \emph{defines} the homeostatic stress:
   \slboxeq{2.4em}{eq:setpoint}{\sigma_h^k := \sigma^k(G^k)}
-  This one convention pins down every set-point in the course --- so all four
-  theories share one parameter set and compare like-for-like.
+  \vfill
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{center}\textbf{\color{AccentRed} No deposition pre-stress}\end{center}
+      \small New material enters slack ($\sigma_{\text{pre}}=0$); as old fibers are
+      removed, the replacement carries no load --- the homeostatic state
+      \textbf{cannot be maintained}.
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{center}\textbf{\color{YaleBlue} With deposition pre-stress}\end{center}
+      \small New material enters at the homeostatic prestress
+      $\sigma_{\text{pre}}=\sigma_h$ (stretch $G^k$); each replacement immediately
+      bears its share --- the state is \textbf{maintained through turnover}.
+    \end{column}
+  \end{columns}
+  \vfill
+  \begin{center}\small\color{AccentRed}
+  This one convention pins every set-point --- and lets a continuously-renewed
+  tissue hold a steady mechanical state.
+  \end{center}
   \srccite{deposition-stretch concept: Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
-\end{frame}
-
-\begin{frame}[t]{Multiplicative Decomposition --- Growth vs.\ Elasticity}
-  Split the deformation into a stress-free \textbf{inelastic} part (growth /
-  remodeling) and an \textbf{elastic} part --- the only part that carries stress.
-  \dlab{general form --- a product of tensors}
-  \giveneq{\bm{F}=\bm{F}_e\,\bm{F}_{\text{inel}}.}
-  \zlab{reduction used here --- scalar stretches}
-  \slboxeq{2.2em}{eq:split}{\lambda = \lambda_e \,\lambda_{\text{inel}}}
-  \begin{itemize}\small
-    \item \textbf{Kinematic growth}: \emph{one} split, an inelastic growth stretch.
-    \item \textbf{Constrained mixtures}: each cohort its own natural
-    configuration, superposed.
-  \end{itemize}
-  The set-point \eqref{eq:setpoint} and the split \eqref{eq:split} recur in every
-  model that follows.
 \end{frame}

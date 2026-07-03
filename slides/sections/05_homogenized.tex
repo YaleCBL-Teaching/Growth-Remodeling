@@ -8,12 +8,15 @@
 
 \begin{frame}[t]{Throw Away the History, Keep Its Average}
   \textbf{Temporal homogenization} replaces the entire deposition history by a
-  \emph{single evolving mean natural configuration}. The heredity integral becomes
-  \textbf{two ODEs per constituent}; cost drops from $O(N^2)$ to $O(N)$:
-  \giveneq{\lambda_e^k = \frac{\lambda}{\lambda_n^k}.}
-  \vfill
-  \begin{center}\homogmap[0.92]\end{center}
-  \vfill
+  \emph{single evolving mean natural configuration} per constituent --- two ODEs
+  per constituent, cost $O(N^2)\to O(N)$.
+  \dlab{general form (Cyron 2016) --- mean natural-config tensor}
+  \zlab{reduction --- scalar mean stretch}
+  \vspace{-0.2em}
+  \giveneq{\bm{F}^k_{\text{e}} = \bm{F}(s)\,\bm{F}^{k}_{n}(s)^{-1}
+    \qquad\longrightarrow\qquad \lambda_e^k = \frac{\lambda}{\lambda_n^k}.}
+  \vspace{-0.2em}
+  \begin{center}\homogmap[0.70]\end{center}
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
@@ -21,22 +24,21 @@
 \begin{frame}[t]{The Mechanical Analog: A Maxwell Fluid with a Motor}
   Each constituent behaves like a \textbf{Maxwell element in parallel with a
   motor}: turnover relaxes stress toward a \emph{prestress}, not zero.
-  \vspace{0.2em}
-  \begin{center}\maxwellelement[0.92]\end{center}
-  \vspace{0.2em}
+  \begin{center}\maxwellelement[0.78]\end{center}
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
       \footnotesize
+      \renewcommand{\arraystretch}{1.5}
       \begin{tabular}{@{}ll@{}}
-        $\sigma^i$ & constituent stress (the load)\\
-        $\mathbb{C}^{i}$ & elastic stiffness (spring)\\
-        $\dot\varrho_0^{\,i}/\varrho_0^{\,i}+1/T^i$ & turnover + degradation (dashpot)\\
+        $\sigma^i$ & constituent stress (the load)\\[2pt]
+        $\mathbb{C}^{i}$ & elastic stiffness (spring)\\[2pt]
+        $\dot\varrho_0^{\,i}/\varrho_0^{\,i}+1/T^i$ & turnover + degradation (dashpot)\\[2pt]
         $\bar\sigma^{i}_{\text{pre}}$ & deposition prestress (motor)\\
       \end{tabular}
     \end{column}
     \begin{column}{0.48\textwidth}
       \footnotesize \textbf{Back to the full CMM (0D):}
-      \begin{itemize}\itemsep1pt
+      \begin{itemize}\itemsep3pt
         \item spring $\leftrightarrow$ constituent law $\sigma^k(\lambda_e^k)$
         \item dashpot $\leftrightarrow$ mass turnover / removal $k_d^k$
         \item motor $\leftrightarrow$ deposition stretch $G^k$
@@ -47,24 +49,28 @@
 \end{frame}
 
 \begin{frame}[t]{Growth (Mass) and Remodeling (Natural Configuration)}
-  \textbf{Growth} --- mass production $\propto$ current mass, driven by the
-  tissue-stress deviation:
-  \slboxeq{2.4em}{eq:homog_mass}{\frac{\dd M^k}{\dd t}
-    = M^k\,(K_\sigma^k k_d^k)\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right)}
-  Since production scales with current mass, $\dot M^k=0 \Leftrightarrow
-  \bar\sigma=\bar\sigma_h$ for \emph{any} mass --- mass settles wherever it must to
-  restore tissue stress.
-  \vspace{0.3em}
-
-  \textbf{Remodeling} --- the mean \emph{natural configuration} evolves as new mass
-  enters at $\lambda/G^k$ and old mass leaves at the current value; mixing at the
-  turnover rate. In general this is a tensor $\bm{F}_n^k$; here it reduces to its
-  scalar stretch $\lambda_n^k$:
-  \zlab{scalar evolution of the natural configuration}
-  \slboxeq{2.4em}{eq:homog_remodel}{\frac{\dd\lambda_n^k}{\dd t}
-    = \frac{m^k}{M^k}\left(\frac{\lambda}{G^k}-\lambda_n^k\right)}
-  Holding $\lambda$ fixed, this relaxes constituent stress exponentially to
-  $\sigma_h^k$ (time constant $\sim 1/k_d$) --- and not to zero, but to a prestress.
+  \textbf{Growth}: mass production $\propto$ current mass, driven by stress
+  deviation. \textbf{Remodeling}: the mean natural configuration evolves as new mass
+  enters at $\lambda/G^k$ and old mass leaves at the current value.
+  \dlab{general form --- mass \& mean natural-config \emph{tensor}}
+  \vspace{-0.2em}
+  \giveneq{\dot M^k = M^k\,(K_\sigma^k k_d^k)\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right),
+    \qquad \dot{\bm{F}}_n^k = f\big(\bm{F},\bm{F}_n^k;\,m^k,M^k\big).}
+  \zlab{reduction --- scalar mass and scalar natural stretch}
+  \vspace{-0.2em}
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}
+      \slboxeq{2.2em}{eq:homog_mass}{\frac{\dd M^k}{\dd t}
+        = M^k K_\sigma^k k_d^k\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right)}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \slboxeq{2.2em}{eq:homog_remodel}{\frac{\dd\lambda_n^k}{\dd t}
+        = \frac{m^k}{M^k}\!\left(\frac{\lambda}{G^k}-\lambda_n^k\right)}
+    \end{column}
+  \end{columns}
+  \vspace{0.2em}
+  Holding $\lambda$ fixed, remodeling relaxes constituent stress exponentially to
+  $\sigma_h^k$ ($\sim 1/k_d$) --- not to zero, but to a prestress.
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
@@ -107,8 +113,10 @@
 % ---- interactive coding exercise: ex04 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Homogenized vs.\ full --- code}
-    \qq{Overlay the homogenized model on the full constrained mixture for the same
-    insult, and measure both the agreement and the speed-up. \qkind{\texttt{ex04}}}
+    \qq{\textbf{Example:} the same artery under one insult. \textbf{Model:}
+    homogenized CMM overlaid on the full constrained mixture. \textbf{Parameters:}
+    \texttt{INSULT}, horizon \texttt{T\_END}. Measure both the agreement and the
+    speed-up. \qkind{\texttt{ex04}}}
     \qres{\texttt{exercises/ex04\_homogenized\_vs\_full.py}. Tunables:
     \texttt{INSULT} (hypertension / aneurysm), \texttt{T\_END=2000}.}
     \qhint{Read off the gap between the two curves. Try the aneurysm insult or a
