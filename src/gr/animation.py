@@ -85,6 +85,7 @@ def animate(
     equilibrium=None,
     n_frames: int = 240,
     title: str | None = None,
+    ylims: dict[str, tuple[float, float]] | None = None,
 ):
     """Animation (16:9) of the simulation: a big vessel + a grid of live plots.
 
@@ -93,6 +94,12 @@ def animate(
     constituent; single theory only).  The insult is one of the grid panels,
     animated like the rest.  There is no separate elastic stage: the raw
     simulation is played over its active time window.
+
+    ``ylims`` optionally fixes the y-range of individual panels (keyed by the
+    quantity name, or ``"insult"`` for the insult panel) instead of autoscaling.
+    Passing the SAME ``ylims`` to two videos makes their axes directly
+    comparable; a curve that exceeds a panel's range simply runs off the top
+    (useful to contrast a stable response against a runaway one on one scale).
     """
     import math
 
@@ -190,6 +197,8 @@ def animate(
                       else ("Elastin fraction" if (has_e and not has_p)
                             else r"Insult ($P/P_h$, elastin)"))
     ax_ins.axhline(1.0, color="gray", lw=1, ls=":", alpha=0.8)
+    if ylims and "insult" in ylims:
+        ax_ins.set_ylim(*ylims["insult"])
 
     # quantity panels
     for ax, q in zip(ax_q, quantities):
@@ -220,6 +229,8 @@ def animate(
                     ax.axhline(val, **STYLE["equilibrated CMM"], alpha=0.9,
                                label="equilibrated CMM")
             ax.set_ylabel(QUANTITIES[q][0])
+        if ylims and q in ylims:
+            ax.set_ylim(*ylims[q])
 
     for ax in plot_axes:
         ax.set_xlim(t_lo, t_vis)

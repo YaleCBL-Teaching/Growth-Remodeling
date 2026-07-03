@@ -34,6 +34,18 @@ from _scenarios import SEMINAR_MODEL, run_all
 
 GIF = "--gif" in sys.argv
 
+# Shared y-limits for the stable (video05) and runaway (video06) aneurysm videos
+# so their panels are on ONE comparable scale.  The limits are sized to keep the
+# *stable* response clearly readable; the runaway simply climbs off the top of
+# each panel -- which is exactly the visual signature of the instability.
+ANEURYSM_YLIMS = {
+    "insult": (-0.03, 1.05),   # elastin fraction (1 -> 0.30 stable / 0.03 runaway)
+    "stress_k": (0.9, 2.2),    # stable peaks ~1.4; runaway elastin runs to ~7
+    "mass_k": (0.0, 1.3),      # stable peaks ~0.55; runaway collagen/smc run to ~2.3
+    "radius": (0.97, 1.3),     # stable a/a_0 -> 1.09; runaway -> 2.14
+    "thickness": (0.72, 1.3),  # stable h/h_0 dips to 0.82; runaway -> 2.13
+}
+
 
 def _save(anim, name):
     print("  wrote", save(anim, f"docs/videos/{name}", gif=GIF))
@@ -85,6 +97,7 @@ def video_stable_aneurysm():
     art = artery(SEMINAR_MODEL)
     r = constrained_mixture.simulate(art, ANEURYSM, t_end=4000, dt=2.0)
     fig, anim = animate([r], ANEURYSM, art, quantities=("stress_k", "mass_k", "radius", "thickness"),
+                        ylims=ANEURYSM_YLIMS,
                         title="Stable aneurysm — full CMM (elastin → 30%)")
     _save(anim, "video05_stable_aneurysm")
 
@@ -95,6 +108,7 @@ def video_runaway():
     severe = Insult(elastin_surviving=0.03, t_on=1.0, ramp=10.0)
     r = constrained_mixture.simulate(art, severe, t_end=8000, dt=3.0)
     fig, anim = animate([r], severe, art, quantities=("stress_k", "mass_k", "radius", "thickness"),
+                        ylims=ANEURYSM_YLIMS,
                         title="Runaway aneurysm — full CMM (elastin → 3%, no equilibrium)")
     _save(anim, "video06_runaway_aneurysm")
 

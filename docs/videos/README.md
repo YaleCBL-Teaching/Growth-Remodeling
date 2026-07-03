@@ -45,6 +45,12 @@ A single shared legend sits outside the panels.
 | `video05_stable_aneurysm.mp4` | — | full CMM, mild aneurysm (elastin → 30%): a **stable** adaptation — collagen & SMC remodel back, elastin stress plateaus, geometry settles to a new equilibrium |
 | `video06_runaway_aneurysm.mp4` | fig06 (unstable) | full CMM, severe elastin loss (→ 3%): elastin stress runs away without bound — no equilibrium, the mechanistic signature of the instability |
 
+The stable (`video05`) and runaway (`video06`) videos share **identical y-axes**
+so the two can be compared directly. The range is sized to keep the stable
+response readable; in the runaway video the stress, mass, radius and thickness
+curves simply climb **off the top** of their panels — that escape is the whole
+point.
+
 Regenerate them all with:
 
 ```bash
