@@ -76,10 +76,12 @@ merely diluted, and the stress returns to homeostatic:
 
 ![Full CMM adaptation to hypertension](figures/fig03_constrained_mixture.png)
 
-*The turnover story. (a) Collagen and smooth muscle (which turn over) grow;
-elastin (which does not) stays put and is diluted. (b) Tissue stress is restored.
-(c) The wall thickens while the radius barely changes — textbook hypertensive
-adaptation.*
+*The turnover story, panel-for-panel with the video. (a) Collagen and smooth
+muscle remodel their stress back to their own homeostatic set-point
+$\sigma_h^k$, while elastin — which cannot turn over — stays elevated (collagen
+is dashed, drawn on top). (b) Collagen and muscle grow in mass; elastin is
+merely diluted. (c) The mid-wall radius barely changes while (d) the wall
+thickens — textbook hypertensive adaptation.*
 
 The price is cost: the history integrals make the model $O(N^2)$ in the number of
 time steps. That is precisely the motivation for the **homogenized** model

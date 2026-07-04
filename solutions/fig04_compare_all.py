@@ -6,11 +6,12 @@ scenarios (hypertension, and a mild aneurysm = 30% elastin retained).  The
 equilibrated end-state is drawn as a horizontal target line.
 
 Take-aways to point at on the slide:
-  * all four largely agree for the mild insults shown here;
+  * all theories largely agree for the mild insults shown here;
   * the homogenized trajectory sits almost on top of the full CMM;
   * the equilibrated line is where the transients are heading;
-  * kinematic growth under-responds to elastin loss (it cannot remodel
-    individual constituents), so its curve separates in the aneurysm panel.
+  * kinematic growth is a single material, so it is shown only under
+    hypertension and DROPPED from the aneurysm row (an elastin-loss insult is
+    not meaningful without constituents) -- exactly as in the videos.
 
 Run:  uv run python solutions/fig04_compare_all.py
 """
@@ -44,6 +45,8 @@ def main() -> None:
     fig, axes = plt.subplots(2, 2, figsize=(12, 8.4))
     for row, (title, insult, t_end, cmm_dt) in enumerate(scenarios):
         results, eq = run_all(art, insult, t_end=t_end, cmm_dt=cmm_dt)
+        if insult is ANEURYSM:   # single material: elastin-loss insult is meaningless
+            results = [r for r in results if r.theory != "kinematic growth"]
         _panel(axes[row][0], results, eq, lambda r: r.sigma_norm,
                r"Wall stress  $\bar\sigma/\bar\sigma_h$", eq_val=eq.sigma_norm if eq.exists else None)
         axes[row][0].axhline(1.0, color="gray", lw=1, alpha=0.5)

@@ -2,8 +2,10 @@
 TEACHER solution / figure for Step 7 (stability capstone).
 
 docs/figures/fig06_stability.pdf:
-  (a) time traces of the homogenized model for a stable insult (adapts) and an
-      unstable insult (runs away): stability DEPENDS ON THE INSULT;
+  (a) time traces of the full CMM for a stable insult (adapts) and an unstable
+      insult (runs away): stability DEPENDS ON THE INSULT.  These are the static
+      twins of video05 (stable) and video06 (runaway), which both use the full
+      CMM;
   (b) the stable/unstable map from the equilibrated existence test, over the
       (elastin loss x pressure) plane.
 
@@ -13,7 +15,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from gr import Insult, artery, homogenized_cmm
+from gr import Insult, artery, constrained_mixture
 from gr.stability import adapts
 from gr.plotting import plt, save_pdf
 
@@ -32,7 +34,7 @@ def main() -> None:
         ("unstable: elastin 3%", Insult(elastin_surviving=0.03, t_on=1, ramp=10), "#C44E52"),
     ]
     for label, insult, color in cases:
-        r = homogenized_cmm.simulate(art, insult, t_end=6000)
+        r = constrained_mixture.simulate(art, insult, t_end=6000, dt=3.0)
         axA.plot(r.t, r.lam, color=color, label=label)
     axA.set_xlabel("Time  [day]")
     axA.set_ylabel(r"Stretch  $\lambda$")

@@ -11,7 +11,7 @@ Run:  uv run python solutions/fig02_kinematic_growth.py
 from __future__ import annotations
 
 from gr import HYPERTENSION, artery, bar, kinematic_growth
-from gr.plotting import plt, save_pdf
+from gr.plotting import NEUTRAL, plt, save_pdf
 
 from _scenarios import SEMINAR_MODEL
 
@@ -22,11 +22,13 @@ def main() -> None:
     model = SEMINAR_MODEL
     fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2))
 
-    for geom, ls in [(bar(model), "--"), (artery(model), "-")]:
+    # single theory (kinematic growth) on two geometries: neutral blue for the
+    # artery (the case the videos show), slate for the bar; linestyle separates them.
+    for geom, ls, color in [(bar(model), "--", "#7F7F7F"), (artery(model), "-", NEUTRAL)]:
         r = kinematic_growth.simulate(geom, HYPERTENSION, t_end=1000)
-        axes[0].plot(r.t, r.sigma_norm, ls, label=geom.name)
-        axes[1].plot(r.t, r.mass, ls, label=geom.name)
-        axes[2].plot(r.t, r.lam, ls, label=geom.name)
+        axes[0].plot(r.t, r.sigma_norm, ls, color=color, label=geom.name)
+        axes[1].plot(r.t, r.mass, ls, color=color, label=geom.name)
+        axes[2].plot(r.t, r.lam, ls, color=color, label=geom.name)
 
     axes[0].axhline(1.0, color="gray", lw=1, alpha=0.6)
     axes[0].set_ylabel(r"Wall stress  $\bar\sigma/\bar\sigma_h$")

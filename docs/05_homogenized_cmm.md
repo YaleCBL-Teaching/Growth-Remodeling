@@ -56,15 +56,15 @@ $\sigma^k\!\to\!\sigma_h^k$.
 Growth (5.2) restores *tissue* homeostasis; remodeling (5.3) restores each
 constituent to its deposition stretch. Together they reproduce the full model's
 trajectory — at a fraction of the cost. In the comparison figure the homogenized
-curve (dashed) sits almost on top of the full CMM (black):
+curve (dashed magenta) sits almost on top of the full CMM (gold):
 
 ![Four theories compared](figures/fig04_compare_all.png)
 
-*All four theories, two scenarios. The homogenized CMM (dashed orange) tracks the
-full CMM (black) closely and both settle onto the equilibrated end-state (red
-dotted). Kinematic growth (blue) under-responds to elastin loss in the aneurysm
-panel, because it grows all constituents in lockstep and cannot remodel their
-natural configurations individually.*
+*All theories, two scenarios. The homogenized CMM (dashed magenta) tracks the
+full CMM (gold) closely and both settle onto the equilibrated end-state (red
+dotted). Kinematic growth (purple) is a single material, so it appears only in
+the hypertension row and is dropped from the aneurysm row — an elastin-loss
+insult is not meaningful without constituents.*
 
 ---
 
