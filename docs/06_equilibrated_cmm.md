@@ -34,9 +34,9 @@ docstring):
 
 $$\phi_{e0}\,s
   + s\,\frac{\bar\sigma_h - \sigma_e(G_e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
-  - \gamma\,(\lambda^*)^{n} = 0,\tag{6.1}$$
+  - \gamma\,(\lambda^*)^{2} = 0,\tag{6.1}$$
 
-with $n$ the geometry exponent (1 bar, 2 artery), $\gamma$ the sustained load
+with the Laplace exponent $n=2$ for the artery, $\gamma$ the sustained load
 factor, $s$ the surviving elastin fraction, $\phi_{e0}$ the reference elastin
 fraction, $\sigma_{\text{turn}}$ the mass-weighted homeostatic stress of the
 turnover constituents, and $\sigma_h^e$ the homeostatic elastin stress. Once

@@ -1,0 +1,26 @@
+# =============================================================================
+# Exercise 6 — Capstone: the stable / unstable map
+# =============================================================================
+# Run:     uv run python run.py configs/ex06_stability.yaml
+# Read:     docs/07_stability.md
+#
+# A tissue adapts to an insult iff a mechanobiological equilibrium exists — the
+# instant equilibrated test.  Sweeping it over (surviving elastin) x (pressure)
+# draws the stable/unstable map.  Change ONE tissue property below and watch the
+# unstable "aneurysm" region shrink.
+# =============================================================================
+title: "Stability map — adapt (blue) vs. runaway (red)"
+study: map
+
+# Change ONE of these and re-run to move the boundary:
+#   * raise the gain:            gain: 3.0
+#   * stiffen collagen:          law: {c1: 600, c2: 8}
+#   * raise deposition stretch:  G: 1.15
+model:
+  constituents:
+    collagen: {gain: 1.0, G: 1.08, law: {c1: 250, c2: 8}}
+    smc:      {gain: 1.0}
+
+axes:
+  x: {parameter: insult.elastin_surviving, start: 0.6, stop: 0.02, num: 40}
+  y: {parameter: insult.pressure_factor,   start: 1.0, stop: 3.0,  num: 40}

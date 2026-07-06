@@ -10,6 +10,10 @@ deposition prestretch.  Watch the "aneurysm" region shrink.
 
 HOW TO RUN
     uv run python exercises/ex06_stability_and_aneurysm.py
+
+Or, without editing any Python, run the same exercise from its YAML input file:
+    uv run python run.py configs/ex06_stability.yaml
+    uv run python run.py configs/ex06_stability.yaml --set model.constituents.collagen.gain=3.0
 """
 from __future__ import annotations
 

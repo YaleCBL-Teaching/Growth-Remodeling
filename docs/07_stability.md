@@ -15,19 +15,17 @@ stiffness), and can be *predicted*.
 
 ## 7.2 Where instability comes from: the Laplace exponent
 
-Recall the required-stress laws ([§2](02_finite_strain.md),
+Recall the required-stress law ([§2](02_finite_strain.md),
 [`gr/geometry.py`](../src/gr/geometry.py)):
 
-$$\text{bar:}\quad \sigma_{\text{req}} \propto \frac{\lambda^1}{M/M_0},
-\qquad
-\text{artery:}\quad \sigma_{\text{req}} \propto \frac{\lambda^2}{M/M_0}.$$
+$$\text{artery (Laplace):}\quad \sigma_{\text{req}} \propto \frac{\lambda^2}{M/M_0}.$$
 
 Growth adds mass ($M\uparrow$), which lowers the required stress — a **stabilising
 negative feedback**. But dilation ($\lambda\uparrow$) *raises* the required
 stress, and in the artery it does so quadratically (Laplace). When elastin — the
 tissue's low-stretch load-bearing buffer — is lost, dilation wins the race
-against mass production, and the feedback turns positive: **runaway**. The bar,
-with only a linear term, can never lose this race.
+against mass production, and the feedback turns positive: **runaway**. It is the
+quadratic Laplace exponent that makes this race losable at all.
 
 ## 7.3 Two ways to read stability
 

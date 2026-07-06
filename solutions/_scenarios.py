@@ -7,8 +7,6 @@ from __future__ import annotations
 
 from gr import (
     Model,
-    artery,
-    bar,
     constrained_mixture,
     equilibrated_cmm,
     homogenized_cmm,

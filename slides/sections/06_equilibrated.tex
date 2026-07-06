@@ -32,11 +32,10 @@
   \zlab{scalar equilibrium equation for $\lambda^*$}
   \slboxeq{2.8em}{eq:equil}{\phi^e\,s
     + s\,\frac{\bar\sigma_h - \sigma^e(G^e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
-    - \gamma\,(\lambda^*)^{n} = 0}
-  with $n$ the geometry exponent ($n=1$ bar, $n=2$ artery), $\gamma$ the sustained
-  load factor, $s$ the surviving elastin fraction, $\phi^e$ the elastin mass
-  fraction. Once $\lambda^*$ is known, the evolved mass ratio is
-  $M/M_0=\gamma(\lambda^*)^n$.
+    - \gamma\,(\lambda^*)^{2} = 0}
+  with the Laplace exponent $n=2$, $\gamma$ the sustained load factor, $s$ the
+  surviving elastin fraction, $\phi^e$ the elastin mass fraction. Once $\lambda^*$
+  is known, the evolved mass ratio is $M/M_0=\gamma(\lambda^*)^2$.
   \vspace{0.3em}
 
   This equation \emph{is} the fixed point of the homogenized ODEs
@@ -55,18 +54,33 @@
 \end{frame}
 
 
+% ---- example + run: ex05 ---------------------------------------------------
+\begin{frame}[t]{}
+  \begin{setupbox}{Example --- the equilibrated stability test (\texttt{ex05})}
+    \sprob{Skip the transient: solve the single algebraic equation \eqref{eq:equil}
+    for the \emph{final} adapted stretch $\lambda^*$. A physical root means the
+    tissue adapts; \emph{no root} means it dilates without bound. Scanning elastin
+    loss then traces the stability boundary.}
+    \srun{\scodeline{uv run python run.py configs/ex05\_equilibrated.yaml}
+      Here \texttt{study: equilibrium} solves once for the given insult, then the
+      \texttt{scan:} block sweeps \texttt{elastin\_surviving} and
+      \texttt{report\_critical: elastin} prints the critical surviving fraction
+      $s_\text{crit}$.}
+    \sstudy{Move the boundary by stiffening the wall, then re-read $s_\text{crit}$:
+      \scodeline{... --set model.constituents.collagen.gain=3.0}
+      \scodeline{... --set model.constituents.collagen.law.c1=600}}
+  \end{setupbox}
+\end{frame}
+
 % ---- interactive coding exercise: ex05 -------------------------------------
 \begin{frame}[t]{}
-  \begin{yourturnbox}{Equilibrated --- code}
-    \qq{Check that the algebraic equilibrium matches the transient end-state --- then
-    find the elastin loss at which the equilibrium \emph{disappears}.
-    \qkind{\texttt{ex05}}}
-    \qres{\texttt{exercises/ex05\_equilibrated.py}. Tunable:
-    \texttt{ELASTIN\_SURVIVING=0.3} (try 0.4 / 0.3 / 0.2).}
-    \qhint{Part A: the equilibrated $\lambda^*$ should sit on the transient
-    plateau. Part B: lower $s$ until the root vanishes --- that is $s_{\text{crit}}$;
-    run just below it and watch the transient diverge.}
-    \qrun{uv run python exercises/ex05\_equilibrated.py}
+  \begin{yourturnbox}{Equilibrated}
+    \qq{Does the algebraic $\lambda^*$ land on the transient plateau where a root
+    exists --- and what is the critical elastin loss beyond which \emph{no}
+    equilibrium exists at all?}
+    \qhint{The scan curve shoots up as $s\to s_{\text{crit}}$: the adapted stretch
+    diverges just before the root vanishes. Below $s_{\text{crit}}$ the transient
+    models dilate without bound.}
   \end{yourturnbox}
 \end{frame}
 

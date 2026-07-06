@@ -10,6 +10,10 @@ gain control how fast (and whether) the wall adapts.
 
 HOW TO RUN
     uv run python exercises/ex03_constrained_mixture.py
+
+Or, without editing any Python, run the same exercise from its YAML input file:
+    uv run python run.py configs/ex03_constrained_mixture.yaml
+    uv run python run.py configs/ex03_constrained_mixture.yaml --set model.constituents.collagen.gain=3.0
 """
 from __future__ import annotations
 

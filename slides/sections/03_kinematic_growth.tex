@@ -74,26 +74,91 @@
   The perturbation decays ($\delta\to0$, \textbf{stable}) iff $\alpha<0$, i.e.
   \slboxeq{2.2em}{eq:stabkin}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
     \quad\Longleftrightarrow\quad\text{adding mass \emph{lowers} the stress it must carry.}}
-  This holds for the \textbf{bar}, but a strong enough insult flips the sign for the
-  \textbf{artery} (Laplace $\bar\sigma\propto\lambda^2$) --- then $\alpha>0$ and
-  growth runs away. The set-point is \emph{prescribed}, so the model can only
-  \emph{impose} stability, never \emph{predict} it.
+  For the intact artery this holds, but a strong enough insult flips the sign
+  (Laplace $\bar\sigma\propto\lambda^2$) --- then $\alpha>0$ and growth runs away.
+  The set-point is \emph{prescribed}, so the model can only \emph{impose}
+  stability, never \emph{predict} it.
+\end{frame}
+
+% ---- shared setup for ALL coding exercises ---------------------------------
+\begin{frame}[t]{The \texttt{gr} Toolbox --- Shared Setup for Every Coding Exercise}
+  \footnotesize
+  Every coding exercise reuses \emph{one} problem definition, so the four theories
+  are compared on identical numbers. A \texttt{Model} bundles the constituents with
+  the homeostatic pressure $P_h=13.3$~kPa ($\sim$100~mmHg) and reference mid-wall
+  radius $R=1$~mm; the reference thickness follows from the Laplace balance
+  $H=P_hR/\bar\sigma_h$ \eqref{eq:laplace}.
+  \vspace{-0.2em}
+  \begin{columns}[T]
+    \begin{column}{0.56\textwidth}
+      \textbf{Default arterial constituents} (mass fraction $\phi_0$, deposition
+      stretch $G$, law, turnover rate $k_d$, gain $K_\sigma$):
+      \renewcommand{\arraystretch}{1.15}
+      \begin{tabular}{@{}lccl@{}}
+        \toprule
+        & $\phi_0$ & $G$ & law, $k_d$\,[1/d], $K_\sigma$\\
+        \midrule
+        elastin  & 0.30 & 1.40 & neo-Hooke $c{=}90$; $k_d{=}0$\\
+        collagen & 0.35 & 1.08 & Fung $c_1{=}250,c_2{=}8$; $\tfrac1{20}$; 1\\
+        smc      & 0.35 & 1.20 & Fung $c_1{=}120,c_2{=}3$; $\tfrac1{20}$; 1\\
+        \bottomrule
+      \end{tabular}
+      \par\smallskip
+      Set-point per constituent $\sigma_h^k=\sigma^k(G^k)$; mixture
+      $\bar\sigma_h=\sum_k\phi_0^k\sigma_h^k$. Elastin never turns over
+      ($k_d^e=0$) and is the only \emph{degradable} constituent (aneurysm).
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \textbf{Geometry \& equilibrium.} At every step the supplied mixture stress
+      must equal the Laplace required stress
+      \giveneq{\bar\sigma(\lambda)=\bar\sigma_h\,\gamma\,\frac{\lambda^{2}}{m},}
+      solved for $\lambda$ by a bracketed root find on $[0.2,20]$; \emph{no root}
+      $\Rightarrow$ runaway. Here $m=M/M_0$ is the mass ratio, $\gamma$ the load
+      factor, and the exponent 2 is the Laplace term $\bar\sigma=Pa/h$.
+      \par\smallskip
+      \textbf{Insult.} \texttt{Insult} ramps a step from \texttt{t\_on} over
+      \texttt{ramp} days: \texttt{pressure\_factor} $\gamma$ (hypertension) or
+      \texttt{elastin\_surviving} $s$ (aneurysm).
+    \end{column}
+  \end{columns}
+  \vspace{-0.1em}
+  \textbf{Running an exercise.} Each exercise is a small YAML \emph{input file};
+  one runner drives them all --- no Python to edit:
+  \scodeline{uv run python run.py configs/exNN\_*.yaml}
+  The file picks the \texttt{theory}, \texttt{geometry}, \texttt{insult} and
+  parameters; the run prints $\bar\sigma/\bar\sigma_h$, mass and \texttt{diverged}
+  and plots the history. For a \textbf{parametric study}, list values in the
+  file's \texttt{sweep:} block or on the command line:
+  \scodeline{... --sweep insult.pressure\_factor=1.2,1.5,2.0 \ \ \# one curve per value}
+  \scodeline{... --set\ \ \ model.constituents.collagen.gain=3.0 \ \# change any one value}
+\end{frame}
+
+% ---- example + run: ex02 ---------------------------------------------------
+\begin{frame}[t]{}
+  \begin{setupbox}{Example --- hypertensive artery (\texttt{ex02})}
+    \sprob{A pressurised artery is made \emph{hypertensive} by a sustained
+    $+50\%$ pressure step. Does the wall thicken back to its \emph{prescribed}
+    homeostatic stress \eqref{eq:kingrowth}, or run away once the pressure step is
+    large enough?}
+    \srun{\scodeline{uv run python run.py configs/ex02\_kinematic\_growth.yaml}
+      The file sets \texttt{theory: kinematic\_growth}, the insult and
+      \texttt{k\_g}. Watch $\bar\sigma/\bar\sigma_h$ return to 1 while $\theta$
+      climbs to the pressure factor.}
+    \sstudy{Overlay several growth rates (the file's \texttt{sweep:} block), or
+      push the pressure until it diverges:
+      \scodeline{... --sweep simulate.k\_g=0.02,0.05,0.2\ \ \ \ \ \# vary the gain}
+      \scodeline{... --set insult.pressure\_factor=3.0\ \ \ \ \ \ \ \# harder insult}}
+  \end{setupbox}
 \end{frame}
 
 % ---- interactive coding exercise: ex02 -------------------------------------
 \begin{frame}[t]{}
-  \begin{yourturnbox}{Kinematic growth --- code}
-    \qq{\textbf{Example:} a hypertensive artery. \textbf{Model:} kinematic growth,
-    $\bm{F}=\bm{F}_e\bm{F}_g$ with the scalar law \eqref{eq:kingrowth}.
-    \textbf{Parameters:} gain \texttt{K\_G}, deposition set-point $\bar\sigma_h$.
-    \textbf{Insult:} a sustained pressure step \texttt{PRESSURE\_FACTOR}. Does the
-    artery reach the prescribed set-point, or run away? \qkind{\texttt{ex02}}}
-    \qres{\texttt{gr} package, \texttt{exercises/ex02\_kinematic\_growth.py}.
-    Tunables: \texttt{K\_G=0.05}, \texttt{PRESSURE\_FACTOR=1.5}.}
-    \qhint{Watch the stress plateau land on $\bar\sigma_h$. Then crank
-    \texttt{PRESSURE\_FACTOR} until the artery diverges --- the sign of
-    $\dd\bar\sigma/\dd\theta$ has flipped.}
-    \qrun{uv run python exercises/ex02\_kinematic\_growth.py}
+  \begin{yourturnbox}{Kinematic growth}
+    \qq{Does the artery reach the \emph{prescribed} homeostatic set-point --- and
+    how large a pressure step does it take to tip it into runaway instead?}
+    \qhint{Watch $\bar\sigma/\bar\sigma_h$ settle at 1 while $\theta$ climbs to the
+    pressure factor. The Laplace $\lambda^2$ term is what lets the artery tip over
+    once $\dd\bar\sigma/\dd\theta$ flips sign.}
   \end{yourturnbox}
 \end{frame}
 

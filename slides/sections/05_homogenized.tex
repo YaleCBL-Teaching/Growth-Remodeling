@@ -110,18 +110,32 @@
   \end{answerbox}
 \end{frame}
 
+% ---- example + run: ex04 ---------------------------------------------------
+\begin{frame}[t]{}
+  \begin{setupbox}{Example --- homogenized vs.\ full (\texttt{ex04})}
+    \sprob{Run both mixture theories on the \emph{same} artery and insult. The
+    homogenized model keeps one mean natural stretch per constituent (two ODEs,
+    \eqref{eq:homog_mass}--\eqref{eq:homog_remodel}) instead of the full cohort
+    history. How closely does it track the full model, and how much faster is it?}
+    \srun{\scodeline{uv run python run.py configs/ex04\_homogenized\_vs\_full.yaml}
+      Here \texttt{study: compare} runs
+      \texttt{theories: [constrained\_mixture, homogenized\_cmm]} on one scenario
+      and prints each runtime and the largest mass-ratio gap between them.}
+    \sstudy{Stress the comparison with a harsher, longer insult:
+      \scodeline{... --set insult.elastin\_surviving=0.3 --set insult.ramp=10}
+      \scodeline{... --set simulate.t\_end=4000\ \ \ \ \ \# does the agreement hold?}}
+  \end{setupbox}
+\end{frame}
+
 % ---- interactive coding exercise: ex04 -------------------------------------
 \begin{frame}[t]{}
-  \begin{yourturnbox}{Homogenized vs.\ full --- code}
-    \qq{\textbf{Example:} the same artery under one insult. \textbf{Model:}
-    homogenized CMM overlaid on the full constrained mixture. \textbf{Parameters:}
-    \texttt{INSULT}, horizon \texttt{T\_END}. Measure both the agreement and the
-    speed-up. \qkind{\texttt{ex04}}}
-    \qres{\texttt{exercises/ex04\_homogenized\_vs\_full.py}. Tunables:
-    \texttt{INSULT} (hypertension / aneurysm), \texttt{T\_END=2000}.}
-    \qhint{Read off the gap between the two curves. Try the aneurysm insult or a
-    longer \texttt{T\_END} --- does the agreement hold?}
-    \qrun{uv run python exercises/ex04\_homogenized\_vs\_full.py}
+  \begin{yourturnbox}{Homogenized vs.\ full}
+    \qq{Is the difference between the two curves visible by eye? By what factor is
+    the homogenized model faster --- and does the agreement survive a harsher,
+    longer insult?}
+    \qhint{Read the printed mass-ratio gap and the two runtimes. The homogenized
+    model should track the full one closely wherever the loading is slow and
+    gradual.}
   \end{yourturnbox}
 \end{frame}
 

@@ -28,7 +28,7 @@ turnover constituents growing in fixed proportion by a factor beta, conditions
       + s * ( sigma_bar_h - sigma_e(G_e lambda*) ) / ( sigma_turn - sigma_h^e )
       - gamma * lambda*^n  =  0                                            (EQ)
 
-where n is the geometry exponent (1 bar, 2 artery), gamma the load factor,
+where n = 2 is the Laplace exponent for the artery, gamma the load factor,
 s the surviving elastin fraction, sigma_turn the mass-weighted homeostatic stress
 of the turnover constituents, and sigma_h^e the homeostatic elastin stress.
 

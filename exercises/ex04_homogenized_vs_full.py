@@ -9,6 +9,9 @@ reproduces the full model (history integrals) — and runs much faster.
 
 HOW TO RUN
     uv run python exercises/ex04_homogenized_vs_full.py
+
+Or, without editing any Python, run the same comparison from its YAML input file:
+    uv run python run.py configs/ex04_homogenized_vs_full.yaml
 """
 from __future__ import annotations
 

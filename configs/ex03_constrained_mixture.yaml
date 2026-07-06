@@ -1,0 +1,36 @@
+# =============================================================================
+# Exercise 3 — Full constrained mixture with turnover
+# =============================================================================
+# Run:     uv run python run.py configs/ex03_constrained_mixture.yaml
+# Read:     docs/04_constrained_mixture.md
+#
+# Now collagen and smooth muscle are continuously PRODUCED and REMOVED (elastin
+# is not).  Watch which constituent takes up the load, and how the turnover time
+# and gain set how fast the wall adapts.
+# =============================================================================
+title: "Constrained mixture — turnover under hypertension"
+study: transient
+theory: constrained_mixture
+
+# Per-constituent overrides.  turnover_days is a convenience for k_d = 1/days;
+# 1/k_d is the mean lifetime.  gain is the mechano-sensitivity K_sigma.
+model:
+  constituents:
+    collagen: {turnover_days: 20, gain: 1.0}
+    smc:      {turnover_days: 20, gain: 1.0}
+
+insult:
+  pressure_factor: 1.5    # hypertension
+  t_on: 1.0
+  ramp: 1.0
+  # For the aneurysm instead, comment the pressure line above and use:
+  # elastin_surviving: 0.3
+
+simulate:
+  t_end: 3000
+  dt: 2.0                 # explicit heredity integral; smaller dt = more accurate
+
+# Parametric study: how does the pressure step change the adapted state?
+sweep:
+  parameter: insult.pressure_factor
+  values: [1.2, 1.5, 2.0]

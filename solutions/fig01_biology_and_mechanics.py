@@ -5,8 +5,8 @@ Produces docs/figures/fig01_constitutive.pdf:
   (a) the constituent laws in REFERENCE-configuration measures -- 2nd
       Piola-Kirchhoff stress S vs Green-Lagrange strain E -- with the deposition
       set-points (E(G^k), S(G^k)) marked (dotted = the Cauchy push-forward);
-  (b) the bar-vs-artery "required stress" feedback -- the single exponent (lambda
-      vs lambda^2) that decides whether growth is self-limiting or can run away.
+  (b) the artery's Laplace "required stress" feedback -- the quadratic exponent
+      (lambda^2) that lets growth run away once too much elastin is lost.
       This is the *spatial* (Cauchy) balance, where a true stress genuinely enters.
 
 Run:  uv run python solutions/fig01_biology_and_mechanics.py
@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from gr import Model, artery, bar
+from gr import Model, artery
 from gr.mechanics import strain_gl
 from gr.plotting import plt, save_pdf
 
@@ -46,19 +46,19 @@ def main() -> None:
     axA.set_ylabel(r"2nd Piola-Kirchhoff stress  $S^k$  [kPa]")
     axA.legend()
 
-    # (b) required-stress feedback: bar (exponent 1) vs artery (exponent 2) -----
+    # (b) required-stress feedback: the artery's Laplace exponent (lambda^2) ----
     lam = np.linspace(0.8, 1.6, 200)
-    for geom, name in [(bar(model), "bar  ($\\lambda^1$)"),
-                       (artery(model), "artery  ($\\lambda^2$, Laplace)")]:
-        req = np.array([geom.required_stress(x, mass_ratio=1.0, load_factor=1.0)
-                        for x in lam])
-        axB.plot(lam, req / model.sigma_bar_h, label=name)
+    geom = artery(model)
+    req = np.array([geom.required_stress(x, mass_ratio=1.0, load_factor=1.0)
+                    for x in lam])
+    axB.plot(lam, req / model.sigma_bar_h, color="#C44E52",
+             label=r"artery  ($\lambda^2$, Laplace)")
     axB.axhline(1.0, color="gray", lw=1, alpha=0.6)
     axB.axvline(1.0, color="gray", lw=1, alpha=0.6)
     axB.set_xlabel(r"Stretch  $\lambda$")
     axB.set_ylabel(r"Required stress  $\sigma_{\rm req}/\bar\sigma_h$")
-    axB.annotate("dilating raises\nwall stress faster\nin the artery",
-                 (1.4, 1.96), fontsize=9, ha="center",
+    axB.annotate("dilating raises the\nwall stress quadratically",
+                 (1.3, 1.7), fontsize=9, ha="center",
                  color="#C44E52")
     axB.legend()
 

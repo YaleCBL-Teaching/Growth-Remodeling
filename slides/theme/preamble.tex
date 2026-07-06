@@ -198,6 +198,25 @@
 \newcommand{\qhint}[1]{\par\smallskip{\color{QBlue}\bfseries Hints.}\ #1}
 \newcommand{\qkind}[1]{}
 
+% ---- problem-setup box (precedes each coding exercise) ---------------------
+% A neutral slate box laying out the problem in enough detail to implement it
+% from scratch, plus a short note on how to drive the gr package.
+\definecolor{SFrame}{RGB}{62,78,138}     % slate/indigo (matches the 3D badge)
+\definecolor{SFill}{RGB}{243,244,250}
+\newtcolorbox{setupbox}[1]{%
+  enhanced, breakable, colback=SFill, colframe=SFrame, boxrule=1pt,
+  arc=2pt, left=6pt,right=6pt,top=4pt,bottom=4pt,
+  fonttitle=\bfseries\color{white},
+  title={\faCogs~~Setup: #1}}
+% field labels inside a setup box.  The general problem setup lives on its own
+% frame (the "gr toolbox"); each exercise box is then lean: the specific example
+% and how to run it, with an optional parametric-study line.
+\newcommand{\sprob}[1]{\par\smallskip{\color{SFrame}\bfseries Example.}\ #1}
+\newcommand{\srun}[1]{\par\smallskip{\color{SFrame}\bfseries Run it.}\ #1}
+\newcommand{\sstudy}[1]{\par\smallskip{\color{SFrame}\bfseries Parametric study.}\ #1}
+% one code line in monospace inside a setup box
+\newcommand{\scodeline}[1]{{\ttfamily\small #1}\par}
+
 
 % ===========================================================================
 %  Idealized blood vessel drawn in TikZ (thick-walled cylinder cross-section)

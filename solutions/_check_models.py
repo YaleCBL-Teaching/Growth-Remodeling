@@ -11,7 +11,6 @@ from gr import (
     HYPERTENSION,
     Insult,
     artery,
-    bar,
     constrained_mixture,
     equilibrated_cmm,
     homogenized_cmm,
@@ -28,7 +27,6 @@ def check(msg, cond):
 
 def main() -> None:
     art = artery(SEMINAR_MODEL)
-    b = bar(SEMINAR_MODEL)
 
     # 1. Homeostasis is a fixed point: no insult -> nothing changes.
     quiet = Insult()
@@ -56,10 +54,6 @@ def main() -> None:
     rs = homogenized_cmm.simulate(art, severe, t_end=8000)
     check("no equilibrium for severe aneurysm", not es.exists)
     check("severe aneurysm dilates strongly", rs.lam[-1] > 1.8)
-
-    # 5. The bar (exponent 1) is unconditionally self-limiting under pressure.
-    rb = homogenized_cmm.simulate(b, Insult(pressure_factor=3.0, t_on=1, ramp=1), t_end=1500)
-    check("bar adapts even to 3x load (no runaway)", not rb.diverged)
 
     print("\nAll checks passed.")
 
