@@ -1,6 +1,6 @@
 r"""
-Mechanical equilibrium for the two settings: the 1D bar and the thin-walled
-artery.  Both theories and both scenarios share this layer.
+Mechanical equilibrium for the thin-walled artery.  Every theory shares this
+layer.
 
 At every instant the tissue must be in **mechanical equilibrium**: the Cauchy
 stress the material *supplies* (from its deformation, via the constitutive laws)
@@ -9,26 +9,24 @@ compute the supplied stress ``sigma_bar(lambda)``; this file supplies the
 *required* stress and solves the balance for the current global stretch lambda.
 
 -------------------------------------------------------------------------------
-The required stress — bar vs. artery differ by ONE exponent
+The required stress — the Laplace law
 -------------------------------------------------------------------------------
-Let ``lambda`` be the global stretch (bar: axial; artery: circumferential,
+Let ``lambda`` be the circumferential stretch (current mid-wall radius
 r = lambda * R) and ``m = M/M_0`` the current total mass relative to
 homeostasis.  Assuming incompressible constituents (growth only adds material),
 the current load-bearing cross-section shrinks with stretch and grows with mass,
 which gives (derivation in docs/03..06):
 
-    bar, dead axial load:     sigma_req = sigma_h * gamma * lambda**1 / m      (G1)
     artery, Laplace P r / h:  sigma_req = sigma_h * gamma * lambda**2 / m      (G2)
 
 where ``sigma_h`` is the mixture homeostatic stress (Eq. P2) and ``gamma`` is the
 current load factor (pressure_factor for hypertension; 1 for the aneurysm
 scenario, whose insult acts through the material, not the load).
 
-**The only difference between a bar and an artery is the exponent 1 vs 2.**  That
-extra power of ``lambda`` is the Laplace law: in a pressurised tube, dilating
-raises wall stress, which can *drive further dilation*.  It is the mathematical
-seed of aneurysm instability, and every stability result in this course traces
-back to it.  See the exercise in docs/07_stability.md.
+The quadratic power of ``lambda`` is the Laplace law: in a pressurised tube,
+dilating raises wall stress, which can *drive further dilation*.  It is the
+mathematical seed of aneurysm instability, and every stability result in this
+course traces back to it.  See the exercise in docs/07_stability.md.
 """
 from __future__ import annotations
 
@@ -45,11 +43,11 @@ class Geometry:
     """A loading setting: how required stress depends on stretch and mass."""
 
     name: str
-    stress_exponent: int  # 1 for the bar, 2 for the artery (Laplace), Eqs. (G1)-(G2)
+    stress_exponent: int  # 2 for the artery (Laplace law), Eq. (G2)
     model: Model
 
     def required_stress(self, lam: float, mass_ratio: float, load_factor: float) -> float:
-        """Stress the loading demands, Eqs. (G1)-(G2)."""
+        """Stress the loading demands, Eq. (G2)."""
         return self.model.sigma_bar_h * load_factor * lam**self.stress_exponent / mass_ratio
 
     def equilibrium_stretch(
@@ -65,8 +63,8 @@ class Geometry:
         ``supplied_stress(lam)`` is provided by each theory (the mixture Cauchy
         stress at global stretch ``lam``, given the current natural
         configurations).  Returns ``None`` when no equilibrium exists in the
-        bracket — which, for the artery, is exactly the *loss of a mechanically
-        equilibrated state* that signals a runaway aneurysm.
+        bracket — exactly the *loss of a mechanically equilibrated state* that
+        signals a runaway aneurysm.
         """
 
         def residual(lam: float) -> float:
@@ -81,7 +79,7 @@ class Geometry:
 
     # -- reporting helpers (for plots / tables) -------------------------------
     def radius(self, lam: float) -> float:
-        """Current **mid-wall** radius [mm] (artery: a = lambda R; bar: length factor).
+        """Current **mid-wall** radius [mm], a = lambda R.
 
         A thin-walled tube is described by a single mid-wall radius ``a`` and a
         thickness ``h`` -- exactly the two quantities the Laplace balance
@@ -90,13 +88,8 @@ class Geometry:
         return lam * self.model.R
 
     def thickness(self, lam: float, mass_ratio: float) -> float:
-        """Current wall thickness [mm], h = H * m / lambda (artery)."""
+        """Current wall thickness [mm], h = H * m / lambda."""
         return self.model.H * mass_ratio / lam
-
-
-def bar(model: Model) -> Geometry:
-    """1D tissue bar under a dead axial load — Eq. (G1)."""
-    return Geometry(name="bar", stress_exponent=1, model=model)
 
 
 def artery(model: Model) -> Geometry:

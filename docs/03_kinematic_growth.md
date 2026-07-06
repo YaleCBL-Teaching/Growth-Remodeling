@@ -60,24 +60,23 @@ the stress it must carry:
 
 $$\left.\frac{\mathrm{d}\bar\sigma}{\mathrm{d}\theta}\right|_{\theta^*} < 0 .$$
 
-For the **bar** (required stress $\propto\lambda^1$) this is always true — growth
-is self-limiting. For the **artery** (required stress $\propto\lambda^2$,
-Laplace) a strong enough insult flips the sign and growth runs away. But note:
-kinematic growth can only *impose* a set-point; it cannot *predict*
-mechanobiological stability from tissue turnover. That is what the mixture
-theories add ([§4](04_constrained_mixture.md)–[§7](07_stability.md)).
+For the **artery** (required stress $\propto\lambda^2$, Laplace) this holds while
+the insult is mild, so growth is self-limiting; a strong enough insult flips the
+sign and growth runs away. But note: kinematic growth can only *impose* a
+set-point; it cannot *predict* mechanobiological stability from tissue turnover.
+That is what the mixture theories add
+([§4](04_constrained_mixture.md)–[§7](07_stability.md)).
 
 ![Kinematic growth under hypertension](figures/fig02_kinematic_growth.png)
 
-*Kinematic growth adapting to a step rise in pressure (1 → 1.5×). Both the bar
-(dashed) and the artery (solid) restore the prescribed homeostatic stress by
-thickening the wall. The stress returns exactly to the set-point — that is
-guaranteed here, not predicted.*
+*Kinematic growth of the artery adapting to a step rise in pressure (1 → 1.5×):
+it restores the prescribed homeostatic stress by thickening the wall. The stress
+returns exactly to the set-point — that is guaranteed here, not predicted.*
 
 ---
 
 ### Exercise → [`exercises/ex02_kinematic_growth.py`](../exercises/ex02_kinematic_growth.py)
 
 Change the growth-rate gain $k_g$ and the pressure step, and watch how fast (and
-whether) the tissue returns to homeostasis. Push the pressure high enough on the
-artery to trigger runaway — and confirm the bar never does.
+whether) the tissue returns to homeostasis. Push the pressure high enough to
+trigger runaway.

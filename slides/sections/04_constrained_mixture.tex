@@ -78,22 +78,34 @@
 \end{frame}
 
 
+% ---- example + run: ex03 ---------------------------------------------------
+\begin{frame}[t]{}
+  \begin{setupbox}{Example --- turnover under hypertension (\texttt{ex03})}
+    \sprob{The same artery, now resolving constituents that are continuously
+    \emph{produced and removed} \eqref{eq:heredity} (elastin is not). Which
+    constituent takes up the load, and does turnover restore the homeostatic
+    stress? The same tissue may \emph{adapt} to hypertension yet \emph{run away}
+    on an aneurysm insult.}
+    \srun{\scodeline{uv run python run.py configs/ex03\_constrained\_mixture.yaml}
+      The file sets each constituent's \texttt{turnover\_days} ($1/k_d$) and
+      \texttt{gain} ($K_\sigma$) and the insult. For the aneurysm, swap the insult
+      to \texttt{elastin\_surviving: 0.3}.}
+    \sstudy{Sweep the pressure step (the file's \texttt{sweep:} block), or change
+      a tissue property:
+      \scodeline{... --set model.constituents.collagen.gain=3.0}
+      \scodeline{... --set model.constituents.collagen.turnover\_days=70}}
+  \end{setupbox}
+\end{frame}
+
 % ---- interactive coding exercise: ex03 -------------------------------------
 \begin{frame}[t]{}
-  \begin{yourturnbox}{Constrained mixture --- code}
-    \qq{\textbf{Example:} the same artery, now with turnover. \textbf{Model:} full
-    constrained mixture --- the heredity integral \eqref{eq:heredity} over all
-    cohorts. \textbf{Parameters:} turnover time \texttt{TURNOVER\_DAYS}, gain
-    \texttt{GAIN}. \textbf{Insult:} hypertension vs.\ elastin-loss (aneurysm). Does
-    the same tissue adapt to one insult but run away on the other?
-    \qkind{\texttt{ex03}}}
-    \qres{\texttt{exercises/ex03\_constrained\_mixture.py}. Tunables:
-    \texttt{TURNOVER\_DAYS=20}, \texttt{GAIN=1.0}; \texttt{INSULT} =
-    hypertension (\texttt{pressure\_factor=1.5}) vs.\ aneurysm
-    (\texttt{elastin\_surviving=0.3}).}
-    \qhint{Try turnover 10 / 20 / 70 d and gain 0.3 / 1.0 / 3.0. Watch which insult
-    the tissue can absorb.}
-    \qrun{uv run python exercises/ex03\_constrained\_mixture.py}
+  \begin{yourturnbox}{Constrained mixture}
+    \qq{Does the same tissue \emph{adapt} to hypertension but \emph{run away} on
+    the aneurysm insult? Which constituent grows to carry the load elastin used
+    to bear?}
+    \qhint{Try turnover 10 / 20 / 70 d and gain 0.3 / 1.0 / 3.0. Faster turnover
+    and higher gain reach the new state sooner; watch which insult the tissue can
+    absorb.}
   \end{yourturnbox}
 \end{frame}
 

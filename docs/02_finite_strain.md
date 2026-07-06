@@ -9,8 +9,8 @@ seen finite strain before, skim to §2.4.*
 
 A body deforms from a **reference** configuration to a **current** one. The
 deformation gradient $\mathbf{F}$ maps reference line elements to current ones.
-Everything in this course collapses to a single dominant direction (the bar's
-axis, or the artery's circumference), so we work with one scalar **stretch**
+Everything in this course collapses to a single dominant direction (the artery's
+circumference), so we work with one scalar **stretch**
 
 $$\lambda = \frac{\text{current length}}{\text{reference length}}.$$
 
@@ -58,20 +58,17 @@ Equilibrium is intrinsically a *spatial* statement, so Cauchy stress appears
 there; everywhere else (the material laws, the deposition
 set-points, the stress power) we stay in the reference configuration.
 
-The two settings, their boundary conditions, and the two insults are shown below.
-The bar is loaded by a **dead axial load** $f$ (fixed at one end), so its required
-stress grows like $\lambda^1$; the artery is loaded by **internal pressure** $P$,
-so by Laplace its wall stress grows like $\lambda^2$. That single difference in
-exponent is what makes the artery — but not the bar — able to lose stability
-([§7](07_stability.md)).
+The setting, its boundary conditions, and the two insults are shown below. The
+artery is loaded by **internal pressure** $P$, so by Laplace its wall stress
+grows like $\lambda^2$. That quadratic exponent is what makes the artery able to
+lose stability ([§7](07_stability.md)).
 
-![The shared setting: bar, artery, and the two insults](figures/fig00_setup.png)
+![The shared setting: the artery and the two insults](figures/fig00_setup.png)
 
-*(a) The 1-D tissue bar under a dead load. (b) The thin-walled artery
-cross-section: internal pressure $P$ (blue), circumferential wall stress
-$\sigma_\theta$ (red), inner radius $r$, thickness $h$, balanced by Laplace. (c)
-The two insults — hypertension raises $P$ (wall thickens); aneurysm degrades
-elastin (the wall dilates, dashed = original size).*
+*(a) The thin-walled artery cross-section: internal pressure $P$ (blue),
+circumferential wall stress $\sigma_\theta$ (red), inner radius $r$, thickness
+$h$, balanced by Laplace. (b) The two insults — hypertension raises $P$ (wall
+thickens); aneurysm degrades elastin (the wall dilates, dashed = original size).*
 
 ## 2.3 Hyperelastic constituents (in reference measures)
 
@@ -98,15 +95,15 @@ $\sigma = \lambda_e^2\,S$ — for elastin
 $\sigma_e = c_e(\lambda_e^2 - 1/\lambda_e)$, and for the Fung fiber
 $\sigma = c_1\lambda_e^2(\lambda_e^2-1)e^{c_2(\lambda_e^2-1)^2}$.
 
-![Constituent laws and the bar-vs-artery feedback](figures/fig01_constitutive.png)
+![Constituent laws and the artery's Laplace feedback](figures/fig01_constitutive.png)
 
 *Left: the constituent laws in **reference measures** — 2nd Piola–Kirchhoff
 stress $S^k$ vs Green–Lagrange strain $E_e$ — with the deposition set-points
 $(E_e(G^k),\,S^k(G^k))$ marked. Elastin is soft; collagen and muscle stiffen
 steeply (their curves run off-scale past the physiological window). Right: the
-"required stress" the loading demands, a **spatial (Cauchy)** balance — linear
-for the bar, **quadratic for the artery** (Laplace). That extra power of
-$\lambda$ is the whole story of arterial instability (§7).*
+"required stress" the loading demands, a **spatial (Cauchy)** balance —
+**quadratic for the artery** (Laplace). That power of $\lambda^2$ is the whole
+story of arterial instability (§7).*
 
 ## 2.4 The deposition stretch $G^k$ (the crucial modelling idea)
 

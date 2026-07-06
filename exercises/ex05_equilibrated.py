@@ -10,6 +10,9 @@ NO equilibrium exists — i.e. the tissue can no longer adapt.
 
 HOW TO RUN
     uv run python exercises/ex05_equilibrated.py
+
+Or, without editing any Python, run the same exercise from its YAML input file:
+    uv run python run.py configs/ex05_equilibrated.yaml
 """
 from __future__ import annotations
 

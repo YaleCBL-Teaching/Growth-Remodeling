@@ -1,12 +1,10 @@
 """
 TEACHER solution / figure for the setup (geometry & boundary conditions).
 
-docs/figures/fig00_setup.pdf -- a schematic (not a simulation) of the two
-mechanical settings every model shares, their boundary conditions, and the two
-insults:
-  (a) the 1-D tissue bar under a dead axial load;
-  (b) the thin-walled artery cross-section with the Laplace balance;
-  (c) the two insults -- hypertension (pressure up) and aneurysm (elastin loss).
+docs/figures/fig00_setup.pdf -- a schematic (not a simulation) of the mechanical
+setting every model shares, its boundary conditions, and the two insults:
+  (a) the thin-walled artery cross-section with the Laplace balance;
+  (b) the two insults -- hypertension (pressure up) and aneurysm (elastin loss).
 
 Annotated with the actual default parameter values from gr.Model().
 
@@ -15,7 +13,7 @@ Run:  uv run python solutions/fig00_setup.py
 from __future__ import annotations
 
 import numpy as np
-from matplotlib.patches import Annulus, Circle, FancyArrowPatch, Rectangle
+from matplotlib.patches import Annulus, Circle, FancyArrowPatch
 
 from gr import Model
 from gr.plotting import plt, save_pdf
@@ -83,51 +81,27 @@ def draw_vessel(ax, center, r_in, wall, *, pressure=1.0, show_labels=True,
 
 def main() -> None:
     m = Model()
-    fig = plt.figure(figsize=(14, 5.2))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1.05, 1.0, 0.9], wspace=0.12)
-    axA, axB, axC = (fig.add_subplot(gs[0, i]) for i in range(3))
-    for ax in (axA, axB, axC):
+    fig = plt.figure(figsize=(10, 5.2))
+    gs = fig.add_gridspec(1, 2, width_ratios=[1.0, 0.9], wspace=0.12)
+    axB, axC = (fig.add_subplot(gs[0, i]) for i in range(2))
+    for ax in (axB, axC):
         ax.set_aspect("equal")
         ax.axis("off")
 
-    # ---- (a) 1-D tissue bar -------------------------------------------------
-    axA.set_xlim(-0.6, 3.7)
-    axA.set_ylim(-1.7, 1.7)
-    axA.set_title("(a) 1-D tissue bar", fontsize=13)
-    # fixed support with ground hatching
-    axA.add_patch(Rectangle((-0.45, -0.95), 0.45, 1.9, facecolor="#dddddd",
-                            edgecolor="k", hatch="////", zorder=2))
-    # reference bar (dashed outline)
-    axA.add_patch(Rectangle((0, 0.42), 1.8, 0.5, facecolor="none",
-                            edgecolor="gray", ls="--", lw=1.5))
-    axA.annotate("", (1.8, 1.12), (0.0, 1.12),
-                 arrowprops=dict(arrowstyle="<|-|>", color="gray"))
-    axA.text(0.9, 1.24, r"reference  $L_0,\ A_0$", ha="center", color="gray", fontsize=11)
-    # current bar (longer, thinner, filled)
-    axA.add_patch(Rectangle((0, -0.75), 2.7, 0.34, facecolor=WALL,
-                            edgecolor=WALL_EDGE, lw=1.6))
-    _arrow(axA, (2.7, -0.58), (3.5, -0.58), STRESS, lw=2.2, mut=15)
-    axA.text(3.15, -0.30, "$f$", color=STRESS, ha="center", fontsize=14)
-    axA.annotate("", (2.7, -1.05), (0.0, -1.05),
-                 arrowprops=dict(arrowstyle="<|-|>", color=WALL_EDGE))
-    axA.text(1.35, -1.45, r"current  $\lambda L_0,\ a$", ha="center", fontsize=11)
-    axA.text(1.75, 0.02, r"dead load  $\Rightarrow\ \sigma = f/a \propto \lambda^{1}$",
-             ha="center", fontsize=11, color=STRESS)
-
-    # ---- (b) thin-walled artery + Laplace -----------------------------------
+    # ---- (a) thin-walled artery + Laplace -----------------------------------
     axB.set_xlim(-1.7, 1.7)
     axB.set_ylim(-1.75, 1.75)
-    axB.set_title("(b) thin-walled artery (cross-section)", fontsize=13)
+    axB.set_title("(a) thin-walled artery (cross-section)", fontsize=13)
     draw_vessel(axB, (0, 0.15), r_in=0.85, wall=0.3, pressure=1.0)
     axB.text(0, -1.5,
              r"Laplace:  $\sigma_\theta = P\,r/h \;\propto\; \lambda^{2}$",
              ha="center", fontsize=12, color=STRESS)
     axB.text(1.35, -1.35, r"$\odot\,z,\ \lambda_z$", fontsize=11, ha="center")
 
-    # ---- (c) the two insults ------------------------------------------------
+    # ---- (b) the two insults ------------------------------------------------
     axC.set_xlim(-1.5, 1.5)
     axC.set_ylim(-2.7, 2.7)
-    axC.set_title("(c) the two insults", fontsize=13)
+    axC.set_title("(b) the two insults", fontsize=13)
     # hypertension: same radius, thicker wall, stronger pressure
     draw_vessel(axC, (0, 1.35), r_in=0.5, wall=0.34, pressure=1.6,
                 show_labels=False)

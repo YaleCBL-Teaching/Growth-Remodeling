@@ -36,20 +36,24 @@ What you will take away, and can reproduce yourself in the exercises:
 
 ---
 
-## Repository layout — three kinds of file
+## Repository layout
 
 ```
 src/gr/          FUNDAMENTALS  — the maths and the four models.  Read them; you
                  don't need to edit them.  Comments tie each line to an equation.
 docs/            The lecture notes: biology, finite-strain theory, one file per
                  theory, plus the stability capstone.  Equations + figures.
-exercises/       STUDENT files.  Each is a short script with a clearly marked
-                 "YOUR TURN" block: change a parameter, add a sweep, make a plot.
+configs/         STUDENT input files — one small YAML per exercise.  Edit a value
+                 or add a `sweep:` block; no Python to touch.
+run.py           ONE runner for every exercise:  run.py configs/exNN_*.yaml
+exercises/       The same exercises as annotated Python scripts — read these to
+                 see each theory expressed in code (they also run standalone).
 solutions/       TEACHER files.  Fully worked; running them writes the
                  presentation-ready PDFs into docs/figures/.
 ```
 
-If you are a **student**, live in `exercises/` (and read `docs/`).
+If you are a **student**, run the exercises from `configs/` with `run.py`, and
+read `docs/` (plus `exercises/` to see the code).
 If you are the **instructor**, run `solutions/` to regenerate every figure.
 
 ---
@@ -61,14 +65,14 @@ If you are the **instructor**, run `solutions/` to regenerate every figure.
 ```bash
 uv venv                 # create .venv
 uv pip install -e .     # install the gr package (editable)
-uv run python exercises/ex01_biology_and_mechanics.py
+uv run python run.py configs/ex02_kinematic_growth.yaml
 ```
 
 or activate the environment once and use plain `python`:
 
 ```bash
 source .venv/bin/activate
-python exercises/ex01_biology_and_mechanics.py
+python run.py configs/ex02_kinematic_growth.yaml
 ```
 
 ### Option B — conda
@@ -77,11 +81,41 @@ python exercises/ex01_biology_and_mechanics.py
 conda env create -f environment.yml
 conda activate growth-remodeling
 pip install -e .
-python exercises/ex01_biology_and_mechanics.py
+python run.py configs/ex02_kinematic_growth.yaml
 ```
 
-Dependencies are only **NumPy, SciPy, and Matplotlib**. No LaTeX install is
-needed (figures use Matplotlib mathtext).
+Dependencies are only **NumPy, SciPy, Matplotlib, and PyYAML**. No LaTeX install
+is needed (figures use Matplotlib mathtext).
+
+---
+
+## Running an exercise & doing a parametric study
+
+Each exercise is a small **YAML input file** in `configs/`; one `run.py` drives
+them all. You never edit Python — change a value in the file, or override it on
+the command line:
+
+```bash
+# run an exercise as-is:
+uv run python run.py configs/ex02_kinematic_growth.yaml
+
+# parametric study — one curve per value (overrides the file's sweep: block):
+uv run python run.py configs/ex02_kinematic_growth.yaml \
+    --sweep simulate.k_g=0.02,0.05,0.2
+
+# change any single value (dotted path into the config):
+uv run python run.py configs/ex03_constrained_mixture.yaml \
+    --set model.constituents.collagen.gain=3.0
+
+# save the figure instead of showing it:
+uv run python run.py configs/ex06_stability.yaml --save out/ex06.pdf --no-show
+```
+
+A config picks the `study` (`transient`, `compare`, `equilibrium`, or `map`),
+the `theory`, `geometry`, `insult`, and parameters; a `sweep:` block (or
+`--sweep`) turns any parameter into an overlaid study. See the comments in each
+`configs/*.yaml` for what to try, and the schema at the top of
+[`src/gr/scenario.py`](src/gr/scenario.py).
 
 ---
 
@@ -91,25 +125,25 @@ needed (figures use Matplotlib mathtext).
 
 1. `docs/01_biology.md` — why tissues grow and remodel (no maths).
 2. `docs/02_finite_strain.md` — the minimum continuum mechanics.
-   → `exercises/ex01_biology_and_mechanics.py`
+   → `exercises/ex01_biology_and_mechanics.py` (a materials plot)
 3. `docs/03_kinematic_growth.md` — multiplicative growth.
-   → `exercises/ex02_kinematic_growth.py`
+   → `run.py configs/ex02_kinematic_growth.yaml`
 4. `docs/04_constrained_mixture.md` — turnover & heredity integrals.
-   → `exercises/ex03_constrained_mixture.py`
+   → `run.py configs/ex03_constrained_mixture.yaml`
 
 *— 3-minute break —*
 
 **Part 2 (90 min) — approximations, equilibrium, and stability**
 
 5. `docs/05_homogenized_cmm.md` — temporal homogenization.
-   → `exercises/ex04_homogenized_vs_full.py`
+   → `run.py configs/ex04_homogenized_vs_full.yaml`
 6. `docs/06_equilibrated_cmm.md` — skip the transient.
-   → `exercises/ex05_equilibrated.py`
+   → `run.py configs/ex05_equilibrated.yaml`
 7. `docs/07_stability.md` — the capstone: adaptation vs. aneurysm.
-   → `exercises/ex06_stability_and_aneurysm.py`
+   → `run.py configs/ex06_stability.yaml`
 
-Each exercise has a matching `solutions/figXX_*.py` that produces the slide
-figure for that step.
+Each step has a matching annotated script in `exercises/` (the theory in code)
+and a `solutions/figXX_*.py` that produces the slide figure.
 
 ---
 

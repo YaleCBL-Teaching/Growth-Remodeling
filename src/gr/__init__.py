@@ -10,7 +10,7 @@ Layout (see the repository README):
 The four theories, each a ``simulate(...)`` (or ``solve(...)``) taking a shared
 :class:`~gr.geometry.Geometry` and :class:`~gr.parameters.Insult`:
 
-    from gr import bar, artery, Model, Insult, HYPERTENSION, ANEURYSM
+    from gr import artery, Model, Insult, HYPERTENSION, ANEURYSM
     from gr import kinematic_growth, constrained_mixture, homogenized_cmm, equilibrated_cmm
 
     model = Model()
@@ -24,8 +24,9 @@ from . import (
     equilibrated_cmm,
     homogenized_cmm,
     kinematic_growth,
+    scenario,
 )
-from .geometry import Geometry, artery, bar
+from .geometry import Geometry, artery
 from .history import Result
 from .parameters import (
     ANEURYSM,
@@ -44,11 +45,11 @@ __all__ = [
     "ANEURYSM",
     "default_constituents",
     "Geometry",
-    "bar",
     "artery",
     "Result",
     "kinematic_growth",
     "constrained_mixture",
     "homogenized_cmm",
     "equilibrated_cmm",
+    "scenario",
 ]

@@ -2,9 +2,9 @@ r"""
 Shared parameters for every model and every scenario.
 
 The whole point of this file is that the four theories (kinematic growth, full /
-homogenized / equilibrated constrained mixture) and the two geometries (1D bar,
-thin-walled artery) all read the **same** numbers.  Change a value here and it
-changes everywhere — so a comparison plot is always apples-to-apples.
+homogenized / equilibrated constrained mixture) all read the **same** numbers for
+the thin-walled artery.  Change a value here and it changes everywhere — so a
+comparison plot is always apples-to-apples.
 
 -------------------------------------------------------------------------------
 The homeostatic (set-point) trick
