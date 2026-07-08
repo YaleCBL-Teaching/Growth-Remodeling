@@ -2,98 +2,141 @@
 %  SECTION 4 — Full constrained mixture
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} The constrained mixture model}
+  \vfill\begin{center}{\Huge\color{YaleBlue} The Constrained Mixture Model}
   \end{center}\vfill
 \end{frame}
 
+% ---- the idea: track every cohort (start of CMM) ---------------------------
 \begin{frame}[t]{The Idea: Track Every Cohort}
-  Constituents are \textbf{constrained to deform together}, but each carries its
-  \emph{own} natural configuration and is continuously \textbf{produced and
-  removed}. The tissue therefore carries a whole \emph{history} of cohorts ---
-  faithful, and expensive.
+  All constituents are \textbf{constrained to deform together}, but each carries
+  its \emph{own} natural configuration and is continuously \textbf{produced and
+  removed} --- so the tissue holds a whole \emph{history} of cohorts.
   \vfill
-  \begin{center}\humphreygr[1.02]\end{center}
+  \begin{center}\humphreygr[0.70]\end{center}
+  \vspace{-0.1em}
+  \begin{center}\footnotesize\color{black!70}
+  $\kappa$: configuration \;\textbullet\; $\tau$: deposition time \;\textbullet\;
+  $s$: current time \;\textbullet\; $\alpha\!\in\!\{e,c,m\}$: constituent
+  \;\textbullet\; $\bm{G}^{\alpha}$: deposition stretch \;\textbullet\;
+  $\bm{F}^{\alpha}_{n(\tau)}$: constituent deformation
+  \end{center}
   \vfill
   \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
+% ---- constituents & mass fractions (moved from biology) + deposition stretch
+\begin{frame}[t]{The Cast of Characters: Constituents \& Mass Fractions}
+  \footnotesize
+  The wall is a mixture of three constituents, each with a reference \textbf{mass
+  fraction} $\phi_0^{\alpha}$ ($\sum_\alpha\phi_0^{\alpha}=1$) and a
+  \textbf{deposition stretch} $G^{\alpha}$ --- the prestretch cells lay it down at,
+  which \emph{defines} its homeostatic stress
+  $\sigma_h^{\alpha}=\sigma^{\alpha}(G^{\alpha})$; the mixture set-point is
+  $\bar\sigma_h=\sum_\alpha\phi_0^{\alpha}\sigma_h^{\alpha}$.
+  \vspace{0.3em}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{center}
+  \begin{tabular}{@{}p{0.15\textwidth}p{0.28\textwidth}ccp{0.24\textwidth}@{}}
+    \toprule
+    \textbf{Constituent} & \textbf{Role} & $\phi_0$ & $G^{\alpha}$ & \textbf{law; turnover $1/k_d$}\\
+    \midrule
+    \textbf{\color{YaleBlue}Elastin} & bears load at low stretch & 0.30 & 1.40 &
+      neo-Hooke; \textbf{none} (decades)\\
+    \textbf{\color{YaleBlue}Collagen} & stiff, crimped; anti-rupture & 0.35 & 1.08 &
+      Fung; fast ($\sim$20\,d)\\
+    \textbf{\color{YaleBlue}Smooth muscle} & passive + active; the sensor & 0.35 & 1.20 &
+      Fung; fast ($\sim$20\,d)\\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{0.3em}
+  \textbf{Elastin cannot be renewed} ($k_d^e=0$) --- its loss drives
+  \emph{aneurysm}; collagen \& SMC \textbf{turn over}, so the wall can
+  \emph{adapt}.
+  \srccite{Humphrey, Eberth, Dye, Gleason, J Biomech (2009)}
+\end{frame}
+
+% ---- why "constrained": one shared tissue stretch --------------------------
+\begin{frame}[t]{Why ``Constrained''? Every Cohort Shares One Stretch}
+  A cohort of $\alpha$ deposited at $\tau$ is laid down at $G^{\alpha}$ and then
+  stretches \emph{with the mixture}: every constituent and cohort is
+  \textbf{constrained} to the same tissue stretch $\lambda(t)$.
+  \dlab{general form --- constituent-specific deformation}
+  \giveneq{\bm{F}^{\alpha}_{n(\tau)}(t) = \bm{F}(t)\,\bm{F}^{-1}(\tau)\,\bm{G}^{\alpha}.}
+  \zlab{0D reduction --- scalar elastic stretch}
+  \slboxeq{2.2em}{eq:cohort}{\lambda_e^{\alpha}(t,\tau) = G^{\alpha}\,\frac{\lambda(t)}{\lambda(\tau)}}
+  The shared $\lambda(t)$ is the \emph{constraint}. At birth ($t=\tau$) the cohort
+  sits at $G^{\alpha}$ (hence $\sigma_h^{\alpha}$); older cohorts measure the same
+  $\lambda$ from an earlier $\lambda(\tau)$.
+  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+\end{frame}
+
+\begin{frame}[t]{Mixture Stress = Mass-Weighted Sum}
+  Each constituent contributes in proportion to its mass --- the \textbf{rule of
+  mixtures}, summed over all surviving cohorts (all evaluated at the \emph{shared}
+  $\lambda$):
+  \slboxeq{3.2em}{eq:mixstress}{\bar\sigma(t) = \frac{1}{M_{\text{tot}}}\sum_\alpha\!\left[
+     M^{\alpha}(0)\,q^{\alpha}(t,0)\,\sigma^{\alpha}\!\big(G^{\alpha}\lambda(t)\big)
+     + \int_0^t\! m^{\alpha}(\tau)\,q^{\alpha}(t,\tau)\,\sigma^{\alpha}\!\big(\lambda_e^{\alpha}\big)\,\dd\tau\right]}
+  Each step evaluates this sum, then solves
+  $\bar\sigma(\lambda)=\sigma_{\text{req}}(\lambda)$ for the current stretch. The
+  surviving fraction $q^{\alpha}$ and production rate $m^{\alpha}$ come from the mass
+  balance next.
+  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+\end{frame}
+
 \begin{frame}[t]{Mass Balance --- The Heredity Integral}
-  The mass of a turnover constituent $k$ now is the surviving remnant of the
-  initial material plus everything produced since, each aged by a survival
-  function:
-  \slboxeq{2.6em}{eq:heredity}{M^k(t) = M^k(0)\,q^k(t,0)
-    + \int_0^t m^k(\tau)\,q^k(t,\tau)\,\dd\tau}
+  Each turnover constituent's mass is the surviving initial material plus all it
+  has produced since, aged by a survival function:
+  \slboxeq{2.6em}{eq:heredity}{M^{\alpha}(t) = M^{\alpha}(0)\,q^{\alpha}(t,0)
+    + \int_0^t m^{\alpha}(\tau)\,q^{\alpha}(t,\tau)\,\dd\tau}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \textbf{Survival} (Poisson removal at rate $k_d^k$):
-      \giveneq{q^k(t,\tau) = e^{-k_d^k (t-\tau)}.}
-      The index $d$ denotes \emph{degradation}: $k_d^k$ is the mass removal rate of
-      constituent $k$, so $1/k_d^k$ is its mean lifetime; elastin does not turn over
-      ($k_d^e=0$).
+      \textbf{Survival} (Poisson removal, rate $k_d^{\alpha}$):
+      $\;q^{\alpha}(t,\tau)=e^{-k_d^{\alpha}(t-\tau)}$, mean lifetime $1/k_d^{\alpha}$
+      (elastin: $k_d^e=0$).
     \end{column}
     \begin{column}{0.5\textwidth}
-      \textbf{Production} $\propto$ current mass, driven by the tissue-stress
-      stimulus that vanishes at homeostasis:
-      \giveneq{m^k = k_d^k M^k\,\Upsilon,\quad
-        \Upsilon = 1 + K_\sigma^k\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right).}
+      \textbf{Production} $\propto$ mass, driven by stress:
+      $\;m^{\alpha}=k_d^{\alpha}M^{\alpha}\,\Upsilon$,
+      $\;\Upsilon=1+K_\sigma^{\alpha}\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right)$.
     \end{column}
   \end{columns}
   \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
-\begin{frame}[t]{Each Cohort Remembers Its Birth Configuration}
-  A cohort of $k$ deposited at time $\tau$ is laid down at deposition stretch
-  $G^k$ and thereafter stretches \emph{with} the mixture.
-  \dlab{general form --- constituent-specific deformation (Humphrey Fig.\ 1)}
-  \giveneq{\bm{F}^{k}_{n(\tau)}(t) = \bm{F}(t)\,\bm{F}^{-1}(\tau)\,\bm{G}^{k}.}
-  \zlab{reduction used here --- scalar elastic stretch}
-  \slboxeq{2.2em}{eq:cohort}{\lambda_e^{k}(t,\tau) = G^k\,\frac{\lambda(t)}{\lambda(\tau)}}
-  At birth ($t=\tau$) it sits exactly at $G^k$ (hence $\sigma_h^k$). This is the
-  \textbf{constrained-mixture constraint}: every constituent shares the current
-  deformation, but each cohort measures it from a different starting point.
-  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
-\end{frame}
-
-\begin{frame}[t]{Mixture Stress = History Integral}
-  The mixture Cauchy stress is the mass-weighted sum over \emph{all} surviving
-  cohorts (rule of mixtures):
-  \slboxeq{3.2em}{eq:mixstress}{\bar\sigma(t) = \frac{1}{M_{\text{tot}}}\sum_k\!\left[
-     M^k(0)\,q^k(t,0)\,\sigma^k\!\big(G^k\lambda(t)\big)
-     + \int_0^t\! m^k(\tau)\,q^k(t,\tau)\,\sigma^k\!\Big(G^k\tfrac{\lambda(t)}{\lambda(\tau)}\Big)\dd\tau\right]}
-  Each time step discretises the mass balance and this sum over stored cohorts,
-  then solves $\bar\sigma(\lambda)=\sigma_{\text{req}}(\lambda)$ for the current
-  stretch. Elastin contributes a single, non-renewing cohort (optionally degraded
-  by an insult).
-  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
-\end{frame}
-
-\begin{frame}[t]{What It Buys You: Stability Is \emph{Predicted}}
-  \emph{Nothing} prescribes the outcome --- adaptation or dilation \textbf{emerges}
-  from the turnover dynamics and the insult. Under hypertension the model grows
-  collagen and muscle while elastin is diluted, and tissue stress returns to
-  homeostatic on its own.
+% ---- quick question: computational cost of the heredity integral -----------
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Quick Check --- How Expensive Is This?}
+    \qq{At each of $N$ time steps the mixture stress sums over \emph{all} cohorts
+    deposited so far. How does the total cost scale with $N$?}
+    \qhint{Step $k$ re-sums $\sim k$ stored cohorts; add up $\sum_{k=1}^{N}k$.}
+  \end{yourturnbox}
   \vfill
-  {\color{AccentRed} The price: the history integrals make the model $O(N^2)$ in
-  time steps --- the motivation for the homogenized model.}
+  \begin{center}
+  $\displaystyle\sum_{k=1}^{N} k=\frac{N(N+1)}{2}=O(N^2)$
+  \end{center}
+  \vfill
+  \begin{center}\small
+  The full model stores and re-sums the \emph{entire} history --- $O(N^2)$ work.
+  Removing that cost is exactly what the \textbf{homogenized} model does next.
+  \end{center}
 \end{frame}
 
 
 % ---- example + run: ex03 ---------------------------------------------------
 \begin{frame}[t]{}
   \begin{setupbox}{Example --- turnover under hypertension (\texttt{ex03})}
-    \sprob{The same artery, now resolving constituents that are continuously
-    \emph{produced and removed} \eqref{eq:heredity} (elastin is not). Which
-    constituent takes up the load, and does turnover restore the homeostatic
-    stress? The same tissue may \emph{adapt} to hypertension yet \emph{run away}
-    on an aneurysm insult.}
+    \sprob{The same artery, now with collagen \& SMC turning over (elastin does
+    not). Which constituent grows to carry the load, and does turnover restore the
+    set-point? Equilibrium each step:
+    $\bar\sigma(\lambda)=\bar\sigma_h\,\gamma\,\lambda^{2}/m$ (load factor $\gamma$,
+    mass ratio $m$).}
     \srun{\scodeline{uv run python run.py configs/ex03\_constrained\_mixture.yaml}
-      The file sets each constituent's \texttt{turnover\_days} ($1/k_d$) and
-      \texttt{gain} ($K_\sigma$) and the insult. For the aneurysm, swap the insult
-      to \texttt{elastin\_surviving: 0.3}.}
-    \sstudy{Sweep the pressure step (the file's \texttt{sweep:} block), or change
-      a tissue property:
-      \scodeline{... --set model.constituents.collagen.gain=3.0}
-      \scodeline{... --set model.constituents.collagen.turnover\_days=70}}
+      Sets each constituent's \texttt{turnover\_days} ($1/k_d$), \texttt{gain}
+      ($K_\sigma$), and the \texttt{insult} --- hypertension ($\gamma$) or aneurysm
+      (\texttt{elastin\_surviving}).}
+    \sstudy{\scodeline{... --set model.constituents.collagen.gain=3.0}}
   \end{setupbox}
 \end{frame}
 
@@ -115,10 +158,7 @@
     to homeostatic. A severe elastin insult can \textbf{run away}. Faster turnover
     / higher gain reach the new state sooner.
   \end{answerbox}
-  \vspace{-0.3em}
-  \bigfigw{fig03_constrained_mixture.pdf}{0.66\linewidth}{Your run: under
+  \vspace{-0.2em}
+  \bigfigw{fig03_constrained_mixture.pdf}{0.98\linewidth}{Your run: under
   hypertension collagen/muscle grow, elastin dilutes, stress returns to set-point.}
-  \vspace{-0.4em}
-  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} stability is
-  \emph{predicted}, and it \textbf{depends on the insult}.\end{center}
 \end{frame}

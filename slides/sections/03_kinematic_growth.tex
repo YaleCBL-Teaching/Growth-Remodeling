@@ -2,7 +2,7 @@
 %  SECTION 3 — Kinematic growth
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Kinematic growth}
+  \vfill\begin{center}{\Huge\color{YaleBlue} Kinematic Growth}
   \end{center}\vfill
 \end{frame}
 
@@ -15,8 +15,9 @@
   \zlab{reduction used here --- scalar stretches}
   \slboxeq{2.2em}{eq:split}{\lambda = \lambda_e \,\lambda_g}
   Growth is \emph{one} inelastic stretch $\lambda_g$; the elastic stretch
-  $\lambda_e=\lambda/\lambda_g$ is what the constituent laws see. (Constrained
-  mixtures will later give each cohort its own natural configuration.)
+  $\lambda_e=\lambda/\lambda_g$ is the only part the material law sees. Here the
+  wall is treated as a \emph{single} material --- no separate constituents yet.
+  \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
 \begin{frame}[t]{The Idea, and the Kinematics}
@@ -38,140 +39,72 @@
   \slboxeq{2.6em}{eq:growthtensor}{\bm{F}_g = \bm{I} + (\theta-1)\,
     \bm{e}_f\!\otimes\bm{e}_f
     \;=\;\mathrm{diag}(1,\,1,\,\theta)}
-  \zlab{the one scalar that actually evolves}
-  \giveneq{\theta = \frac{M}{M_0}\ \ (\text{mass / volume ratio}),\qquad
-    \det\bm{F}_g=\theta.}
-  Here $\bm{e}_f$ is the growth direction --- it could be the radial
-  (wall-thickening) direction, or a fiber direction. Everything about the growth
+  \zlab{0D-specific reduction --- the growth tensor becomes one stretch}
+  \giveneq{\bm{F}_g\ \longrightarrow\ \lambda_g\ \ (\text{scalar growth stretch}),
+    \qquad \theta=\det\bm{F}_g=M/M_0.}
+  Here $\bm{e}_f$ is the growth direction (e.g.\ wall-thickening). The growth
   \emph{pattern} is fixed a priori; only the scalar \textbf{growth stretch}
-  $\theta$ evolves in time.
+  $\lambda_g$ (equivalently the mass ratio $\theta$) evolves in time.
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
 \begin{frame}[t]{The Growth Law}
   The growth \emph{pattern} $\bm{F}_g$ is fixed; the growth law evolves its single
-  scalar $\theta$ to null the stress deviation from the set-point (first-order,
-  production $\propto$ current mass).
-  \dlab{general form --- rate of the growth tensor via its scalar}
-  \giveneq{\dot{\bm{F}}_g = \dot\theta\,\bm{e}_f\!\otimes\bm{e}_f,\qquad
-    \dot\theta = k_g\,\theta\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right).}
-  \zlab{scalar growth law --- the only unknown in $\bm{F}_g$}
+  scalar to null the stress deviation from the set-point (first-order, production
+  $\propto$ current mass). Since $\bm{F}_g$ is fixed by $\theta$, its rate
+  $\dot{\bm{F}}_g=\dot\theta\,\bm{e}_f\!\otimes\bm{e}_f$ reduces to \emph{one}
+  scalar ODE --- the \emph{same} law in the full 3D tensor model and the 0D
+  reduction (both track the scalar $\theta$):
   \slboxeq{2.6em}{eq:kingrowth}{\frac{\dd\theta}{\dd t}
     = k_g\,\theta\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right)}
   The set-point $\bar\sigma_h$ is \textbf{prescribed}: wherever growth stops
-  ($\dot\theta=0$), stress is homeostatic \emph{by construction}. At each instant
-  $\lambda$ follows from equilibrium
-  $\bar\sigma(\lambda)=\sigma_{\text{req}}(\lambda,\theta)$.
+  ($\dot\theta=0$), stress is homeostatic \emph{by construction}. So the model can
+  only \emph{impose} its set-point, never \emph{predict} stability --- that is
+  what the mixture theories add.
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
-\begin{frame}[t]{Stability Is Imposed, Not Predicted}
-  Is the homeostatic state $\theta^*$ stable? Perturb it, $\theta=\theta^*+\delta$,
-  and linearise the growth law \eqref{eq:kingrowth} about $\theta^*$ (where
-  $\bar\sigma=\bar\sigma_h$):
-  \giveneq{\dot\delta = \underbrace{k_g\,\theta^*\,
-    \frac{1}{\bar\sigma_h}\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}}_{\displaystyle =:\,\alpha}\;\delta.}
-  The perturbation decays ($\delta\to0$, \textbf{stable}) iff $\alpha<0$, i.e.
-  \slboxeq{2.2em}{eq:stabkin}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
-    \quad\Longleftrightarrow\quad\text{adding mass \emph{lowers} the stress it must carry.}}
-  For the intact artery this holds, but a strong enough insult flips the sign
-  (Laplace $\bar\sigma\propto\lambda^2$) --- then $\alpha>0$ and growth runs away.
-  The set-point is \emph{prescribed}, so the model can only \emph{impose}
-  stability, never \emph{predict} it.
-\end{frame}
-
-% ---- shared setup for ALL coding exercises ---------------------------------
-\begin{frame}[t]{The \texttt{gr} Toolbox --- Shared Setup for Every Coding Exercise}
-  \footnotesize
-  Every coding exercise reuses \emph{one} problem definition, so the four theories
-  are compared on identical numbers. A \texttt{Model} bundles the constituents with
-  the homeostatic pressure $P_h=13.3$~kPa ($\sim$100~mmHg) and reference mid-wall
-  radius $R=1$~mm; the reference thickness follows from the Laplace balance
-  $H=P_hR/\bar\sigma_h$ \eqref{eq:laplace}.
-  \vspace{-0.2em}
-  \begin{columns}[T]
-    \begin{column}{0.56\textwidth}
-      \textbf{Default arterial constituents} (mass fraction $\phi_0$, deposition
-      stretch $G$, law, turnover rate $k_d$, gain $K_\sigma$):
-      \renewcommand{\arraystretch}{1.15}
-      \begin{tabular}{@{}lccl@{}}
-        \toprule
-        & $\phi_0$ & $G$ & law, $k_d$\,[1/d], $K_\sigma$\\
-        \midrule
-        elastin  & 0.30 & 1.40 & neo-Hooke $c{=}90$; $k_d{=}0$\\
-        collagen & 0.35 & 1.08 & Fung $c_1{=}250,c_2{=}8$; $\tfrac1{20}$; 1\\
-        smc      & 0.35 & 1.20 & Fung $c_1{=}120,c_2{=}3$; $\tfrac1{20}$; 1\\
-        \bottomrule
-      \end{tabular}
-      \par\smallskip
-      Set-point per constituent $\sigma_h^k=\sigma^k(G^k)$; mixture
-      $\bar\sigma_h=\sum_k\phi_0^k\sigma_h^k$. Elastin never turns over
-      ($k_d^e=0$) and is the only \emph{degradable} constituent (aneurysm).
-    \end{column}
-    \begin{column}{0.44\textwidth}
-      \textbf{Geometry \& equilibrium.} At every step the supplied mixture stress
-      must equal the Laplace required stress
-      \giveneq{\bar\sigma(\lambda)=\bar\sigma_h\,\gamma\,\frac{\lambda^{2}}{m},}
-      solved for $\lambda$ by a bracketed root find on $[0.2,20]$; \emph{no root}
-      $\Rightarrow$ runaway. Here $m=M/M_0$ is the mass ratio, $\gamma$ the load
-      factor, and the exponent 2 is the Laplace term $\bar\sigma=Pa/h$.
-      \par\smallskip
-      \textbf{Insult.} \texttt{Insult} ramps a step from \texttt{t\_on} over
-      \texttt{ramp} days: \texttt{pressure\_factor} $\gamma$ (hypertension) or
-      \texttt{elastin\_surviving} $s$ (aneurysm).
-    \end{column}
-  \end{columns}
-  \vspace{-0.1em}
-  \textbf{Running an exercise.} Each exercise is a small YAML \emph{input file};
-  one runner drives them all --- no Python to edit:
-  \scodeline{uv run python run.py configs/exNN\_*.yaml}
-  The file picks the \texttt{theory}, \texttt{geometry}, \texttt{insult} and
-  parameters; the run prints $\bar\sigma/\bar\sigma_h$, mass and \texttt{diverged}
-  and plots the history. For a \textbf{parametric study}, list values in the
-  file's \texttt{sweep:} block or on the command line:
-  \scodeline{... --sweep insult.pressure\_factor=1.2,1.5,2.0 \ \ \# one curve per value}
-  \scodeline{... --set\ \ \ model.constituents.collagen.gain=3.0 \ \# change any one value}
-\end{frame}
-
-% ---- example + run: ex02 ---------------------------------------------------
+% ---- problem setup: ex02 ---------------------------------------------------
 \begin{frame}[t]{}
   \begin{setupbox}{Example --- hypertensive artery (\texttt{ex02})}
     \sprob{A pressurised artery is made \emph{hypertensive} by a sustained
-    $+50\%$ pressure step. Does the wall thicken back to its \emph{prescribed}
-    homeostatic stress \eqref{eq:kingrowth}, or run away once the pressure step is
-    large enough?}
-    \srun{\scodeline{uv run python run.py configs/ex02\_kinematic\_growth.yaml}
-      The file sets \texttt{theory: kinematic\_growth}, the insult and
-      \texttt{k\_g}. Watch $\bar\sigma/\bar\sigma_h$ return to 1 while $\theta$
-      climbs to the pressure factor.}
-    \sstudy{Overlay several growth rates (the file's \texttt{sweep:} block), or
-      push the pressure until it diverges:
-      \scodeline{... --sweep simulate.k\_g=0.02,0.05,0.2\ \ \ \ \ \# vary the gain}
-      \scodeline{... --set insult.pressure\_factor=3.0\ \ \ \ \ \ \ \# harder insult}}
+    pressure step. Kinematic growth thickens the wall --- does the wall stress
+    $\bar\sigma/\bar\sigma_h$ return to the \emph{prescribed} set-point?}
   \end{setupbox}
+\end{frame}
+
+% ---- how to run (concise), placed AFTER the problem setup ------------------
+\begin{frame}[t]{Running the Exercises}
+  One runner drives every exercise --- no Python to edit. Run the input file:
+  \scodeline{uv run python run.py configs/ex02\_kinematic\_growth.yaml}
+  \textbf{Results:} the key numbers ($\bar\sigma/\bar\sigma_h$, mass,
+  \texttt{diverged}) print to the terminal, and the time history opens as a plot.
+  \vspace{0.7em}\par
+  \textbf{Parametric study} --- one curve per value, from the command line:
+  \scodeline{... --sweep insult.pressure\_factor=1.5,2,3}
+  Every parameter in the file can be swept or overridden the same way.
 \end{frame}
 
 % ---- interactive coding exercise: ex02 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Kinematic growth}
-    \qq{Does the artery reach the \emph{prescribed} homeostatic set-point --- and
-    how large a pressure step does it take to tip it into runaway instead?}
-    \qhint{Watch $\bar\sigma/\bar\sigma_h$ settle at 1 while $\theta$ climbs to the
-    pressure factor. The Laplace $\lambda^2$ term is what lets the artery tip over
-    once $\dd\bar\sigma/\dd\theta$ flips sign.}
+    \qq{Does the wall stress return to the prescribed set-point? Try larger
+    pressure steps --- does the outcome ever change?}
+    \qhint{$\bar\sigma/\bar\sigma_h$ settles at 1 while $\theta$ climbs to the
+    pressure factor. Under pure hypertension it \emph{always} adapts --- runaway
+    needs the mixture / aneurysm story (later).}
   \end{yourturnbox}
 \end{frame}
 
 \begin{frame}[t]{}
   \begin{answerbox}{Kinematic growth}
-    The stress plateau \emph{always} lands on the prescribed set-point; the artery
-    (Laplace $\lambda^2$) tips into runaway once \texttt{PRESSURE\_FACTOR} is large
-    enough --- exactly when $\dd\bar\sigma/\dd\theta$ turns positive.
+    The stress plateau \emph{always} lands on the prescribed set-point --- the wall
+    simply thickens more for a larger pressure step. Kinematic growth
+    \emph{imposes} stability; it cannot predict runaway.
   \end{answerbox}
+  \vspace{-0.2em}
+  \bigfigw{fig02_kinematic_growth.pdf}{0.98\linewidth}{}
   \vspace{-0.3em}
-  \bigfigw{fig02_kinematic_growth.pdf}{0.66\linewidth}{Your numerical experiment:
-  convergence to the \emph{prescribed} set-point, or divergence.}
-  \vspace{-0.4em}
-  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} reaches the a-priori
-  prescribed homeostasis, \emph{or} it is unstable --- nothing in between.\end{center}
+  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} reaches the
+  a-priori prescribed homeostasis --- stability is built in, not predicted.\end{center}
 \end{frame}
