@@ -6,17 +6,17 @@
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Throw Away the History, Keep Its Average}
-  \textbf{Temporal homogenization} replaces the entire deposition history by a
-  \emph{single evolving mean natural configuration} per constituent --- two ODEs
-  per constituent, cost $O(N^2)\to O(N)$.
-  \dlab{general form (Cyron 2016) --- mean natural-config tensor}
-  \zlab{reduction --- scalar mean stretch}
-  \vspace{-0.2em}
-  \giveneq{\bm{F}^k_{\text{e}} = \bm{F}(s)\,\bm{F}^{k}_{n}(s)^{-1}
-    \qquad\longrightarrow\qquad \lambda_e^k = \frac{\lambda}{\lambda_n^k}.}
-  \vspace{-0.2em}
-  \begin{center}\homogmap[0.70]\end{center}
+\begin{frame}[t]{Homogenize: One Mean Natural Configuration per Constituent}
+  The full model tracks \emph{every} past cohort with its own natural
+  configuration ($O(N^2)$). \textbf{Temporal homogenization} instead gives each
+  constituent a \emph{single, evolving} mean natural configuration --- its whole
+  mass shares one homogenized elastic deformation, so two ODEs per constituent
+  replace the entire history ($O(N)$).
+  \dlab{general form (Cyron 2016) --- homogenized elastic deformation}
+  \giveneq{\bm{F}^{\alpha}_{e}(s) = \bm{F}(s)\,\big[\bm{F}^{\alpha}_{n}(s)\big]^{-1}}
+  \zlab{0D reduction --- scalar mean natural stretch}
+  \giveneq{\lambda_e^{\alpha} = \lambda/\lambda_n^{\alpha}}
+  \begin{center}\homogmap[0.56]\end{center}
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
@@ -30,18 +30,18 @@
       \footnotesize
       \renewcommand{\arraystretch}{1.5}
       \begin{tabular}{@{}ll@{}}
-        $\sigma^i$ & constituent stress (the load)\\[2pt]
-        $\mathbb{C}^{i}$ & elastic stiffness (spring)\\[2pt]
-        $\dot\varrho_0^{\,i}/\varrho_0^{\,i}+1/T^i$ & turnover + degradation (dashpot)\\[2pt]
-        $\bar\sigma^{i}_{\text{pre}}$ & deposition prestress (motor)\\
+        $\sigma^{\alpha}$ & constituent stress (the load)\\[2pt]
+        $\mathbb{C}^{\alpha}$ & elastic stiffness (spring)\\[2pt]
+        $\dot\varrho_0^{\alpha}/\varrho_0^{\alpha}+1/T^{\alpha}$ & turnover + degradation (dashpot)\\[2pt]
+        $\bar\sigma^{\alpha}_{\text{pre}}$ & deposition prestress (motor)\\
       \end{tabular}
     \end{column}
     \begin{column}{0.48\textwidth}
       \footnotesize \textbf{Back to the full CMM (0D):}
       \begin{itemize}\itemsep3pt
-        \item spring $\leftrightarrow$ constituent law $\sigma^k(\lambda_e^k)$
-        \item dashpot $\leftrightarrow$ mass turnover / removal $k_d^k$
-        \item motor $\leftrightarrow$ deposition stretch $G^k$
+        \item spring $\leftrightarrow$ constituent law $\sigma^{\alpha}(\lambda_e^{\alpha})$
+        \item dashpot $\leftrightarrow$ mass turnover / removal $k_d^{\alpha}$
+        \item motor $\leftrightarrow$ deposition stretch $G^{\alpha}$
       \end{itemize}
     \end{column}
   \end{columns}
@@ -49,40 +49,46 @@
 \end{frame}
 
 \begin{frame}[t]{Growth (Mass) and Remodeling (Natural Configuration)}
-  \textbf{Growth}: mass production $\propto$ current mass, driven by stress
-  deviation. \textbf{Remodeling}: the mean natural configuration evolves as new mass
-  enters at $\lambda/G^k$ and old mass leaves at the current value.
-  \dlab{general form --- mass \& mean natural-config \emph{tensor}}
-  \vspace{-0.2em}
-  \giveneq{\dot M^k = M^k\,(K_\sigma^k k_d^k)\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right),
-    \qquad \dot{\bm{F}}_n^k = f\big(\bm{F},\bm{F}_n^k;\,m^k,M^k\big).}
-  \zlab{reduction --- scalar mass and scalar natural stretch}
-  \vspace{-0.2em}
+  Two 0D ODEs per constituent replace the cohort history. \textbf{Growth}: mass
+  production $\propto$ mass, driven by the tissue-stress deviation. \textbf{Remodeling}:
+  new mass enters at natural stretch $\lambda/G^{\alpha}$, old mass leaves at the
+  current $\lambda_n^{\alpha}$; mixing the two at the turnover rate evolves the mean.
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
-      \slboxeq{2.2em}{eq:homog_mass}{\frac{\dd M^k}{\dd t}
-        = M^k K_\sigma^k k_d^k\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right)}
+      \zlab{growth --- mass}
+      \slboxeq{2.2em}{eq:homog_mass}{\frac{\dd M^{\alpha}}{\dd t}
+        = M^{\alpha} K_\sigma^{\alpha} k_d^{\alpha}\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right)}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \slboxeq{2.2em}{eq:homog_remodel}{\frac{\dd\lambda_n^k}{\dd t}
-        = \frac{m^k}{M^k}\!\left(\frac{\lambda}{G^k}-\lambda_n^k\right)}
+      \zlab{remodeling --- mean natural stretch}
+      \slboxeq{2.2em}{eq:homog_remodel}{\frac{\dd\lambda_n^{\alpha}}{\dd t}
+        = \frac{m^{\alpha}}{M^{\alpha}}\!\left(\frac{\lambda}{G^{\alpha}}-\lambda_n^{\alpha}\right)}
     \end{column}
   \end{columns}
-  \vspace{0.2em}
-  Holding $\lambda$ fixed, remodeling relaxes constituent stress exponentially to
-  $\sigma_h^k$ ($\sim 1/k_d$) --- not to zero, but to a prestress.
+  \vspace{0.3em}
+  with production $m^{\alpha}=k_d^{\alpha}M^{\alpha}\Upsilon^{\alpha}$. Holding
+  $\lambda$ fixed, remodeling relaxes each constituent's stress to its prestress
+  $\sigma_h^{\alpha}$ (time constant $\sim\!1/k_d$) --- the Maxwell-with-motor
+  behaviour.
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
-\begin{frame}[t]{It Tracks the Full Model Closely --- Much Cheaper}
-  Two ODEs per constituent replace the full deposition history. The homogenized
-  trajectory sits almost on the full constrained mixture, while kinematic growth
-  under-responds to elastin loss --- it grows constituents in lockstep and cannot
-  remodel their natural configurations individually.
+\begin{frame}[t]{}
+  \begin{yourturnbox}{Quick Check --- Why Is the Homogenized Model Cheap?}
+    \qq{Its entire state is $(M^{\alpha},\lambda_n^{\alpha})$ per constituent --- a
+    \emph{fixed} number of values, updated once per step. How does its cost scale
+    with the number of steps $N$, compared with the full model's $O(N^2)$?}
+    \qhint{No growing history to re-sum: constant work per step.}
+  \end{yourturnbox}
   \vfill
-  \begin{center}\color{AccentRed}
-  The homogenized model follows the full model's \emph{time trajectory} closely,
-  at $O(N)$ instead of $O(N^2)$.
+  \begin{center}
+  homogenized: $O(N)$ \qquad vs.\qquad full CMM: $O(N^2)$
+  \end{center}
+  \vfill
+  \begin{center}\small
+  Same time trajectory, far cheaper --- and the fixed state maps onto a
+  viscoelastic (Maxwell-with-motor) material, so it drops into standard
+  finite-element solvers.
   \end{center}
 \end{frame}
 
@@ -93,7 +99,7 @@
     constituent. Under what assumptions should it match the full deposition-history
     model --- and when would you expect them to diverge? \qkind{discuss}}
     \qres{The two remodeling pictures: full heredity integral vs.\ the single mean
-    stretch $\lambda_n^k$ \eqref{eq:homog_remodel}.}
+    stretch $\lambda_n^{\alpha}$ \eqref{eq:homog_remodel}.}
     \qhint{Think about the \emph{spread} of natural configurations across cohorts.
     When is a single mean a good summary of the whole history?}
   \end{yourturnbox}
@@ -102,7 +108,7 @@
 \begin{frame}[t]{}
   \begin{answerbox}{When do homogenized and full agree?}
     They agree when each constituent's cohorts share \emph{nearly the same} natural
-    configuration --- i.e.\ slow, gradual loading where deposition stretch $G^k$ and
+    configuration --- i.e.\ slow, gradual loading where deposition stretch $G^{\alpha}$ and
     turnover are roughly stationary, so the cohort spread stays narrow and the mean
     represents it well. {\color{ABlue}\bfseries They diverge} under fast or strongly
     time-varying insults, when cohorts deposited at very different states coexist and

@@ -2,48 +2,30 @@
 %  SECTION 3 — Finite-strain continuum mechanics
 % ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\Huge\color{YaleBlue} Finite-strain fundamentals}
+  \vfill\begin{center}{\Huge\color{YaleBlue} Finite-Strain Fundamentals}
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Reference and Current Configuration}
-  A body is described in two configurations: the \textbf{reference}
-  $\mathcal{B}_0$ (material points $\bm{X}$) and the \textbf{current}
-  $\mathcal{B}_t$ (spatial points $\bm{x}$). The \textbf{motion}
-  $\bm{x}=\bm{\varphi}(t,\bm{X})$ carries one to the other.
-  \vfill
-  \begin{center}\configmap[1.02]\end{center}
-  \vfill
-\end{frame}
-
-\begin{frame}[t]{Our 0D Model vs.\ the 3D Geometric Model}
-  Everything in this seminar has a \textbf{full 3D} form and a \textbf{reduced 0D}
-  form. We use the \emph{same notation} for both; the badges tell you which:
+\begin{frame}[t]{Reference and Current Configuration --- 3D and 0D}
+  A body is described by a \textbf{reference} $\mathcal{B}_0$ (points $\bm{X}$) and
+  a \textbf{current} $\mathcal{B}_t$ (points $\bm{x}$), related by the motion
+  $\bm{x}=\bm{\varphi}(t,\bm{X})$. Everything here has a \textbf{full 3D} form and a
+  \textbf{reduced 0D} form --- \emph{same notation}, badges tell you which.
   \vfill
   \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.52\textwidth}
       \begin{center}\tagd\ \textbf{3D geometric model}\end{center}
-      \begin{itemize}\small
-        \item full deformation field $\bm{x}=\bm{\varphi}(t,\bm{X})$
-        \item tensor $\bm{F}=\partial\bm{\varphi}/\partial\bm{X}$; stresses
-        $\bm{\sigma},\bm{S}$
-        \item solved on a meshed artery (finite elements)
-      \end{itemize}
+      \begin{center}\configmap[0.62]\end{center}
+      {\footnotesize Full field $\bm{x}=\bm{\varphi}(t,\bm{X})$, tensor
+      $\bm{F}=\partial\bm{\varphi}/\partial\bm{X}$; solved on a meshed artery (FE).}
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{center}\tagz\ \textbf{0D reduced model}\end{center}
-      \begin{itemize}\small
-        \item one dominant direction $\Rightarrow$ scalar stretch $\lambda$
-        \item tensor $\bm{F}\to\lambda$; stress $\bm{\sigma}\to\sigma$
-        \item a handful of ODEs / algebraic equations --- runs in milliseconds
-      \end{itemize}
+      \begin{center}\scalarmap[0.82]\end{center}
+      {\footnotesize One dominant direction $\Rightarrow$ scalar stretch
+      $\lambda$; tensor $\bm{F}\to\lambda$; a few ODEs, runs in milliseconds.}
     \end{column}
   \end{columns}
-  \vfill
-  \begin{center}\small\color{AccentRed}
-  The 0D model is the thin-walled artery ($\sigma_\theta=Pa/h$) reduced to its one
-  load-bearing direction --- ideal for exploring the theories analytically.
-  \end{center}
 \end{frame}
 
 \begin{frame}[t]{The Deformation Gradient}
@@ -63,7 +45,7 @@
   $\bm{F}$ still contains rigid rotation. Removing it gives the \textbf{right
   Cauchy--Green} tensor and the \textbf{Green--Lagrange strain}.
   \dlab{general form --- tensors}
-  \slboxeq{2.4em}{eq:strain}{\bm{C}=\bm{F}^{\!\top}\bm{F},\qquad
+  \slboxeq{2.4em}{eq:strain}{\bm{C}=\bm{F}^{\!\intercal}\bm{F},\qquad
     \bm{E}=\tfrac12\!\left(\bm{C}-\bm{I}\right)}
   \zlab{reduction used here --- one dominant direction}
   \giveneq{C=\lambda^2,\qquad E=\tfrac12(\lambda^2-1).}
@@ -76,7 +58,7 @@
   --- the natural measure for a growing body, since the load-bearing area itself
   changes as the tissue remodels.
   \dlab{general form --- a tensor (from the 2nd Piola--Kirchhoff $\bm{S}$)}
-  \giveneq{\bm{\sigma}=\tfrac1J\,\bm{F}\,\bm{S}\,\bm{F}^{\!\top},\qquad
+  \giveneq{\bm{\sigma}=\tfrac1J\,\bm{F}\,\bm{S}\,\bm{F}^{\!\intercal},\qquad
     \bm{S}=2\,\frac{\partial W}{\partial\bm{C}}.}
   \zlab{reduction used here --- one scalar}
   \giveneq{\bm{\sigma}\ \longrightarrow\ \sigma\ \text{(the value in Laplace,
@@ -99,37 +81,12 @@
   \vspace{-0.6em}\par
   {\footnotesize $I_1=\operatorname{tr}\bm{C}$ (isotropic elastin); $I_4$ reads
   $\bm{C}$ along the collagen fiber --- the one place anisotropy enters.}
-  \zlab{reduction used here --- one stretch $\lambda_e$, scalar $\sigma=\lambda_e\,\dd W/\dd\lambda_e$}
+  \zlab{reduction used here --- one stretch $\lambda$, scalar $\sigma=\lambda\,\dd W/\dd\lambda$}
   \vspace{-0.3em}
-  \slboxeq{2.6em}{eq:fung}{\sigma_{\text{elastin}}=c\,(\lambda_e^2-\lambda_e^{-1}),\qquad
-    \sigma_{\text{collagen}}=c_1\,\lambda_e^2(\lambda_e^2-1)\,e^{\,c_2(\lambda_e^2-1)^2}}
+  \slboxeq{2.6em}{eq:fung}{\sigma_{\text{elastin}}=c\,(\lambda^2-\lambda^{-1}),\qquad
+    \sigma_{\text{collagen}}=c_1\,\lambda^2(\lambda^2-1)\,e^{\,c_2(\lambda^2-1)^2}}
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
 \end{frame}
 
-\begin{frame}[t]{The Deposition Stretch $G^k$}
-  Cells deposit new fibers \textbf{already under tension} at a fixed deposition
-  stretch $G^k>1$. At homeostasis the elastic stretch equals $G^k$, which
-  \emph{defines} the homeostatic stress:
-  \slboxeq{2.4em}{eq:setpoint}{\sigma_h^k := \sigma^k(G^k)}
-  \vfill
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      \begin{center}\textbf{\color{AccentRed} No deposition pre-stress}\end{center}
-      \small New material enters slack ($\sigma_{\text{pre}}=0$); as old fibers are
-      removed, the replacement carries no load --- the homeostatic state
-      \textbf{cannot be maintained}.
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \begin{center}\textbf{\color{YaleBlue} With deposition pre-stress}\end{center}
-      \small New material enters at the homeostatic prestress
-      $\sigma_{\text{pre}}=\sigma_h$ (stretch $G^k$); each replacement immediately
-      bears its share --- the state is \textbf{maintained through turnover}.
-    \end{column}
-  \end{columns}
-  \vfill
-  \begin{center}\small\color{AccentRed}
-  This one convention pins every set-point --- and lets a continuously-renewed
-  tissue hold a steady mechanical state.
-  \end{center}
-  \srccite{deposition-stretch concept: Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
-\end{frame}
+% (The deposition stretch G^alpha is introduced later, in the constrained-mixture
+%  chapter, where turnover first makes it matter.)
