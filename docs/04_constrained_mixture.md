@@ -21,7 +21,7 @@ The mass of a turnover constituent $k$ present now is the surviving remnant of
 what was there initially plus everything produced since, each aged by a survival
 function:
 
-$$M^k(t) = M^k(0)\,q^k(t,0) + \int_0^t m^k(\tau)\,q^k(t,\tau)\,\mathrm{d}\tau.\tag{4.1}$$
+$$M^k(t) = M^k(0)\thinspace q^k(t,0) + \int_0^t m^k(\tau)\thinspace q^k(t,\tau)\thinspace\mathrm{d}\tau.\tag{4.1}$$
 
 - **Survival** (first-order/Poisson removal at rate $k_d^k$):
   $$q^k(t,\tau) = e^{-k_d^k (t-\tau)}.\tag{4.2}$$
@@ -31,8 +31,8 @@ $$M^k(t) = M^k(0)\,q^k(t,0) + \int_0^t m^k(\tau)\,q^k(t,\tau)\,\mathrm{d}\tau.\t
 - **Production** — proportional to current mass, modulated by a stress stimulus
   that vanishes at homeostasis. We drive it by the **tissue** (mixture) stress,
   so all constituents grow together to restore tissue homeostasis:
-  $$m^k(\tau) = k_d^k\,M^k(\tau)\,\Upsilon(\tau),\qquad
-    \Upsilon(\tau) = 1 + K_\sigma^k\!\left(\frac{\bar\sigma(\tau)}{\bar\sigma_h}-1\right).\tag{4.3}$$
+  $$m^k(\tau) = k_d^k\thinspace M^k(\tau)\thinspace\Upsilon(\tau),\qquad
+    \Upsilon(\tau) = 1 + K_\sigma^k\negthinspace\left(\frac{\bar\sigma(\tau)}{\bar\sigma_h}-1\right).\tag{4.3}$$
 
 ## 4.3 Each cohort remembers its birth configuration
 
@@ -40,7 +40,7 @@ A cohort of $k$ deposited at time $\tau$ is laid down at the deposition stretch
 $G^k$. As the tissue goes on deforming, that cohort stretches *with* the mixture,
 so its elastic stretch evaluated now is
 
-$$\lambda_e^{k}(t;\tau) = G^k\,\frac{\lambda(t)}{\lambda(\tau)}.\tag{4.4}$$
+$$\lambda_e^{k}(t;\tau) = G^k\thinspace\frac{\lambda(t)}{\lambda(\tau)}.\tag{4.4}$$
 
 At birth ($t=\tau$) it sits exactly at $G^k$ (hence $\sigma_h^k$). This is the
 **constrained-mixture constraint**: every constituent shares the current
@@ -53,8 +53,8 @@ surviving cohorts of their constituent stresses — each computed referentially 
 $S^k$ and pushed forward, $\sigma^k=\lambda_e^2 S^k$ (rule of mixtures):
 
 $$\bar\sigma(t) = \frac{1}{M_{\text{tot}}}\sum_k\left[
-   M^k(0)\,q^k(t,0)\,\sigma^k\!\big(G^k\lambda(t)\big)
-   + \int_0^t m^k(\tau)\,q^k(t,\tau)\,\sigma^k\!\Big(G^k\tfrac{\lambda(t)}{\lambda(\tau)}\Big)\mathrm{d}\tau\right].\tag{4.5}$$
+   M^k(0)\thinspace q^k(t,0)\thinspace\sigma^k\negthinspace\big(G^k\lambda(t)\big) +
+   \int_0^t m^k(\tau)\thinspace q^k(t,\tau)\thinspace\sigma^k\negthinspace\Big(G^k\tfrac{\lambda(t)}{\lambda(\tau)}\Big)\mathrm{d}\tau\right].\tag{4.5}$$
 
 At each time step the code discretises (4.1) and (4.5) as sums over stored
 cohorts, then solves (4.5) $=\sigma_{\text{req}}(\lambda)$ for the current
@@ -62,7 +62,7 @@ stretch. Elastin contributes a single, non-renewing cohort (optionally degraded
 by an insult).
 
 > **Numerical note.** With exponential survival the exact per-step cohort weight
-> is $\big(e^{k_d\,\Delta t}-1\big)/k_d$, not simply $\Delta t$. Using the exact
+> is $\big(e^{k_d\thinspace\Delta t}-1\big)/k_d$, not simply $\Delta t$. Using the exact
 > weight makes the discrete steady state land *exactly* on $\bar\sigma_h$ (no
 > $O(k_d\Delta t)$ bias) — that is why the code uses it, and why the full CMM,
 > homogenized, and equilibrated results coincide to several digits.

@@ -24,10 +24,10 @@ $$\lambda_e^k = \frac{\lambda}{\lambda_n^k}.\tag{5.1}$$
 ## 5.3 Growth (mass)
 
 Mass production is proportional to current mass and driven by the tissue-stress
-deviation — the Cyron–Braeu growth law $\dot\rho = \rho\,k_\sigma(\sigma-\sigma_h)/\sigma_h$:
+deviation — the Cyron–Braeu growth law $\dot\rho = \rho\thinspace k_\sigma(\sigma-\sigma_h)/\sigma_h$:
 
 $$\frac{\mathrm{d}M^k}{\mathrm{d}t}
-   = M^k\,(K_\sigma^k k_d^k)\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right).\tag{5.2}$$
+   = M^k\thinspace (K_\sigma^k k_d^k)\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right).\tag{5.2}$$
 
 Because production scales with current mass, the fixed point $\dot M^k=0$ is
 $\bar\sigma=\bar\sigma_h$ for **any** mass — so mass is free to settle wherever it
@@ -48,8 +48,8 @@ $\lambda$ fixed, (5.3) makes the constituent stress **relax exponentially toward
 its homeostatic value** $\sigma_h^k$ with a time constant $\sim 1/k_d$ — exactly
 Cyron 2016's **mechanical analog**: a Maxwell spring–dashpot in parallel with a
 "motor" that holds the homeostatic prestress. At steady state
-$\lambda_n^k\!\to\!\lambda/G^k$, so $\lambda_e^k\!\to\!G^k$ and
-$\sigma^k\!\to\!\sigma_h^k$.
+$\lambda_n^k\negthinspace\to\negthinspace\lambda/G^k$, so $\lambda_e^k\negthinspace\to\negthinspace G^k$ and
+$\sigma^k\negthinspace\to\negthinspace\sigma_h^k$.
 
 ## 5.5 Why it matters: it tracks the full model closely
 
