@@ -23,16 +23,19 @@ function:
 
 $$M^k(t) = M^k(0)\thinspace q^k(t,0) + \int_0^t m^k(\tau)\thinspace q^k(t,\tau)\thinspace\mathrm{d}\tau.\tag{4.1}$$
 
-- **Survival** (first-order/Poisson removal at rate $k_d^k$):
-  $$q^k(t,\tau) = e^{-k_d^k (t-\tau)}.\tag{4.2}$$
-  The mean lifetime is $1/k_d^k$ (weeks–months for collagen/muscle; **elastin
-  does not turn over**, $k_d^e = 0$).
+**Survival** — first-order/Poisson removal at rate $k_d^k$:
 
-- **Production** — proportional to current mass, modulated by a stress stimulus
-  that vanishes at homeostasis. We drive it by the **tissue** (mixture) stress,
-  so all constituents grow together to restore tissue homeostasis:
-  $$m^k(\tau) = k_d^k\thinspace M^k(\tau)\thinspace\Upsilon(\tau),\qquad
-    \Upsilon(\tau) = 1 + K_\sigma^k\negthinspace\left(\frac{\bar\sigma(\tau)}{\bar\sigma_h}-1\right).\tag{4.3}$$
+$$q^k(t,\tau) = e^{-k_d^k (t-\tau)}.\tag{4.2}$$
+
+The mean lifetime is $1/k_d^k$ (weeks–months for collagen/muscle; **elastin does
+not turn over**, $k_d^e = 0$).
+
+**Production** — proportional to current mass, modulated by a stress stimulus
+that vanishes at homeostasis. We drive it by the **tissue** (mixture) stress, so
+all constituents grow together to restore tissue homeostasis:
+
+$$m^k(\tau) = k_d^k\thinspace M^k(\tau)\thinspace\Upsilon(\tau),\qquad
+  \Upsilon(\tau) = 1 + K_\sigma^k\negthinspace\left(\frac{\bar\sigma(\tau)}{\bar\sigma_h}-1\right).\tag{4.3}$$
 
 ## 4.3 Each cohort remembers its birth configuration
 
