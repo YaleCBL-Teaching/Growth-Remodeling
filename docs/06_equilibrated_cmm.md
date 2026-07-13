@@ -32,9 +32,9 @@ when they share gain and turnover, as here). Conditions (A)–(C) reduce to a
 **single** equation for the evolved stretch $\lambda^\ast$ (derivation in the code
 docstring):
 
-$$\phi_{e0}\thinspace s +
-  s\thinspace\frac{\bar\sigma_h - \sigma_e(G_e\lambda^\ast)}{\sigma_{\text{turn}} - \sigma_h^e} -
-  \gamma\thinspace (\lambda^\ast)^{2} = 0,\tag{6.1}$$
+$$\phi_{e0}s +
+  s\frac{\bar\sigma_h - \sigma_e(G_e\lambda^\ast)}{\sigma_{\text{turn}} - \sigma_h^e} -
+  \gamma(\lambda^\ast)^{2} = 0,\qquad (6.1)$$
 
 with the Laplace exponent $n=2$ for the artery, $\gamma$ the sustained load
 factor, $s$ the surviving elastin fraction, $\phi_{e0}$ the reference elastin
