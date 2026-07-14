@@ -55,7 +55,7 @@ solver is also the cleanest possible **stability test**: solve one algebraic
 equation; if it has a root the tissue adapts, if it does not the tissue is
 mechanobiologically unstable.
 
-![Equilibrated matches the transient, and predicts the boundary](figures/fig05_equilibrated.png)
+![Equilibrated matches the transient, and predicts the boundary](figures/fig04_equilibrated.png)
 
 <i>(a) The homogenized transient settles exactly onto the equilibrated stretch
 $\lambda^\ast$ (dotted) — the two theories agree whenever an equilibrium exists.
@@ -71,7 +71,7 @@ why the instant equilibrated test is so useful.
 
 ---
 
-### Exercise → [`exercises/ex05_equilibrated.py`](../exercises/ex05_equilibrated.py)
+### Exercise → [`exercises/ex04_equilibrated.py`](../exercises/ex04_equilibrated.py)
 
 Sweep the insult and find, from the equilibrated solve alone, the critical
 elastin loss at which the artery can no longer adapt. Then confirm with a

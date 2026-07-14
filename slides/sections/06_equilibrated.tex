@@ -54,14 +54,14 @@
 \end{frame}
 
 
-% ---- example + run: ex05 ---------------------------------------------------
+% ---- example + run: ex04 ---------------------------------------------------
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- the equilibrated stability test (\texttt{ex05})}
+  \begin{setupbox}{Example --- the equilibrated stability test (\texttt{ex04})}
     \sprob{Skip the transient: solve the single algebraic equation \eqref{eq:equil}
     for the \emph{final} adapted stretch $\lambda^*$. A physical root means the
     tissue adapts; \emph{no root} means it dilates without bound. Scanning elastin
     loss then traces the stability boundary.}
-    \srun{\scodeline{uv run python run.py configs/ex05\_equilibrated.yaml}
+    \srun{\scodeline{uv run python run.py configs/ex04\_equilibrated.yaml}
       Here \texttt{study: equilibrium} solves once for the given insult, then the
       \texttt{scan:} block sweeps \texttt{elastin\_surviving} and
       \texttt{report\_critical: elastin} prints the critical surviving fraction
@@ -72,7 +72,7 @@
   \end{setupbox}
 \end{frame}
 
-% ---- interactive coding exercise: ex05 -------------------------------------
+% ---- interactive coding exercise: ex04 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Equilibrated}
     \qq{Does the algebraic $\lambda^*$ land on the transient plateau where a root
@@ -91,7 +91,7 @@
     dilates without bound.
   \end{answerbox}
   \vspace{-0.3em}
-  \bigfigw{fig05_equilibrated.pdf}{0.66\linewidth}{Your run: equilibrated end-state
+  \bigfigw{fig04_equilibrated.pdf}{0.66\linewidth}{Your run: equilibrated end-state
   on the transient plateau where a root exists; near the boundary, critical slowing.}
   \vspace{-0.4em}
   \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} \textbf{matches} the

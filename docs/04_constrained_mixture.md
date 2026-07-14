@@ -77,7 +77,7 @@ adapts or dilates without bound **emerges** from the turnover dynamics and the
 insult. Under hypertension the model grows collagen and muscle while elastin is
 merely diluted, and the stress returns to homeostatic:
 
-![Full CMM adaptation to hypertension](figures/fig03_constrained_mixture.png)
+![Full CMM adaptation to hypertension](figures/fig02_constrained_mixture.png)
 
 *The turnover story. (a) Collagen and smooth muscle (which turn over) grow;
 elastin (which does not) stays put and is diluted. (b) Tissue stress is restored.
@@ -90,7 +90,7 @@ time steps. That is precisely the motivation for the **homogenized** model
 
 ---
 
-### Exercise → [`exercises/ex03_constrained_mixture.py`](../exercises/ex03_constrained_mixture.py)
+### Exercise → [`exercises/ex02_constrained_mixture.py`](../exercises/ex02_constrained_mixture.py)
 
 Change the turnover time $1/k_d$ and the gain $K_\sigma$, and watch how quickly
 the wall adapts. Then degrade elastin (the aneurysm insult) and see collagen take

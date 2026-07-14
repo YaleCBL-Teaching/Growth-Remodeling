@@ -50,6 +50,7 @@ import numpy as np
 
 from .geometry import Geometry
 from .history import Result
+from .monitor import Monitor, adapted_note, cmm_columns, driving_preamble
 from .parameters import Insult
 
 
@@ -60,6 +61,7 @@ def simulate(
     t_end: float = 2000.0,   # [day]
     dt: float = 1.0,         # [day]
     lam_runaway: float = 8.0,
+    monitor: Monitor | None = None,   # optional live tracker (see gr.monitor)
 ) -> Result:
     """Integrate the homogenized CMM (two ODEs per turnover constituent)."""
     model = geom.model
@@ -73,6 +75,11 @@ def simulate(
 
     N = int(round(t_end / dt))
     t = np.arange(N + 1) * dt
+    if monitor is not None:
+        monitor.begin(f"homogenized CMM · {geom.name}",
+                      cmm_columns(model.constituents, turnover),
+                      driving_preamble(model, insult), t_span=t_end)
+    last_snap: dict | None = None
     out = {k: np.zeros(N + 1) for k in ("lam", "mass", "sigma", "r", "h")}
     masses_hist = {c.name: np.zeros(N + 1) for c in model.constituents}
     stress_hist = {c.name: np.zeros(N + 1) for c in model.constituents}
@@ -100,6 +107,8 @@ def simulate(
             for nm in masses_hist:
                 masses_hist[nm][i:] = masses_hist[nm][i - 1] if i > 0 else np.nan
                 stress_hist[nm][i:] = stress_hist[nm][i - 1] if i > 0 else np.nan
+            if monitor is not None and last_snap is not None:
+                monitor.end(ti, last_snap, adapted_note(True))
             break
 
         out["lam"][i] = lam
@@ -113,6 +122,17 @@ def simulate(
             masses_hist[c.name][i] = M[c.name]
             stress_hist[c.name][i] = c.law.stress_cauchy(lam / lam_n[c.name]) / c.sigma_h
 
+        # --- live tracking of the physical quantities (mass fractions, stimuli)
+        dev = out["sigma"][i] / model.sigma_bar_h - 1.0            # tissue stress deviation
+        if monitor is not None:
+            last_snap = {"t": ti, "lam": lam, "sig": out["sigma"][i] / model.sigma_bar_h,
+                         "mass": M_tot, "r": out["r"][i], "h": out["h"][i]}
+            for c in model.constituents:
+                last_snap[f"phi_{c.name}"] = masses_hist[c.name][i] / M_tot
+            for c in turnover:
+                last_snap[f"ups_{c.name}"] = max(0.0, 1.0 + c.gain * dev)   # stimulus Upsilon
+            monitor.row(ti, last_snap)
+
         # advance the ODEs one explicit step, Eqs. (HC2)-(HC3)
         #
         # Growth is driven by the TISSUE (mixture) stress deviation, so all
@@ -121,7 +141,6 @@ def simulate(
         # (gr.equilibrated_cmm).  Remodeling separately drives each constituent's
         # natural configuration toward its deposition stretch G^k.
         if i < N:
-            dev = out["sigma"][i] / model.sigma_bar_h - 1.0        # tissue stress deviation
             for c in turnover:
                 upsilon = max(0.0, 1.0 + c.gain * dev)             # production stimulus
                 prod_rate = c.k_d * M[c.name] * upsilon            # m^k, Eq. (HC3)
@@ -129,6 +148,9 @@ def simulate(
                 dlam_n = (prod_rate / M[c.name]) * (lam / c.G - lam_n[c.name])
                 M[c.name] += dt * dM
                 lam_n[c.name] += dt * dlam_n
+
+    if monitor is not None and not diverged and last_snap is not None:
+        monitor.end(t[-1], last_snap, adapted_note(False))
 
     return Result(
         theory="homogenized CMM",

@@ -9,13 +9,12 @@ import importlib
 
 MODULES = [
     "fig00_setup",
-    "fig01_biology_and_mechanics",
-    "fig01_split",
-    "fig02_kinematic_growth",
-    "fig03_constrained_mixture",
-    "fig04_compare_all",
-    "fig05_equilibrated",
-    "fig06_stability_and_aneurysm",
+    "fig00_biology_and_mechanics",
+    "fig01_kinematic_growth",
+    "fig02_constrained_mixture",
+    "fig03_compare_all",
+    "fig04_equilibrated",
+    "fig05_stability_and_aneurysm",
 ]
 
 

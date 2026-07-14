@@ -116,14 +116,14 @@
   \end{answerbox}
 \end{frame}
 
-% ---- example + run: ex04 ---------------------------------------------------
+% ---- example + run: ex03 ---------------------------------------------------
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- homogenized vs.\ full (\texttt{ex04})}
+  \begin{setupbox}{Example --- homogenized vs.\ full (\texttt{ex03})}
     \sprob{Run both mixture theories on the \emph{same} artery and insult. The
     homogenized model keeps one mean natural stretch per constituent (two ODEs,
     \eqref{eq:homog_mass}--\eqref{eq:homog_remodel}) instead of the full cohort
     history. How closely does it track the full model, and how much faster is it?}
-    \srun{\scodeline{uv run python run.py configs/ex04\_homogenized\_vs\_full.yaml}
+    \srun{\scodeline{uv run python run.py configs/ex03\_homogenized\_vs\_full.yaml}
       Here \texttt{study: compare} runs
       \texttt{theories: [constrained\_mixture, homogenized\_cmm]} on one scenario
       and prints each runtime and the largest mass-ratio gap between them.}
@@ -133,7 +133,7 @@
   \end{setupbox}
 \end{frame}
 
-% ---- interactive coding exercise: ex04 -------------------------------------
+% ---- interactive coding exercise: ex03 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Homogenized vs.\ full}
     \qq{Is the difference between the two curves visible by eye? By what factor is
@@ -152,6 +152,6 @@
     a \textbf{similar time trajectory} to the full model --- cheaply.
   \end{answerbox}
   \vspace{-0.4em}
-  \bigfigw{fig04_compare_all.pdf}{0.52\linewidth}{Your overlay: homogenized (dashed)
+  \bigfigw{fig03_compare_all.pdf}{0.52\linewidth}{Your overlay: homogenized (dashed)
   on the full CMM (black); kinematic growth (blue) under-responds.}
 \end{frame}

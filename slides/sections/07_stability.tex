@@ -16,7 +16,7 @@
     \ \Longleftrightarrow\ \text{tissue adapts}}
   \begin{columns}[c]
     \begin{column}{0.46\textwidth}
-      \begin{center}\includegraphics[width=\linewidth]{figures/fig01b_required_stress.pdf}\end{center}
+      \begin{center}\includegraphics[width=\linewidth]{figures/fig00_required_stress.pdf}\end{center}
     \end{column}
     \begin{column}{0.54\textwidth}
       \small
@@ -31,7 +31,7 @@
   \end{columns}
   \begin{center}\footnotesize\color{BoxGray}
   The verdict follows analytically from the Laplace feedback (curve is
-  reproducible; explored numerically in \texttt{ex06}).
+  reproducible; explored numerically in \texttt{ex05}).
   \end{center}
   \srccite{Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
 \end{frame}
@@ -43,14 +43,14 @@
   can do either: mild elastin loss adapts, severe loss dilates without bound.
 \end{frame}
 
-% ---- example + run: ex06 ---------------------------------------------------
+% ---- example + run: ex05 ---------------------------------------------------
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- the stable/unstable map (\texttt{ex06})}
+  \begin{setupbox}{Example --- the stable/unstable map (\texttt{ex05})}
     \sprob{A tissue \emph{adapts} to an insult iff a mechanobiological equilibrium
     exists \eqref{eq:equil}. Sweeping that instant test over (surviving elastin)
     $\times$ (pressure) draws the stable/unstable map. Then change \emph{one}
     tissue property and watch the unstable ``aneurysm'' region shrink.}
-    \srun{\scodeline{uv run python run.py configs/ex06\_stability.yaml}
+    \srun{\scodeline{uv run python run.py configs/ex05\_stability.yaml}
       Here \texttt{study: map} builds the 2D grid over the two \texttt{axes:} via
       the \texttt{adapts} existence test and shades adapt (blue) vs.\ runaway
       (red); it also prints the fraction of the grid that adapts.}
@@ -62,7 +62,7 @@
   \end{setupbox}
 \end{frame}
 
-% ---- interactive coding exercise: ex06 -------------------------------------
+% ---- interactive coding exercise: ex05 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Stability map}
     \qq{Which single change --- higher gain, stiffer collagen, or larger
@@ -80,7 +80,7 @@
     away.
   \end{answerbox}
   \vspace{-0.3em}
-  \bigfigw{fig06_stability.pdf}{0.66\linewidth}{Your map: 30\% elastin adapts (blue),
+  \bigfigw{fig05_stability.pdf}{0.66\linewidth}{Your map: 30\% elastin adapts (blue),
   3\% dilates without bound (red). Boundary from the equilibrated existence test.}
   \vspace{-0.4em}
   \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} the existence test

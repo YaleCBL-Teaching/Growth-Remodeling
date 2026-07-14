@@ -64,9 +64,9 @@
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
-% ---- problem setup: ex02 ---------------------------------------------------
+% ---- problem setup: ex01 ---------------------------------------------------
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- hypertensive artery (\texttt{ex02})}
+  \begin{setupbox}{Example --- hypertensive artery (\texttt{ex01})}
     \sprob{A pressurised artery is made \emph{hypertensive} by a sustained
     pressure step. Kinematic growth thickens the wall --- does the wall stress
     $\bar\sigma/\bar\sigma_h$ return to the \emph{prescribed} set-point?}
@@ -76,7 +76,7 @@
 % ---- how to run (concise), placed AFTER the problem setup ------------------
 \begin{frame}[t]{Running the Exercises}
   One runner drives every exercise --- no Python to edit. Run the input file:
-  \scodeline{uv run python run.py configs/ex02\_kinematic\_growth.yaml}
+  \scodeline{uv run python run.py configs/ex01\_kinematic\_growth.yaml}
   \textbf{Results:} the key numbers ($\bar\sigma/\bar\sigma_h$, mass,
   \texttt{diverged}) print to the terminal, and the time history opens as a plot.
   \vspace{0.7em}\par
@@ -85,7 +85,7 @@
   Every parameter in the file can be swept or overridden the same way.
 \end{frame}
 
-% ---- interactive coding exercise: ex02 -------------------------------------
+% ---- interactive coding exercise: ex01 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Kinematic growth}
     \qq{Does the wall stress return to the prescribed set-point? Try larger
@@ -103,7 +103,7 @@
     \emph{imposes} stability; it cannot predict runaway.
   \end{answerbox}
   \vspace{-0.2em}
-  \bigfigw{fig02_kinematic_growth.pdf}{0.98\linewidth}{}
+  \bigfigw{fig01_kinematic_growth.pdf}{0.98\linewidth}{}
   \vspace{-0.3em}
   \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} reaches the
   a-priori prescribed homeostasis --- stability is built in, not predicted.\end{center}

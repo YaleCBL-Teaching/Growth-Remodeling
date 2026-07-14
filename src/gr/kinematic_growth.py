@@ -50,6 +50,7 @@ import numpy as np
 
 from .geometry import Geometry
 from .history import Result
+from .monitor import Column, Monitor, adapted_note, driving_preamble
 from .parameters import Insult
 
 
@@ -62,6 +63,7 @@ def simulate(
     t_end: float = 2000.0,           # [day]
     dt: float = 1.0,                 # [day]
     lam_runaway: float = 8.0,
+    monitor: Monitor | None = None,  # optional live tracker (see gr.monitor)
 ) -> Result:
     """Integrate kinematic growth (single material) for the given loading."""
     model = geom.model
@@ -90,6 +92,18 @@ def simulate(
     out = {k: np.zeros(nsteps + 1) for k in ("lam", "mass", "sigma", "r", "h")}
     diverged = False
 
+    # Single material: no constituents, so the tracker shows the growth driver
+    # (the stress deviation sigma/sigma_h - 1) in place of per-constituent stimuli.
+    if monitor is not None:
+        monitor.begin(
+            f"kinematic growth · {geom.name}",
+            [Column("t", "t[day]", "{:.0f}"), Column("lam", "λ", "{:.3f}"),
+             Column("sig", "σ/σh", "{:.3f}"), Column("mass", "θ=M/M0", "{:.3f}"),
+             Column("dev", "σ/σh-1", "{:+.3f}"), Column("r", "r[mm]", "{:.3f}"),
+             Column("h", "h[mm]", "{:.4f}")],
+            driving_preamble(model, insult), t_span=t_end)
+    last_snap: dict | None = None
+
     for i in range(nsteps + 1):
         ti = i * dt
         t[i] = ti
@@ -106,6 +120,8 @@ def simulate(
             for key in out:
                 out[key][i:] = out[key][i - 1] if i > 0 else np.nan
             t[i:] = np.linspace(ti, t_end, nsteps + 1 - i)
+            if monitor is not None and last_snap is not None:
+                monitor.end(ti, last_snap, adapted_note(True))
             break
 
         sig = sigma_tissue(lam, s_eff)
@@ -115,9 +131,17 @@ def simulate(
         out["r"][i] = geom.radius(lam)
         out["h"][i] = geom.thickness(lam, theta)
 
+        if monitor is not None:
+            last_snap = {"t": ti, "lam": lam, "sig": sig / sigma_h, "mass": theta,
+                         "dev": sig / sigma_h - 1.0, "r": out["r"][i], "h": out["h"][i]}
+            monitor.row(ti, last_snap)
+
         # (ii) advance growth one step, Eq. (KG3)
         if i < nsteps:
             theta = max(theta + dt * k_g * theta * (sig / sigma_h - 1.0), 1e-6)
+
+    if monitor is not None and not diverged and last_snap is not None:
+        monitor.end(t[-1], last_snap, adapted_note(False))
 
     return Result(
         theory="kinematic growth",

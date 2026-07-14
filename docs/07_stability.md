@@ -39,7 +39,7 @@ stable insult plateaus, an unstable one climbs without bound. Near the boundary
 the transient slows down dramatically (critical slowing) — so (1) is the
 practical tool and (2) is the confirmation.
 
-![Stability depends on the insult](figures/fig06_stability.png)
+![Stability depends on the insult](figures/fig05_stability.png)
 
 *(a) The same tissue, two insults: retaining 30% of elastin, it adapts and
 plateaus (blue); retaining only 3%, it dilates without bound (red). (b) The
@@ -70,7 +70,7 @@ region; severe ones cross into the red "aneurysm" region.*
 
 ---
 
-### Exercise → [`exercises/ex06_stability_and_aneurysm.py`](../exercises/ex06_stability_and_aneurysm.py)
+### Exercise → [`exercises/ex05_stability_and_aneurysm.py`](../exercises/ex05_stability_and_aneurysm.py)
 
 Reproduce the stability map, then explore what stabilises a tissue: raise the
 production gain, stiffen the collagen, or increase the deposition stretch, and

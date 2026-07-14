@@ -124,15 +124,15 @@
 \end{frame}
 
 
-% ---- example + run: ex03 ---------------------------------------------------
+% ---- example + run: ex02 ---------------------------------------------------
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- turnover under hypertension (\texttt{ex03})}
+  \begin{setupbox}{Example --- turnover under hypertension (\texttt{ex02})}
     \sprob{The same artery, now with collagen \& SMC turning over (elastin does
     not). Which constituent grows to carry the load, and does turnover restore the
     set-point? Equilibrium each step:
     $\bar\sigma(\lambda)=\bar\sigma_h\,\gamma\,\lambda^{2}/m$ (load factor $\gamma$,
     mass ratio $m$).}
-    \srun{\scodeline{uv run python run.py configs/ex03\_constrained\_mixture.yaml}
+    \srun{\scodeline{uv run python run.py configs/ex02\_constrained\_mixture.yaml}
       Sets each constituent's \texttt{turnover\_days} ($1/k_d$), \texttt{gain}
       ($K_\sigma$), and the \texttt{insult} --- hypertension ($\gamma$) or aneurysm
       (\texttt{elastin\_surviving}).}
@@ -140,7 +140,7 @@
   \end{setupbox}
 \end{frame}
 
-% ---- interactive coding exercise: ex03 -------------------------------------
+% ---- interactive coding exercise: ex02 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Constrained mixture}
     \qq{Does the same tissue \emph{adapt} to hypertension but \emph{run away} on
@@ -159,6 +159,6 @@
     / higher gain reach the new state sooner.
   \end{answerbox}
   \vspace{-0.2em}
-  \bigfigw{fig03_constrained_mixture.pdf}{0.98\linewidth}{Your run: under
+  \bigfigw{fig02_constrained_mixture.pdf}{0.98\linewidth}{Your run: under
   hypertension collagen/muscle grow, elastin dilutes, stress returns to set-point.}
 \end{frame}
