@@ -2,11 +2,10 @@
 
 Beamer slides for the G&R seminar, in two builds:
 
-- **`gr-seminar-student.pdf`** — key equations are shown as **empty numbered
-  boxes** to fill in during class (e.g. on an iPad). Distribute this version to
-  students beforehand.
-- **`gr-seminar-teacher.pdf`** — the same boxes are **filled in** with the
-  actual equations.
+- **`gr-seminar-student.pdf`** — the content is revealed **piece by piece**
+  (beamer overlays), so it builds up step by step as you present.
+- **`gr-seminar-teacher.pdf`** — the **whole slide** is shown at once (a static
+  reference with everything visible).
 
 Both are 16:9 and carry a per-slide source citation in the format
 *First, …, Last, short journal (year)*.
@@ -23,19 +22,22 @@ make figures    # regenerate the reproducible result figures from the gr package
 make clean
 ```
 
-## How the fill-in mechanism works
+## How the build mechanism works
 
-`theme/preamble.tex` defines
+`theme/preamble.tex` defines a reveal step, `\srev` (nothing in the teacher
+build, `\pause` in the student build), and the equation helpers
 
 ```latex
-\slboxeq{<box height>}{<eq label>}{<equation body>}
+\slboxeq{<eq label>}{<equation body>}   % numbered key equation; its own reveal step
+\keyeq{<eq label>}{<equation body>}     % numbered equation, no reveal (for use in boxes)
+\giveneq{<equation body>}               % unnumbered equation; also a reveal step
 ```
 
 The `\teachertrue` / `\teacherfalse` toggle in `slides-teacher.tex` /
-`slides-student.tex` selects whether each `\slboxeq` renders the boxed, numbered
-equation (teacher) or an empty numbered box at the same position (student). The
-equation number and every `\eqref` are identical in both builds, so the two PDFs
-stay in lock-step.
+`slides-student.tex` selects the mode: teacher shows the whole slide at once,
+student reveals each `\srev`/equation as a separate overlay. Equation numbers and
+every `\eqref` are identical in both builds, so the two PDFs stay in lock-step.
+Add `\srev` between text pieces (at frame level) to build them up too.
 
 ## Reproducible figures
 
@@ -57,7 +59,7 @@ figures are cited per slide.
 slides/
   slides-student.tex   slides-teacher.tex   # master files (mode toggle)
   body.tex                                  # title, roadmap, section inputs
-  theme/preamble.tex                        # theme + \slboxeq mechanism
+  theme/preamble.tex                        # theme + student/teacher reveal mechanism
   sections/01_biology.tex … 11_summary.tex  # the 11 sections
   figures/                                  # result + talk + literature figures
   references.bib                            # consolidated bibliography

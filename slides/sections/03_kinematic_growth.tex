@@ -11,7 +11,7 @@
   \dlab{a product of tensors}
   \giveneq{\bm{F}=\bm{F}_e\,\bm{F}_g,\qquad\text{only }\bm{F}_e\text{ stores energy.}}
   \zlab{scalar stretches}
-  \slboxeq{2.2em}{eq:split}{\lambda = \lambda_e \,\lambda_g}
+  \slboxeq{eq:split}{\lambda = \lambda_e \,\lambda_g}
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
@@ -26,7 +26,7 @@
   $\bm{F}_g$ encodes \emph{how} the tissue is assumed to add mass. A common choice grows the tissue
   an amount $\theta$ along a direction $\bm{f}$:
   \dlab{prescribed growth tensor}
-  \slboxeq{2.6em}{eq:growthtensor}{\bm{F}_g = \bm{I} + (\theta-1)\,
+  \slboxeq{eq:growthtensor}{\bm{F}_g = \bm{I} + (\theta-1)\,
     \bm{f}\!\otimes\bm{f}
     \;=\;\mathrm{diag}(1,\,1,\,\theta)}
   \zlab{growth stretch}
@@ -42,7 +42,7 @@
   $\dot{\bm{F}}_g=\dot\theta\,\bm{f}\!\otimes\bm{f}$ reduces to \emph{one}
   scalar ODE --- the \emph{same} law in the full 3D tensor model and the 0D
   reduction (both track the scalar $\theta$):
-  \slboxeq{2.6em}{eq:kingrowth}{\frac{\dd\theta}{\dd t}
+  \slboxeq{eq:kingrowth}{\frac{\dd\theta}{\dd t}
     = k_g\,\theta\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right)}
   The set-point $\bar\sigma_h$ is \textbf{prescribed}: wherever growth stops
   ($\dot\theta=0$), stress is homeostatic \emph{by construction}. So the model can
@@ -90,8 +90,5 @@
     \emph{imposes} stability; it cannot predict runaway.
   \end{answerbox}
   \vspace{-0.2em}
-  \bigfigw{fig02_kinematic_growth.pdf}{0.98\linewidth}{}
-  \vspace{-0.3em}
-  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} reaches the
-  a-priori prescribed homeostasis --- stability is built in, not predicted.\end{center}
+  \bigfigw{fig02_kinematic_growth.pdf}{\linewidth}{}
 \end{frame}

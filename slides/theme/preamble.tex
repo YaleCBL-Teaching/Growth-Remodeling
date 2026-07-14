@@ -3,8 +3,8 @@
 %  Adapted from the YaleCBL-Teaching/BENG_5570 slide build system.
 %  Two build modes are selected by \teachertrue / \teacherfalse in the
 %  master files (slides-student.tex / slides-teacher.tex):
-%    student  -> key equations shown as EMPTY numbered boxes to fill on iPad
-%    teacher  -> the same boxes are filled with the actual equation
+%    student  -> content is revealed piece by piece (beamer overlays)
+%    teacher  -> the whole slide is shown at once
 % ============================================================================
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -57,38 +57,24 @@
 }
 
 % ============================================================================
-%  Fill-in-the-blank equation mechanism
+%  Student build (piece by piece) vs. teacher full slide
 % ============================================================================
-% \teacher toggle set in the master file.
+% \teacher toggle is set in the master file AFTER this preamble is input, so
+% every test below is evaluated at USE time (inside the macros), not here.
+%   teacher  -> the whole slide is shown at once
+%   student  -> almost the same, but a few reveals (\srev) build up on click
+% Slides are kept mostly static: prefer a NEW slide over many build-in steps.
 \newif\ifteacher
 
-% Height register for a student blank box.
-% Usage in slides:
-%   \slboxeq{<box height>}{<eq label>}{<equation body>}
-%     student : empty framed box of the given height, right-numbered (label)
-%     teacher : the equation, boxed and numbered (same label)
-% The label is shared, so \eqref works identically in both builds.
-\newcommand{\slboxeq}[3]{%
-  \ifteacher
-    % teacher: show the boxed, numbered equation
-    \begin{equation}\label{#2}
-      \boxed{\displaystyle #3}
-    \end{equation}
-  \else
-    % student: reserve an empty framed box carrying the equation number
-    \begin{equation}\label{#2}\end{equation}%
-    \vspace{-2.2\baselineskip}%
-    \begin{center}%
-    \setlength{\fboxrule}{0.8pt}\setlength{\fboxsep}{4pt}%
-    \textcolor{SlideFrame}{\framebox[0.92\linewidth][c]{%
-      \rule{0pt}{#1}\rule{0pt}{0pt}%
-    }}%
-    \end{center}%
-    \vspace{-0.3\baselineskip}%
-  \fi
-}
+% \srev -- one reveal step: nothing in the teacher build, \pause in the student
+% build. Use SPARINGLY, mainly to reveal an answer after its question. Use at
+% frame level (not inside minipage/column/tcolorbox, where \pause is ineffective).
+\newcommand{\srev}{\ifteacher\else\pause\fi}
 
-% Inline "given" equation (always shown in both builds, unnumbered box-free).
+% \slboxeq{<eq label>}{<equation body>} -- a numbered key equation (no box).
+% \giveneq{<equation body>}             -- an unnumbered equation.
+% Both are shown with the rest of the slide; add \srev explicitly for a reveal.
+\newcommand{\slboxeq}[2]{\begin{equation}\label{#1}#2\end{equation}}
 \newcommand{\giveneq}[1]{\begin{equation*}#1\end{equation*}}
 
 % ============================================================================

@@ -27,7 +27,7 @@
 \begin{frame}[t]{The Deformation Gradient}
   The \textbf{deformation gradient} maps reference line elements to current ones.
   \dlab{a $3\times3$ tensor}
-  \slboxeq{2.4em}{eq:defgrad}{\dd\bm{x} = \bm{F}\,\dd\bm{X},\qquad
+  \slboxeq{eq:defgrad}{\dd\bm{x} = \bm{F}\,\dd\bm{X},\qquad
     \bm{F}=\frac{\partial\bm{\varphi}}{\partial\bm{X}},\qquad J=\det\bm{F}}
   $J$ is the volume ratio, \textbf{incompressibility} means $J=1$.
   \zlab{a scalar}
@@ -38,7 +38,7 @@
 \begin{frame}[t]{Strain: A Rotation-Free Measure of Stretch}
   Removing rigid rotation gives the \textbf{right Cauchy--Green} tensor and the \textbf{Green--Lagrange strain}.
   \dlab{symmetric $3\times3$ tensors}
-  \slboxeq{2.4em}{eq:strain}{\bm{C}=\bm{F}^\mathrm{T}\bm{F} = (\bm{R}\bm{U})^\mathrm{T}\bm{R}\bm{U} = \bm{U}^\mathrm{T} \bm{R}^\mathrm{T} \bm{R}^\mathrm{T} \bm{U} = \bm{U}^2,\qquad
+  \slboxeq{eq:strain}{\bm{C}=\bm{F}^\mathrm{T}\bm{F} = (\bm{R}\bm{U})^\mathrm{T}\bm{R}\bm{U} = \bm{U}^\mathrm{T} \bm{R}^\mathrm{T} \bm{R}^\mathrm{T} \bm{U} = \bm{U}^2,\qquad
     \bm{E}=\tfrac12\!\left(\bm{C}-\bm{I}\right)}
   \zlab{scalars}
   \giveneq{C=\lambda^2,\qquad E=\tfrac12(\lambda^2-1).}
@@ -69,7 +69,7 @@
   (anisotropy --- collagen).}
   \zlab{reduction used here --- one stretch $\lambda$, scalar $\sigma=\lambda\,\dd W/\dd\lambda$}
   \vspace{-0.3em}
-  \slboxeq{2.6em}{eq:fung}{\sigma_{\text{neo-Hooke}}=c\,(\lambda^2-\lambda^{-1}),\qquad
+  \slboxeq{eq:fung}{\sigma_{\text{neo-Hooke}}=c\,(\lambda^2-\lambda^{-1}),\qquad
     \sigma_{\text{Fung}}=c_1\,\lambda^2(\lambda^2-1)\,e^{\,c_2(\lambda^2-1)^2}}
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
 \end{frame}
