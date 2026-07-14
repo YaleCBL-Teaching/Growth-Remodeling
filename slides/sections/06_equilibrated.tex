@@ -8,7 +8,7 @@
   root-find instead of thousands of time steps.
   \dlab{the 3D equilibrium conditions}
   \vspace{-0.2em}
-  \giveneq{\underbrace{\Upsilon=1\Rightarrow\bar\sigma^*=\bar\sigma_h}_{\text{(A) growth balance}}
+  \giveneq{\underbrace{\Upsilon^{\alpha}=1\Rightarrow\bar\sigma^*=\bar\sigma_h}_{\text{(A) growth balance}}
     \quad
     \underbrace{\bm{F}_n^{\alpha}=\mathrm{const}\Rightarrow\sigma^{\alpha}=\sigma_h^{\alpha}}_{\text{(B) remodeling completed}}
     \quad
@@ -25,24 +25,28 @@
   equation for the evolved stretch $\lambda^*$, consistent with the same
   $\lambda,\ G^{\alpha},\ \phi^{\alpha}$ used throughout:
   \zlab{scalar equilibrium equation for $\lambda^*$}
-  \slboxeq{eq:equil}{\phi^e\,s
-    + s\,\frac{\bar\sigma_h - \sigma^e(G^e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
+  \slboxeq{eq:equil}{\phi^e\,\xi
+    + \xi\,\frac{\bar\sigma_h - \sigma^e(G^e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
     - \gamma\,(\lambda^*)^{2} = 0}
-  with the Laplace exponent $n=2$, $\gamma$ the sustained load factor, $s$ the
-  surviving elastin fraction, $\phi^e$ the elastin mass fraction. Once $\lambda^*$
-  is known, the evolved mass ratio is $M/M_0=\gamma(\lambda^*)^2$.
+  with the Laplace exponent $n=2$, $\gamma$ the sustained load factor, $\xi$ the
+  surviving elastin fraction, $\phi^e$ the elastin mass fraction,
+  $\sigma_h^e=\sigma^e(G^e)$ the elastin homeostatic stress, and $\sigma_{\text{turn}}$
+  the homeostatic stress carried by the turnover constituents (collagen and smooth
+  muscle). Once $\lambda^*$ is known, the evolved mass ratio is $M/M_0=\gamma(\lambda^*)^2$.
   \vspace{0.3em}
 
   This equation \emph{is} the fixed point of the homogenized ODEs (\eqref{eq:homog_mass}--\eqref{eq:homog_remodel} with $\dd/\dd t=0$), so its root coincides with the long-time limit of the transient theory.
   \srccite{Latorre, Humphrey, ZAMM (2018)}
 \end{frame}
 
-\begin{frame}[t]{The Punchline: Existence = Stability}
+\begin{frame}[t]{The Punchline: Existence Sets the Capacity Limit}
   Equation \eqref{eq:equil} may have \textbf{no physical root}. Then no adapted
-  state exists and the transient theories dilate without bound. The solver is
-  therefore the cleanest \textbf{stability test}: root $\Rightarrow$ adapts, no root
-  $\Rightarrow$ unstable. Near the boundary the transient slows critically, which
-  is exactly why the instant algebraic test is so useful.
+  state exists and the transient theories dilate without bound. So the solver is
+  the cleanest \textbf{existence test}: no root $\Rightarrow$ the wall lacks the
+  \emph{capacity} to adapt. Existence is \emph{necessary} for stability; whether the
+  transient actually \emph{reaches} an equilibrium that exists is a separate,
+  gain-dependent question (dynamic stability). Near the boundary the transient slows
+  critically, which is exactly why the instant algebraic test is so useful.
 \end{frame}
 
 \begin{frame}[t]{}
@@ -56,12 +60,12 @@
       a transient cross-check: the homogenized plateau lands on $\lambda^*$), then
       the \texttt{scan:} block sweeps \texttt{elastin\_surviving} and
       \texttt{report\_critical: elastin} prints the critical surviving fraction
-      $s_\text{crit}$.}
+      $\xi_\text{crit}$.}
     \sstudy{Move the boundary by changing the wall's load-bearing \emph{capacity},
-      then re-read $s_\text{crit}$:
+      then re-read $\xi_\text{crit}$:
       \scodeline{... --set model.constituents.collagen.law.c1=600}
       \scodeline{... --set model.constituents.collagen.G=1.15}
-      (Raising the \texttt{gain} leaves $s_\text{crit}$ unchanged: gain sets how
+      (Raising the \texttt{gain} leaves $\xi_\text{crit}$ unchanged: gain sets how
       \emph{fast} the transient adapts, not \emph{whether} an equilibrium exists.)}
   \end{setupbox}
 \end{frame}
@@ -74,7 +78,7 @@
 
 \begin{frame}[t]{}
   \begin{answerbox}{Equilibrated}
-    Where a root exists, the equilibrated solve lands exactly on the transient end-state. Below $s_{\text{crit}}$ there is \emph{no} root: the transient dilates without bound.
+    Where a root exists, the equilibrated solve lands exactly on the transient end-state. Below $\xi_{\text{crit}}$ there is \emph{no} root: the transient dilates without bound.
   \end{answerbox}
   \vspace{-0.3em}
   \bigfigw{fig04_equilibrated.pdf}{\linewidth}{Your run: equilibrated end-state
