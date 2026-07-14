@@ -11,7 +11,10 @@
 # =============================================================================
 title: "Homogenized vs. full constrained mixture"
 study: compare
-theories: [constrained_mixture, homogenized_cmm]
+# full vs. homogenized is the comparison of interest (the printed mass-ratio gap
+# is between these first two); kinematic growth is overlaid as a reference curve
+# so you can see the single-material theory under-respond.
+theories: [constrained_mixture, homogenized_cmm, kinematic_growth]
 
 insult:
   pressure_factor: 1.5    # hypertension  (try the aneurysm: elastin_surviving: 0.3, ramp: 10)

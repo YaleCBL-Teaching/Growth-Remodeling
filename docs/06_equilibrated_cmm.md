@@ -47,13 +47,22 @@ equilibrated solution **coincides with the long-time limit of the transient
 theories** — to several digits (see the flat red target lines in the §5 figure,
 which the black and dashed curves settle onto).
 
-## 6.4 The punchline: existence = stability
+## 6.4 The punchline: existence is a necessary condition for stability
 
 Equation (6.1) may have **no physical root**. Then there is no adapted state to
 converge to, and the transient theories dilate without bound. So the equilibrated
-solver is also the cleanest possible **stability test**: solve one algebraic
-equation; if it has a root the tissue adapts, if it does not the tissue is
-mechanobiologically unstable.
+solver is the cleanest possible **existence test**: solve one algebraic equation;
+no root means the wall lacks the load-bearing capacity to adapt (an aneurysm-type
+runaway).
+
+This existence is **necessary but not sufficient** for stability. The equilibrium
+*location* is independent of the mechano-sensitivity gain $K_\sigma$ — at
+equilibrium production balances removal ($\Upsilon=1$), so the gain cancels.
+Whether the transient actually *reaches* an equilibrium that exists is a separate,
+gain-dependent question (mechanobiological *dynamic* stability, Cyron & Humphrey
+2014): with too weak a gain the artery can run away even where a root exists. So
+the equilibrated solve draws the **existence** boundary; the gain-dependent part
+lives in the transient (see §7.4).
 
 ![Equilibrated matches the transient, and predicts the boundary](figures/fig04_equilibrated.png)
 

@@ -174,6 +174,15 @@ def driving_preamble(model, insult) -> list[str]:
     return lines
 
 
-def adapted_note(diverged: bool) -> str:
-    """The final-row tag: adapted vs. runaway."""
-    return "⚠ diverged — runaway (no equilibrium)" if diverged else "✓ adapted"
+def status_note(diverged: bool, converged: bool = True) -> str:
+    """The final-row tag: adapted vs. (hard or slow) runaway.
+
+    ``diverged`` is the hard runaway (stretch hit the cutoff).  ``converged=False``
+    without divergence is the *slow* runaway: stress is held near the set-point by
+    mass that is still growing at the end of the window -- it has NOT adapted.
+    """
+    if diverged:
+        return "⚠ diverged — runaway (no equilibrium)"
+    if converged:
+        return "✓ adapted"
+    return "… not converged — still evolving (try a larger simulate.t_end)"

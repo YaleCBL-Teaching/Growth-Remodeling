@@ -50,7 +50,7 @@ import numpy as np
 
 from .geometry import Geometry
 from .history import Result
-from .monitor import Column, Monitor, adapted_note, driving_preamble
+from .monitor import Column, Monitor, driving_preamble, status_note
 from .parameters import Insult
 
 
@@ -121,7 +121,7 @@ def simulate(
                 out[key][i:] = out[key][i - 1] if i > 0 else np.nan
             t[i:] = np.linspace(ti, t_end, nsteps + 1 - i)
             if monitor is not None and last_snap is not None:
-                monitor.end(ti, last_snap, adapted_note(True))
+                monitor.end(ti, last_snap, status_note(diverged=True))
             break
 
         sig = sigma_tissue(lam, s_eff)
@@ -140,10 +140,7 @@ def simulate(
         if i < nsteps:
             theta = max(theta + dt * k_g * theta * (sig / sigma_h - 1.0), 1e-6)
 
-    if monitor is not None and not diverged and last_snap is not None:
-        monitor.end(t[-1], last_snap, adapted_note(False))
-
-    return Result(
+    result = Result(
         theory="kinematic growth",
         setting=geom.name,
         sigma_h=sigma_h,
@@ -156,3 +153,6 @@ def simulate(
         masses={"grown_volume": out["mass"]},   # single material: one grown volume, no constituents
         diverged=diverged,
     )
+    if monitor is not None and not diverged and last_snap is not None:
+        monitor.end(t[-1], last_snap, status_note(False, result.converged))
+    return result

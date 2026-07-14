@@ -125,12 +125,18 @@ def build_model(cfg: dict) -> Model:
     if globals_:
         model = replace(model, **globals_)
     for name, ov in (mc.get("constituents") or {}).items():
-        model = model.with_constituent(name, **_constituent_kwargs(ov))
+        model = model.with_constituent(name, **_constituent_kwargs(ov, model.by_name(name)))
     return model
 
 
-def _constituent_kwargs(ov: dict) -> dict:
-    """Translate a per-constituent override block into ``Constituent`` fields."""
+def _constituent_kwargs(ov: dict, current) -> dict:
+    """Translate a per-constituent override block into ``Constituent`` fields.
+
+    A *partial* law override inherits the coefficients it does not name from the
+    constituent's current law, so a single-value command-line override such as
+    ``--set model.constituents.collagen.law.c1=600`` works even when the config
+    does not spell out the whole law (previously that raised ``KeyError: 'c2'``).
+    """
     kw: dict = {}
     if "turnover_days" in ov:
         kw["k_d"] = 1.0 / float(ov["turnover_days"])
@@ -139,9 +145,20 @@ def _constituent_kwargs(ov: dict) -> dict:
             kw[key] = ov[key]
     if "law" in ov:
         law = ov["law"]
-        if "c1" in law:
-            kw["law"] = FungFiber(c1=float(law["c1"]), c2=float(law["c2"]))
-        elif "c" in law:
+        if "c1" in law or "c2" in law:          # Fung fiber (possibly a partial override)
+            base = current.law if isinstance(current.law, FungFiber) else None
+
+            def pick(key: str) -> float:
+                if key in law:
+                    return float(law[key])
+                if base is not None:
+                    return float(getattr(base, key))
+                raise ValueError(
+                    f"a Fung law override needs both c1 and c2 when the constituent's "
+                    f"current law is not a Fung fiber: {law}")
+
+            kw["law"] = FungFiber(c1=pick("c1"), c2=pick("c2"))
+        elif "c" in law:                        # neo-Hookean
             kw["law"] = NeoHookean(c=float(law["c"]))
         else:
             raise ValueError(f"law override needs c1/c2 (Fung) or c (neo-Hookean): {law}")
@@ -243,10 +260,14 @@ def _study_transient(cfg: dict, *, trace: bool = False, trace_every: float | Non
         color = cmap(0.15 + 0.7 * i / max(n - 1, 1)) if n > 1 else "black"
         axes[0].plot(r.t, r.sigma_norm, color=color, label=label)
         axes[1].plot(r.t, r.mass, color=color, label=label)
+        status = ("runaway (diverged)" if r.diverged
+                  else "adapted" if r.converged
+                  else "NOT converged (still evolving)")
         summary.append({"label": label, "sigma_norm": float(r.sigma_norm[-1]),
-                        "mass": float(r.mass[-1]), "diverged": bool(r.diverged)})
+                        "mass": float(r.mass[-1]), "diverged": bool(r.diverged),
+                        "converged": bool(r.converged)})
         print(f"  {label:>16}:  sigma/sigma_h -> {r.sigma_norm[-1]:.3f},"
-              f"  mass -> {r.mass[-1]:.3f},  diverged={r.diverged}")
+              f"  mass -> {r.mass[-1]:.3f},  {status}")
     axes[0].axhline(1.0, color="gray", lw=1)
     axes[0].set(xlabel="time [day]", ylabel=r"$\bar\sigma/\bar\sigma_h$", title="stress vs set-point")
     axes[1].set(xlabel="time [day]", ylabel=r"mass $M/M_0$", title="growth")
@@ -312,6 +333,16 @@ def _study_equilibrium(cfg: dict, *, trace: bool = False):
     print(f"  equilibrium exists? {e.exists}")
     if e.exists:
         print(f"  evolved stretch lambda* = {e.lam:.3f},  mass = {e.mass:.3f}")
+        # Cross-check the headline claim right here: the equilibrated solve skips the
+        # transient but should land on its plateau.  Run the cheap homogenized
+        # transient on the same insult and compare, so the student sees the match
+        # without having to set up a separate run.
+        rt = homogenized_cmm.simulate(geom, insult, t_end=5000, dt=1.0)
+        lam_t = float(rt.lam[-1])
+        gap = 100.0 * abs(lam_t - e.lam) / e.lam
+        settled = "settled" if rt.converged else "still evolving"
+        print(f"  transient check: homogenized plateau lambda = {lam_t:.3f} ({settled}) "
+              f"-> matches lambda* to {gap:.1f}%")
         if trace:
             # The evolved end state, in the same physical quantities the transient
             # tracker prints: mass fractions phi^k and per-constituent stress.
@@ -323,6 +354,8 @@ def _study_equilibrium(cfg: dict, *, trace: bool = False):
             print(f"    constituent stress:  {stresses}")
 
     summary = {"exists": e.exists, "lam": float(e.lam)}
+    if e.exists:
+        summary["transient_lam"] = lam_t
 
     fig = None
     scan = cfg.get("scan")

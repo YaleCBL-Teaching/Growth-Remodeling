@@ -58,7 +58,7 @@ import numpy as np
 
 from .geometry import Geometry
 from .history import Result
-from .monitor import Monitor, adapted_note, cmm_columns, driving_preamble
+from .monitor import Monitor, cmm_columns, driving_preamble, status_note
 from .parameters import Insult
 
 
@@ -140,7 +140,7 @@ def simulate(
                 masses_hist[nm][i:] = masses_hist[nm][i - 1] if i > 0 else np.nan
                 stress_hist[nm][i:] = stress_hist[nm][i - 1] if i > 0 else np.nan
             if monitor is not None and last_snap is not None:
-                monitor.end(ti, last_snap, adapted_note(True))
+                monitor.end(ti, last_snap, status_note(diverged=True))
             break
 
         out["lam"][i] = lam
@@ -178,10 +178,7 @@ def simulate(
                 upsilon = 1.0 + c.gain * dev                       # stimulus, Eq. (CM3)
                 m_prod[c.name][i] = max(0.0, c.k_d * M[c.name] * upsilon)
 
-    if monitor is not None and not diverged and last_snap is not None:
-        monitor.end(t[-1], last_snap, adapted_note(False))
-
-    return Result(
+    result = Result(
         theory="full CMM",
         setting=geom.name,
         sigma_h=model.sigma_bar_h,
@@ -195,3 +192,6 @@ def simulate(
         stresses=stress_hist,
         diverged=diverged,
     )
+    if monitor is not None and not diverged and last_snap is not None:
+        monitor.end(t[-1], last_snap, status_note(False, result.converged))
+    return result
