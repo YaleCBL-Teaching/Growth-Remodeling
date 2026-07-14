@@ -22,7 +22,7 @@ def main() -> None:
     model = SEMINAR_MODEL
     fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2))
 
-    r = kinematic_growth.simulate(artery(model), HYPERTENSION, t_end=1000)
+    r = kinematic_growth.simulate(artery(model), HYPERTENSION, t_end=400)
     axes[0].plot(r.t, r.sigma_norm, color=NEUTRAL)
     axes[1].plot(r.t, r.mass, color=NEUTRAL)
     axes[2].plot(r.t, r.lam, color=NEUTRAL)

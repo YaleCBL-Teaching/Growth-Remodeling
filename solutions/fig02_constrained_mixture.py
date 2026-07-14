@@ -21,7 +21,7 @@ FIG = "docs/figures/fig02_constrained_mixture.pdf"
 
 def main() -> None:
     art = artery(SEMINAR_MODEL)
-    r = constrained_mixture.simulate(art, HYPERTENSION, t_end=1200, dt=2.0)
+    r = constrained_mixture.simulate(art, HYPERTENSION, t_end=400, dt=2.0)
 
     fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2))
 

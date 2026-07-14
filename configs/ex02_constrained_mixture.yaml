@@ -27,7 +27,7 @@ insult:
   # elastin_surviving: 0.3
 
 simulate:
-  t_end: 3000
+  t_end: 400              # the hypertensive adaptation plays out within 400 days
   dt: 2.0                 # explicit heredity integral; smaller dt = more accurate
 
 # Parametric study: how does the pressure step change the adapted state?

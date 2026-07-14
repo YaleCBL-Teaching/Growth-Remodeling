@@ -19,7 +19,7 @@ insult:
 
 simulate:
   k_g: 0.05               # growth-rate gain [1/day]
-  t_end: 1500
+  t_end: 400              # adaptation is complete well within 400 days
 
 # Parametric study: one curve per growth-rate gain.  (Or override on the CLI:
 #   uv run python run.py configs/ex01_kinematic_growth.yaml --sweep simulate.k_g=0.02,0.05,0.2)

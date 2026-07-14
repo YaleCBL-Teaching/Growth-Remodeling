@@ -22,5 +22,5 @@ insult:
   ramp: 1.0
 
 simulate:
-  t_end: 2000
+  t_end: 400              # hypertension settles within 400 days (aneurysm study below needs longer)
   dt: 1.0                 # used by the full model; ignored by the homogenized one

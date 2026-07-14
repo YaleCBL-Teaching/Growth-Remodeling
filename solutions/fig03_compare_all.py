@@ -37,7 +37,8 @@ def main() -> None:
     art = artery(SEMINAR_MODEL)
 
     scenarios = [
-        (r"Hypertension  ($P\times1.5$)", HYPERTENSION, 1000.0, 1.0),
+        # hypertension settles fast (short window); the aneurysm is slow (keep long)
+        (r"Hypertension  ($P\times1.5$)", HYPERTENSION, 400.0, 1.0),
         (r"Aneurysm  (elastin $\to$ 30%)", ANEURYSM, 6000.0, 2.0),
     ]
 
