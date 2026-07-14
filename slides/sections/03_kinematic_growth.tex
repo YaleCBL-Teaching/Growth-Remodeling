@@ -6,53 +6,40 @@
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Multiplicative Decomposition --- Growth vs.\ Elasticity}
-  Kinematic growth splits the deformation into a stress-free \textbf{growth} part
-  $\bm{F}_g$ (how the tissue adds mass) and an \textbf{elastic} part $\bm{F}_e$ ---
-  the only part that carries stress.
-  \dlab{general form --- a product of tensors}
+\begin{frame}[t]{Multiplicative Decomposition: Growth vs.\ Elasticity}
+  Split the deformation into a stress-free \textbf{growth} part $\bm{F}_g$ and a stress-carying \textbf{elastic} part $\bm{F}_e$.
+  \dlab{a product of tensors}
   \giveneq{\bm{F}=\bm{F}_e\,\bm{F}_g,\qquad\text{only }\bm{F}_e\text{ stores energy.}}
-  \zlab{reduction used here --- scalar stretches}
+  \zlab{scalar stretches}
   \slboxeq{2.2em}{eq:split}{\lambda = \lambda_e \,\lambda_g}
-  Growth is \emph{one} inelastic stretch $\lambda_g$; the elastic stretch
-  $\lambda_e=\lambda/\lambda_g$ is the only part the material law sees. Here the
-  wall is treated as a \emph{single} material --- no separate constituents yet.
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
-\begin{frame}[t]{The Idea, and the Kinematics}
-  Postulate a stress-free \textbf{growth} deformation $\bm{F}_g$; only the elastic
-  part $\bm{F}_e$ carries load. Grown pieces need not fit together ---
-  $\bm{F}_g$ leaves an \emph{incompatible} stress-free state; $\bm{F}_e$ forces
-  them back into one body (residual stress).
+\begin{frame}[t]{Multiplicative Decomposition: Growth vs.\ Elasticity}
+  $\bm{F}_g$ yields an \emph{incompatible} stress-free state, $\bm{F}_e$ restores compability via residual stress.
   \vfill
   \begin{center}\kinmap[1.0]\end{center}
   \vfill
 \end{frame}
 
-\begin{frame}[t]{The Growth Tensor Must Be Prescribed}
-  $\bm{F}_g$ is \textbf{chosen by the modeler}, not derived --- it encodes
-  \emph{how} the tissue is assumed to add mass. A common choice grows the tissue
-  along a single direction $\bm{e}_f$ (a wall-thickening or \emph{fiber}
-  direction):
-  \dlab{prescribed growth tensor --- this is an \emph{input}}
+\begin{frame}[t]{Kinematic Growth Tensor}
+  $\bm{F}_g$ encodes \emph{how} the tissue is assumed to add mass. A common choice grows the tissue
+  an amount $\theta$ along a direction $\bm{f}$:
+  \dlab{prescribed growth tensor}
   \slboxeq{2.6em}{eq:growthtensor}{\bm{F}_g = \bm{I} + (\theta-1)\,
-    \bm{e}_f\!\otimes\bm{e}_f
+    \bm{f}\!\otimes\bm{f}
     \;=\;\mathrm{diag}(1,\,1,\,\theta)}
-  \zlab{0D-specific reduction --- the growth tensor becomes one stretch}
-  \giveneq{\bm{F}_g\ \longrightarrow\ \lambda_g\ \ (\text{scalar growth stretch}),
+  \zlab{growth stretch}
+  \giveneq{\lambda_g\ \ (\text{scalar growth stretch}),
     \qquad \theta=\det\bm{F}_g=M/M_0.}
-  Here $\bm{e}_f$ is the growth direction (e.g.\ wall-thickening). The growth
-  \emph{pattern} is fixed a priori; only the scalar \textbf{growth stretch}
-  $\lambda_g$ (equivalently the mass ratio $\theta$) evolves in time.
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
-\begin{frame}[t]{The Growth Law}
+\begin{frame}[t]{Growth Law}
   The growth \emph{pattern} $\bm{F}_g$ is fixed; the growth law evolves its single
   scalar to null the stress deviation from the set-point (first-order, production
   $\propto$ current mass). Since $\bm{F}_g$ is fixed by $\theta$, its rate
-  $\dot{\bm{F}}_g=\dot\theta\,\bm{e}_f\!\otimes\bm{e}_f$ reduces to \emph{one}
+  $\dot{\bm{F}}_g=\dot\theta\,\bm{f}\!\otimes\bm{f}$ reduces to \emph{one}
   scalar ODE --- the \emph{same} law in the full 3D tensor model and the 0D
   reduction (both track the scalar $\theta$):
   \slboxeq{2.6em}{eq:kingrowth}{\frac{\dd\theta}{\dd t}

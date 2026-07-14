@@ -1,0 +1,15 @@
+% Yale wordmark in the official "Yale 2024" typeface, Yale blue.
+% The main deck builds with pdflatex (which cannot use system OTF fonts), so the
+% logo is pre-rendered here to a self-contained vector PDF (font embedded) and
+% included via \includegraphics{figures/yale_logo.pdf}.
+%
+% Regenerate (requires the Yale 2024 font installed and xelatex):
+%     xelatex yale_logo.tex
+\documentclass[border=1pt]{standalone}
+\usepackage{fontspec}
+\usepackage{xcolor}
+\definecolor{YaleBlue}{RGB}{0,53,107}
+\setmainfont{Yale 2024}
+\begin{document}
+{\color{YaleBlue}\fontsize{72}{72}\selectfont Yale}
+\end{document}

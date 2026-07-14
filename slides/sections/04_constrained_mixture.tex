@@ -1,22 +1,22 @@
-% ============================================================================
-%  SECTION 4 — Full constrained mixture
-% ============================================================================
 \begin{frame}[t]{}
   \vfill\begin{center}{\Huge\color{YaleBlue} The Constrained Mixture Model}
   \end{center}\vfill
 \end{frame}
 
-% ---- the idea: track every cohort (start of CMM) ---------------------------
-\begin{frame}[t]{The Idea: Track Every Cohort}
-  All constituents are \textbf{constrained to deform together}, but each carries
-  its \emph{own} natural configuration and is continuously \textbf{produced and
-  removed} --- so the tissue holds a whole \emph{history} of cohorts.
+\begin{frame}[t]{One Framework, Many Applications}
   \vfill
-  \begin{center}\humphreygr[0.70]\end{center}
+  \begin{center}\includegraphics[height=0.9\textheight]{figures/cmm_applications.pdf}\end{center}
+  \vfill
+  \srccite{Humphrey, J Elasticity (2021)}
+\end{frame}
+
+\begin{frame}[t]{The Idea: Track Every Cohort}
+  \vfill
+  \begin{center}\humphreygr[0.56]\end{center}
   \vspace{-0.1em}
   \begin{center}\footnotesize\color{black!70}
   $\kappa$: configuration \;\textbullet\; $\tau$: deposition time \;\textbullet\;
-  $s$: current time \;\textbullet\; $\alpha\!\in\!\{e,c,m\}$: constituent
+  $s$: current time \;\textbullet\; $\alpha$: constituent
   \;\textbullet\; $\bm{G}^{\alpha}$: deposition stretch \;\textbullet\;
   $\bm{F}^{\alpha}_{n(\tau)}$: constituent deformation
   \end{center}
@@ -24,8 +24,7 @@
   \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
-% ---- constituents & mass fractions (moved from biology) + deposition stretch
-\begin{frame}[t]{The Cast of Characters: Constituents \& Mass Fractions}
+\begin{frame}[t]{Load-Bearing Vessel Constituents}
   \footnotesize
   The wall is a mixture of three constituents, each with a reference \textbf{mass
   fraction} $\phi_0^{\alpha}$ ($\sum_\alpha\phi_0^{\alpha}=1$) and a
@@ -56,71 +55,172 @@
   \srccite{Humphrey, Eberth, Dye, Gleason, J Biomech (2009)}
 \end{frame}
 
-% ---- why "constrained": one shared tissue stretch --------------------------
-\begin{frame}[t]{Why ``Constrained''? Every Cohort Shares One Stretch}
+\begin{frame}[t]{Every Cohort Shares One Stretch}
   A cohort of $\alpha$ deposited at $\tau$ is laid down at $G^{\alpha}$ and then
   stretches \emph{with the mixture}: every constituent and cohort is
-  \textbf{constrained} to the same tissue stretch $\lambda(t)$.
-  \dlab{general form --- constituent-specific deformation}
-  \giveneq{\bm{F}^{\alpha}_{n(\tau)}(t) = \bm{F}(t)\,\bm{F}^{-1}(\tau)\,\bm{G}^{\alpha}.}
-  \zlab{0D reduction --- scalar elastic stretch}
-  \slboxeq{2.2em}{eq:cohort}{\lambda_e^{\alpha}(t,\tau) = G^{\alpha}\,\frac{\lambda(t)}{\lambda(\tau)}}
-  The shared $\lambda(t)$ is the \emph{constraint}. At birth ($t=\tau$) the cohort
+  \textbf{constrained} to the same tissue stretch $\lambda(s)$.
+  \dlab{constituent-specific deformation}
+  \giveneq{\bm{F}^{\alpha}_{n(\tau)}(s) = \bm{F}(s)\,\bm{F}^{-1}(\tau)\,\bm{G}^{\alpha}(\tau).}
+  \zlab{scalar elastic stretch}
+  \slboxeq{2.2em}{eq:cohort}{\lambda_{n(\tau)}^{\alpha}(s,\tau) = \frac{\lambda(s)}{\lambda(\tau)} \, G^{\alpha}}
+  The shared $\lambda(s)$ is the \emph{constraint}. At birth ($t=\tau$) the cohort
   sits at $G^{\alpha}$ (hence $\sigma_h^{\alpha}$); older cohorts measure the same
   $\lambda$ from an earlier $\lambda(\tau)$.
   \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
 \end{frame}
 
-\begin{frame}[t]{Mixture Stress = Mass-Weighted Sum}
-  Each constituent contributes in proportion to its mass --- the \textbf{rule of
-  mixtures}, summed over all surviving cohorts (all evaluated at the \emph{shared}
-  $\lambda$):
-  \slboxeq{3.2em}{eq:mixstress}{\bar\sigma(t) = \frac{1}{M_{\text{tot}}}\sum_\alpha\!\left[
-     M^{\alpha}(0)\,q^{\alpha}(t,0)\,\sigma^{\alpha}\!\big(G^{\alpha}\lambda(t)\big)
-     + \int_0^t\! m^{\alpha}(\tau)\,q^{\alpha}(t,\tau)\,\sigma^{\alpha}\!\big(\lambda_e^{\alpha}\big)\,\dd\tau\right]}
-  Each step evaluates this sum, then solves
-  $\bar\sigma(\lambda)=\sigma_{\text{req}}(\lambda)$ for the current stretch. The
-  surviving fraction $q^{\alpha}$ and production rate $m^{\alpha}$ come from the mass
-  balance next.
-  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+% ---- derivation after Humphrey (2021): mass balance (1) ----------------------
+\begin{frame}[t]{Mass Balance}
+  \textbf{Two G\&R times:} the \emph{current} time $s$ and a past
+  \emph{deposition} time $\tau\in[0,s]$. Track each constituent's
+  \textbf{apparent mass density} $\rho^{\alpha}$ (mass of $\alpha$ per current
+  mixture volume; $\rho=\sum_{\alpha}\rho^{\alpha}$).
+  \par\medskip
+  Spatial mass balance, one per constituent:
+  \giveneq{\frac{\partial\rho^{\alpha}}{\partial s}
+     + \underbrace{\operatorname{div}(\rho^{\alpha}\bm{v}^{\alpha})}_{\text{transport}}
+     = \underbrace{\bar m^{\alpha}}_{\text{net mass exchange}},
+     \qquad \alpha=1,\dots,N.}
+  The net rate is \emph{signed} ---
+  $\bar m^{\alpha}=\underbrace{m^{\alpha}}_{\text{production }\ge 0}
+   -\underbrace{r^{\alpha}}_{\text{removal }\ge 0}$: \;
+   $<0$ atrophy \;\textbullet\; $=0$ maintenance \;\textbullet\; $>0$ growth.
+  \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
-\begin{frame}[t]{Mass Balance --- The Heredity Integral}
-  Each turnover constituent's mass is the surviving initial material plus all it
-  has produced since, aged by a survival function:
-  \slboxeq{2.6em}{eq:heredity}{M^{\alpha}(t) = M^{\alpha}(0)\,q^{\alpha}(t,0)
-    + \int_0^t m^{\alpha}(\tau)\,q^{\alpha}(t,\tau)\,\dd\tau}
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      \textbf{Survival} (Poisson removal, rate $k_d^{\alpha}$):
-      $\;q^{\alpha}(t,\tau)=e^{-k_d^{\alpha}(t-\tau)}$, mean lifetime $1/k_d^{\alpha}$
-      (elastin: $k_d^e=0$).
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \textbf{Production} $\propto$ mass, driven by stress:
-      $\;m^{\alpha}=k_d^{\alpha}M^{\alpha}\,\Upsilon$,
-      $\;\Upsilon=1+K_\sigma^{\alpha}\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right)$.
-    \end{column}
-  \end{columns}
-  \srccite{Humphrey, Rajagopal, Math Models Methods Appl Sci (2002)}
+% ---- assumptions 1 & 2 -> heredity integral (2) ------------------------------
+\begin{frame}[t]{From Balance to a Heredity Integral}
+  \textbf{Assumption 1 --- constrained mixture:} every constituent moves with the
+  mixture, $\bm{v}^{\alpha}=\bm{v}$; as G\&R is slow vs.\ the cardiac cycle the
+  transport term is negligible, so $\;\partial\rho^{\alpha}/\partial s=\bar m^{\alpha}\;$
+  integrates directly in time.
+  \par\smallskip
+  \textbf{Assumption 2 --- prescribed rates:} a true production rate
+  $m^{\alpha}(\tau)\ge 0$ and a survival fraction $q^{\alpha}(s,\tau)\in[0,1]$.
+  Integrating from the distant past to $s$:
+  \slboxeq{3.0em}{eq:massher}{\rho^{\alpha}(s)=
+     \underbrace{\rho^{\alpha}(0)\,Q^{\alpha}(s)}_{\text{survivors of original material}}
+     +\underbrace{\int_{0}^{s} m^{\alpha}(\tau)\,q^{\alpha}(s,\tau)\,\dd\tau}
+       _{\text{deposited at }\tau,\ \text{still present at }s}}
+  with $Q^{\alpha}(0)=1$. \textbf{Assumption 3:} bulk density is nearly constant,
+  $\rho(s)=\rho(0)$ --- mass changes track volume changes.
+  \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
-% ---- quick question: computational cost of the heredity integral -----------
+% ---- linear momentum (3) ----------------------------------------------------
+\begin{frame}[t]{Linear Momentum Balance}
+  A rule-of-mixtures for the stresses (no body forces) satisfies the classical
+  linear-momentum balance:
+  \giveneq{\operatorname{div}\bm{\sigma}=\rho\,\bm{a}
+     \;\;\xrightarrow{\ \text{quasi-static}\ }\;\;
+     \operatorname{div}\bm{\sigma}=\bm{0}.}
+  \textbf{Quasi-static assumption:} G\&R evolves slowly at every time $s$, so the
+  inertia $\rho\bm{a}$ is negligible --- the tissue stays in mechanical
+  equilibrium throughout. G\&R is then a \emph{sequence} of finite-elasticity
+  boundary-value problems.
+  \srccite{Humphrey, J Elasticity (2021)}
+\end{frame}
+
+% ---- constitutive: Cauchy stress (4) ----------------------------------------
+\begin{frame}[t]{Constitutive Relations: Cauchy Stress}
+  In finite elasticity the Cauchy stress follows from a stored-energy function
+  $W$ (per unit reference mixture volume):
+  \giveneq{\bm{\sigma}(s)=\frac{2}{J}\,\bm{F}(s)\,
+     \frac{\partial W(s)}{\partial\bm{C}(s)}\,\bm{F}^{\mathrm{T}}(s),
+     \qquad \bm{C}=\bm{F}^{\mathrm{T}}\bm{F},\quad J=\det\bm{F}.}
+  Rule of mixtures: $W=\sum_{\alpha}\tilde W^{\alpha}$. Closing the model needs
+  \textbf{three constituent-specific relations} --- a \emph{stored energy}
+  $W^{\alpha}$, a \emph{production} rate $m^{\alpha}$, and a \emph{removal}
+  (survival) $q^{\alpha}$.
+  \srccite{Humphrey, J Elasticity (2021)}
+\end{frame}
+
+% ---- screenshot slide 2: the three constituent-specific constitutive relations
+\begin{frame}[t]{Three Constituent-Specific Constitutive Relations}
+  \textbf{1.\ Material} --- constituent stored energy $W^{\alpha}$: neo-Hookean
+  elastin, Fung-type collagen \& smooth muscle (eq.~\eqref{eq:fung}).
+  \par\medskip
+  \textbf{2.\ Rate of production} --- up with wall stress \& inflammation, down
+  with wall shear:
+  \slboxeq{2.8em}{eq:production}{m^{\alpha}(\tau)=m_o^{\alpha}\big(1
+     + K_{\sigma}^{\alpha}\,\Delta\sigma
+     - K_{\tau_w}^{\alpha}\,\Delta\tau_w
+     + K_{\varphi}^{\alpha}\,\Delta\rho_{\varphi}\big)\ge 0}
+  \vspace{-0.4em}
+  \begin{center}\footnotesize\color{black!70}
+   $\Delta\sigma$: pressure \;\textbullet\; $\Delta\tau_w$: flow \;\textbullet\;
+   $\Delta\rho_{\varphi}$: inflammation
+  \end{center}
+  \textbf{3.\ Rate of removal} --- a survival fraction that decays faster under
+  stress perturbation:
+  \slboxeq{2.6em}{eq:removal}{q^{\alpha}(s,\tau)=\exp\!\Big(\!-\!\int_{\tau}^{s}
+     k_o^{\alpha}\big(1+\omega\,\Delta\sigma^{2}(t)+\cdots\big)\,\dd t\Big)\in[0,1]}
+  \srccite{Valentin, \ldots, Humphrey, J R Soc Interface (2009)}
+\end{frame}
+
+% ---- strain-energy functions: the stored-energy heredity (5) -----------------
+\begin{frame}[t]{Constituent Stored-Energy Functions}
+  Each cohort carries its \emph{own} stored energy $W^{\alpha}$, evaluated at its
+  elastic deformation
+  $\bm{F}^{\alpha}_{n(\tau)}(s)=\bm{F}(s)\,\bm{F}^{-1}(\tau)\,\bm{G}^{\alpha}(\tau)$.
+  Summing over cohorts with the \emph{same} heredity structure gives the apparent
+  (mixture-level) energy:
+  \slboxeq{3.8em}{eq:mixenergy}{\rho\,\tilde W^{\alpha}(s)=
+     \underbrace{\rho^{\alpha}(0)\,Q^{\alpha}(s)\,W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(0)}(s)\big)}
+       _{\text{original material}}
+     +\underbrace{\int_{0}^{s} m^{\alpha}(\tau)\,q^{\alpha}(s,\tau)\,
+       W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(\tau)}(s)\big)\,\dd\tau}_{\text{later cohorts}}}
+  The mixture energy $W=\sum_{\alpha}\tilde W^{\alpha}$ closes the stress above.
+  \srccite{Humphrey, J Elasticity (2021)}
+\end{frame}
+
+% ---- two special cases from the paper: s=0 and homeostasis (6),(7) -----------
+\begin{frame}[t]{Special Cases: $s=0$ and Homeostasis}
+  \textbf{(i) At $s=0$} (just before a perturbation) only original material is
+  present, and $Q^{\alpha}(0)=1$:
+  \giveneq{\rho\,\tilde W^{\alpha}(0)=\rho^{\alpha}(0)\,W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(0)}(0)\big)
+     \;\Rightarrow\;
+     \tilde W^{\alpha}(0)=\underbrace{\tfrac{\rho^{\alpha}(0)}{\rho(0)}}_{\phi^{\alpha}(0)}
+       W^{\alpha}(0),}
+  recovering the rule of mixtures $W(0)=\sum_{\alpha}\phi^{\alpha}(0)\,W^{\alpha}(0)$.
+  \par\medskip
+  \textbf{(ii) Homeostasis} --- turnover in an \emph{unchanging} configuration, so
+  $\bm{F}^{\alpha}_{n(\tau)}(s)=\bm{F}^{\alpha}_{n(0)}(s)$ (independent of $\tau$).
+  Then $W^{\alpha}$ factors out and, using the mass balance,
+  \slboxeq{2.8em}{eq:homeo}{\rho\,\tilde W^{\alpha}(s)=
+     \underbrace{\Big(\rho^{\alpha}(0)Q^{\alpha}(s)+\!\int_{0}^{s}\! m^{\alpha}q^{\alpha}\,\dd\tau\Big)}_{=\;\rho^{\alpha}(s)}
+     \,W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(0)}(s)\big)
+     \;\Rightarrow\; \tilde W^{\alpha}(s)=\phi^{\alpha}(s)\,W^{\alpha}(s).}
+  \srccite{Humphrey, J Elasticity (2021)}
+\end{frame}
+
+% ---- perfect maintenance (constant rates) from the presentation --------------
+\begin{frame}[t]{Perfect Maintenance}
+  Take \emph{constant} rates: $m^{\alpha}=m_0$, $Q^{\alpha}(s)=e^{-K^{\alpha}s}$,
+  $q^{\alpha}(s,\tau)=e^{-K^{\alpha}(s-\tau)}$. The mass balance integrates to
+  \giveneq{\rho^{\alpha}(s)=
+     \underbrace{\rho^{\alpha}(0)\,e^{-K^{\alpha}s}}_{\text{original decays}}
+     +\underbrace{\frac{m_0}{K^{\alpha}}\big(1-e^{-K^{\alpha}s}\big)}_{\text{production accumulates}}.}
+  A time-\emph{invariant} density ($\rho^{\alpha}(s)=\rho^{\alpha}(0)$ for all $s$)
+  requires the two to balance exactly:
+  \slboxeq{2.4em}{eq:perfmaint}{\text{perfect maintenance}\iff
+     \frac{m_0}{K^{\alpha}}=\rho^{\alpha}(0).}
+  Production $m_0$ then exactly offsets removal $K^{\alpha}\rho^{\alpha}$ ---
+  continuous turnover, unchanging tissue.
+  \srccite{Valentin \& Humphrey, Phil Trans R Soc A (2009)}
+\end{frame}
+
 \begin{frame}[t]{}
-  \begin{yourturnbox}{Quick Check --- How Expensive Is This?}
+  \begin{yourturnbox}{Computational Cost?}
     \qq{At each of $N$ time steps the mixture stress sums over \emph{all} cohorts
     deposited so far. How does the total cost scale with $N$?}
     \qhint{Step $k$ re-sums $\sim k$ stored cohorts; add up $\sum_{k=1}^{N}k$.}
   \end{yourturnbox}
   \vfill
   \begin{center}
-  $\displaystyle\sum_{k=1}^{N} k=\frac{N(N+1)}{2}=O(N^2)$
+  $\displaystyle\sum_{k=1}^{N} k=\frac{N(N+1)}{2}=\mathcal{O}(N^2)$
   \end{center}
   \vfill
-  \begin{center}\small
-  The full model stores and re-sums the \emph{entire} history --- $O(N^2)$ work.
-  Removing that cost is exactly what the \textbf{homogenized} model does next.
-  \end{center}
 \end{frame}
 
 

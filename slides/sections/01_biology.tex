@@ -1,40 +1,71 @@
-% ============================================================================
-%  SECTION 1 — Biological motivation & fundamental observations
-%  Order: motivation plots first; constituents introduced only at the end.
-% ============================================================================
 \begin{frame}[t]{}
-  \vfill\begin{center}{\huge\color{YaleBlue} A Brief Intro to Mechanobiology\\[0.3em] of Blood Vessels}
+  \vfill\begin{center}{\huge\color{YaleBlue} A Brief Introduction to Mechanobiology\\[0.3em] of Blood Vessels}
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Living Materials Are Never ``Finished''}
-  A steel beam is made once and wears out. A living artery is
-  \textbf{continuously torn down and rebuilt}: cells deposit and degrade
-  structural proteins while sensing the loads they carry.
-  \begin{itemize}
-    \item \textbf{Growth} --- change in \emph{mass}.
-    \item \textbf{Remodeling} --- change in \emph{microstructure} (fiber
-    orientation, natural length, composition).
-  \end{itemize}
+%"Ligaments, or any soft tissue, when put under even a moderate degree of tension, if that tension is unremitting, will elongate by the addition of new material; on the contrary, when ligaments, or rather soft tissues, remain uninterruptedly in a loose or lax state, they will gradually shorten, as the effete material is removed, until they come to maintain the same relation to the bony structures with which they are united that they did before their shortening. Nature never wastes her time and material in maintaining a muscle or ligament at its original length when the distance between their points of origin and insertion is for any considerable time, without interruption, shortened."
+
+\begin{frame}[t]{Vascular tissue has a preferred mechanical state}
+  \begin{columns}[T]
+    % left: Wolinsky-Glagov data plot
+    \begin{column}{0.55\textwidth}
+      \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]%
+        {figures/wolinsky_glagov.pdf}
+    \end{column}
+    % right: readings + thin-walled-tube schematic
+    \begin{column}{0.45\textwidth}
+      \vspace{0.3em}
+      Tension $T$ varies by a \textbf{\color{AccentRed}factor of 26}
+      \par\smallskip
+      \begin{center}$T = P\,a$\end{center}
+      \vfill
+      \begin{center}\wgvessel[0.62]\end{center}
+      \vfill
+      Tension / lamella varies by a \textbf{\color{ABlue}factor of 2.8}
+      \\
+      \par\smallskip
+      \begin{center}$\displaystyle \frac{T}{h} = \frac{P\,a}{h} = \sigma_\theta$\end{center}
+    \end{column}
+  \end{columns}
+  \srccite{Wolinsky \& Glagov, Circ Res (1967); Fig.~8 adapted by J.~Eichinger}
 \end{frame}
 
-\begin{frame}[t]{Cells Actively Hold a Mechanical Set-Point}
-  Cultured cells generate a steady \textbf{tension} and restore it after each
-  perturbation.
-  \bigfigw{biol_tensional_homeostasis.png}{0.96\linewidth}{}
-  \srccite{Tensional homeostasis; Brown et al., J Cell Physiol (1998)}
-\end{frame}
-
-\begin{frame}[t]{Fundamental Observation: A Stress Set-Point}
-  Wolinsky \& Glagov: aortic wall stress is nearly \textbf{constant across
-  mammals} --- a tissue-level set-point.
-  \bigfigw{motiv_wolinsky_glagov.png}{0.9\linewidth}{}
-  \srccite{Wolinsky \& Glagov, Circ Res (1967)}
-\end{frame}
-
-\begin{frame}[t]{Cells Chase a Mechanical Set-Point}
+\begin{frame}[t]{Mechanical Homeostasis}
+  The tissue holds a mechanical \textbf{set-point}: small fluctuations are
+  tolerated (\textbf{A}), and a perturbation relaxes back to it (\textbf{B}).
   \vfill
-  \begin{center}\gnrloop[1.18]\end{center}
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}
+      \begin{center}\includegraphics[width=\linewidth]{figures/fig_homeostasis_a.pdf}\end{center}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{center}\includegraphics[width=\linewidth]{figures/fig_homeostasis_b.pdf}\end{center}
+    \end{column}
+  \end{columns}
   \vfill
-  \srccite{Humphrey, J Elasticity (2021)}
+  \srccite{Humphrey \& Schwartz, Annu Rev Biomed Eng (2021)}
+\end{frame}
+
+\begin{frame}[t]{(Mal)adaptation}
+  The set-point itself can shift: a perturbation may settle at a \textbf{reset}
+  set-point (\textbf{C}), or, when regulation fails, the state runs away
+  (\textbf{D}).
+  \vfill
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}
+      \begin{center}\includegraphics[width=\linewidth]{figures/fig_homeostasis_c.pdf}\end{center}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{center}\includegraphics[width=\linewidth]{figures/fig_homeostasis_d.pdf}\end{center}
+    \end{column}
+  \end{columns}
+  \vfill
+  \srccite{Humphrey \& Schwartz, Annu Rev Biomed Eng (2021)}
+\end{frame}
+
+\begin{frame}[t]{Mechanobiological Regulation}
+  \vfill
+  \begin{center}\immunoreg[0.58]\end{center}
+  \vfill
+  \srccite{Humphrey \& Schwartz, Annu Rev Biomed Eng (2021)}
 \end{frame}
