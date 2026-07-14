@@ -1,26 +1,18 @@
-% ============================================================================
-%  SECTION 5 — Homogenized constrained mixture
-% ============================================================================
 \begin{frame}[t]{}
   \vfill\begin{center}{\Huge\color{YaleBlue} Homogenized CMM}
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Homogenize: One Mean Natural Configuration per Constituent}
-  The full model tracks \emph{every} past cohort with its own natural
-  configuration ($O(N^2)$). \textbf{Temporal homogenization} instead gives each
-  constituent a \emph{single, evolving} mean natural configuration --- its whole
-  mass shares one homogenized elastic deformation, so two ODEs per constituent
-  replace the entire history ($O(N)$).
-  \dlab{general form (Cyron 2016) --- homogenized elastic deformation}
-  \giveneq{\bm{F}^{\alpha}_{e}(s) = \bm{F}(s)\,\big[\bm{F}^{\alpha}_{n}(s)\big]^{-1}}
-  \zlab{0D reduction --- scalar mean natural stretch}
-  \giveneq{\lambda_e^{\alpha} = \lambda/\lambda_n^{\alpha}}
-  \begin{center}\homogmap[0.56]\end{center}
-  \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
-\end{frame}
+% \begin{frame}[t]{Homogenize: One Mean Natural Configuration per Constituent}
+%   \textbf{Temporal homogenization} gives each constituent a \emph{single, evolving} mean natural configuration. Two ODEs per constituent replace the entire history.
+%   \dlab{general form (Cyron 2016): homogenized elastic deformation}
+%   \giveneq{\bm{F}^{\alpha}_{e}(s) = \bm{F}(s)\,\big[\bm{F}^{\alpha}_{n}(s)\big]^{-1}}
+%   \zlab{0D reduction: scalar mean natural stretch}
+%   \giveneq{\lambda_e^{\alpha} = \lambda/\lambda_n^{\alpha}}
+%   \begin{center}\homogmap[0.56]\end{center}
+%   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
+% \end{frame}
 
-% ---- Maxwell analog moved EARLY: the visual intuition for the whole model ----
 \begin{frame}[t]{The Mechanical Analog: A Maxwell Fluid with a Motor}
   Each constituent behaves like a \textbf{Maxwell element in parallel with a
   motor}: turnover relaxes stress toward a \emph{prestress}, not zero.
@@ -55,60 +47,50 @@
   current $\lambda_n^{\alpha}$; mixing the two at the turnover rate evolves the mean.
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
-      \zlab{growth --- mass}
-      \slboxeq{2.2em}{eq:homog_mass}{\frac{\dd M^{\alpha}}{\dd t}
+      \zlab{growth (mass)}
+      \slboxeq{eq:homog_mass}{\frac{\dd M^{\alpha}}{\dd t}
         = M^{\alpha} K_\sigma^{\alpha} k_d^{\alpha}\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right)}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \zlab{remodeling --- mean natural stretch}
-      \slboxeq{2.2em}{eq:homog_remodel}{\frac{\dd\lambda_n^{\alpha}}{\dd t}
+      \zlab{remodeling (mean natural stretch)}
+      \slboxeq{eq:homog_remodel}{\frac{\dd\lambda_n^{\alpha}}{\dd t}
         = \frac{m^{\alpha}}{M^{\alpha}}\!\left(\frac{\lambda}{G^{\alpha}}-\lambda_n^{\alpha}\right)}
     \end{column}
   \end{columns}
   \vspace{0.3em}
   with production $m^{\alpha}=k_d^{\alpha}M^{\alpha}\Upsilon^{\alpha}$. Holding
   $\lambda$ fixed, remodeling relaxes each constituent's stress to its prestress
-  $\sigma_h^{\alpha}$ (time constant $\sim\!1/k_d$) --- the Maxwell-with-motor
+  $\sigma_h^{\alpha}$ (time constant $\sim\!1/k_d$), the Maxwell-with-motor
   behaviour.
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
 
 \begin{frame}[t]{}
-  \begin{yourturnbox}{Quick Check --- Why Is the Homogenized Model Cheap?}
-    \qq{Its entire state is $(M^{\alpha},\lambda_n^{\alpha})$ per constituent --- a
-    \emph{fixed} number of values, updated once per step. How does its cost scale
-    with the number of steps $N$, compared with the full model's $O(N^2)$?}
-    \qhint{No growing history to re-sum: constant work per step.}
+  \begin{yourturnbox}{Why Is the Homogenized Model Cheap?}
+    \qq{How does the cost of the homogenized constrained mixture model scale
+    with the number of steps $N$, compared with the full model?}
   \end{yourturnbox}
-  \vfill
-  \begin{center}
-  homogenized: $O(N)$ \qquad vs.\qquad full CMM: $O(N^2)$
-  \end{center}
-  \vfill
-  \begin{center}\small
-  Same time trajectory, far cheaper --- and the fixed state maps onto a
-  viscoelastic (Maxwell-with-motor) material, so it drops into standard
-  finite-element solvers.
-  \end{center}
+  \vspace{0.6em}
+  \srev
+  \begin{answerbox}{Why Is the Homogenized Model Cheap?}
+    The state is \emph{fixed-size}, two numbers $(M^{\alpha},\lambda_n^{\alpha})$ per constituent, and each step just advances two ODEs, with \emph{no} history to re-sum:
+    \giveneq{\text{homogenized: }\mathcal{O}(N)\qquad\text{vs.}\qquad
+      \text{full CMM: }\mathcal{O}(N^2)}
+    Same time trajectory, far cheaper, and the fixed state maps onto a viscoelastic (Maxwell-with-motor) material, so it drops traight into standard finite-element solvers.
+  \end{answerbox}
 \end{frame}
 
-% ---- pen & paper: when are the two models close? ---------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{When do homogenized and full agree?}
     \qq{The homogenized model keeps only the \emph{mean} natural configuration per
     constituent. Under what assumptions should it match the full deposition-history
-    model --- and when would you expect them to diverge? \qkind{discuss}}
-    \qres{The two remodeling pictures: full heredity integral vs.\ the single mean
-    stretch $\lambda_n^{\alpha}$ \eqref{eq:homog_remodel}.}
-    \qhint{Think about the \emph{spread} of natural configurations across cohorts.
-    When is a single mean a good summary of the whole history?}
+    model and when would you expect them to diverge? \qkind{discuss}}
   \end{yourturnbox}
-\end{frame}
-
-\begin{frame}[t]{}
+  \vspace{0.6em}
+  \srev
   \begin{answerbox}{When do homogenized and full agree?}
     They agree when each constituent's cohorts share \emph{nearly the same} natural
-    configuration --- i.e.\ slow, gradual loading where deposition stretch $G^{\alpha}$ and
+    configuration i.e.\ slow, gradual loading where deposition stretch $G^{\alpha}$ and
     turnover are roughly stationary, so the cohort spread stays narrow and the mean
     represents it well. {\color{ABlue}\bfseries They diverge} under fast or strongly
     time-varying insults, when cohorts deposited at very different states coexist and
@@ -116,13 +98,9 @@
   \end{answerbox}
 \end{frame}
 
-% ---- example + run: ex03 ---------------------------------------------------
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- homogenized vs.\ full (\texttt{ex03})}
-    \sprob{Run both mixture theories on the \emph{same} artery and insult. The
-    homogenized model keeps one mean natural stretch per constituent (two ODEs,
-    \eqref{eq:homog_mass}--\eqref{eq:homog_remodel}) instead of the full cohort
-    history. How closely does it track the full model, and how much faster is it?}
+  \begin{setupbox}{Example (homogenized vs.\ full, \texttt{ex03})}
+    \sprob{Run both mixture theories on the \emph{same} artery and insult. How closely does the homogenized model track the full model, and how much faster is it?}
     \srun{\scodeline{uv run python run.py configs/ex03\_homogenized\_vs\_full.yaml}
       Here \texttt{study: compare} runs
       \texttt{theories: [constrained\_mixture, homogenized\_cmm]} on one scenario
@@ -133,11 +111,10 @@
   \end{setupbox}
 \end{frame}
 
-% ---- interactive coding exercise: ex03 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Homogenized vs.\ full}
     \qq{Is the difference between the two curves visible by eye? By what factor is
-    the homogenized model faster --- and does the agreement survive a harsher,
+    the homogenized model faster and does the agreement survive a harsher,
     longer insult?}
     \qhint{Read the printed mass-ratio gap and the two runtimes. The homogenized
     model should track the full one closely wherever the loading is slow and
@@ -149,7 +126,7 @@
   \begin{answerbox}{Homogenized vs.\ full}
     The homogenized curve overlays the full CMM closely at a fraction of the
     runtime ($O(N)$ vs.\ $O(N^2)$). {\color{ABlue}\bfseries Learning:} it reproduces
-    a \textbf{similar time trajectory} to the full model --- cheaply.
+    a \textbf{similar time trajectory} to the full model, cheaply.
   \end{answerbox}
   \vspace{-0.4em}
   \bigfigw{fig03_compare_all.pdf}{0.52\linewidth}{Your overlay: homogenized (dashed)

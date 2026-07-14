@@ -3,8 +3,8 @@
 %  Adapted from the YaleCBL-Teaching/BENG_5570 slide build system.
 %  Two build modes are selected by \teachertrue / \teacherfalse in the
 %  master files (slides-student.tex / slides-teacher.tex):
-%    student  -> key equations shown as EMPTY numbered boxes to fill on iPad
-%    teacher  -> the same boxes are filled with the actual equation
+%    student  -> content is revealed piece by piece (beamer overlays)
+%    teacher  -> the whole slide is shown at once
 % ============================================================================
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -14,7 +14,7 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{tikz}
-\usetikzlibrary{positioning,arrows.meta,calc}
+\usetikzlibrary{positioning,arrows.meta,calc,shapes.geometric}
 \usepackage[export]{adjustbox}
 \usepackage{xcolor}
 
@@ -57,38 +57,24 @@
 }
 
 % ============================================================================
-%  Fill-in-the-blank equation mechanism
+%  Student build (piece by piece) vs. teacher full slide
 % ============================================================================
-% \teacher toggle set in the master file.
+% \teacher toggle is set in the master file AFTER this preamble is input, so
+% every test below is evaluated at USE time (inside the macros), not here.
+%   teacher  -> the whole slide is shown at once
+%   student  -> almost the same, but a few reveals (\srev) build up on click
+% Slides are kept mostly static: prefer a NEW slide over many build-in steps.
 \newif\ifteacher
 
-% Height register for a student blank box.
-% Usage in slides:
-%   \slboxeq{<box height>}{<eq label>}{<equation body>}
-%     student : empty framed box of the given height, right-numbered (label)
-%     teacher : the equation, boxed and numbered (same label)
-% The label is shared, so \eqref works identically in both builds.
-\newcommand{\slboxeq}[3]{%
-  \ifteacher
-    % teacher: show the boxed, numbered equation
-    \begin{equation}\label{#2}
-      \boxed{\displaystyle #3}
-    \end{equation}
-  \else
-    % student: reserve an empty framed box carrying the equation number
-    \begin{equation}\label{#2}\end{equation}%
-    \vspace{-2.2\baselineskip}%
-    \begin{center}%
-    \setlength{\fboxrule}{0.8pt}\setlength{\fboxsep}{4pt}%
-    \textcolor{SlideFrame}{\framebox[0.92\linewidth][c]{%
-      \rule{0pt}{#1}\rule{0pt}{0pt}%
-    }}%
-    \end{center}%
-    \vspace{-0.3\baselineskip}%
-  \fi
-}
+% \srev -- one reveal step: nothing in the teacher build, \pause in the student
+% build. Use SPARINGLY, mainly to reveal an answer after its question. Use at
+% frame level (not inside minipage/column/tcolorbox, where \pause is ineffective).
+\newcommand{\srev}{\ifteacher\else\pause\fi}
 
-% Inline "given" equation (always shown in both builds, unnumbered box-free).
+% \slboxeq{<eq label>}{<equation body>} -- a numbered key equation (no box).
+% \giveneq{<equation body>}             -- an unnumbered equation.
+% Both are shown with the rest of the slide; add \srev explicitly for a reveal.
+\newcommand{\slboxeq}[2]{\begin{equation}\label{#1}#2\end{equation}}
 \newcommand{\giveneq}[1]{\begin{equation*}#1\end{equation*}}
 
 % ============================================================================
@@ -214,8 +200,9 @@
 \newcommand{\sprob}[1]{\par\smallskip{\color{SFrame}\bfseries Example.}\ #1}
 \newcommand{\srun}[1]{\par\smallskip{\color{SFrame}\bfseries Run it.}\ #1}
 \newcommand{\sstudy}[1]{\par\smallskip{\color{SFrame}\bfseries Parametric study.}\ #1}
-% one code line in monospace inside a setup box
-\newcommand{\scodeline}[1]{{\ttfamily\small #1}\par}
+% one code line in monospace inside a setup box; always on its own line
+% (breaks before AND after, so it never runs into surrounding text)
+\newcommand{\scodeline}[1]{\par{\ttfamily\small #1}\par}
 
 
 % ===========================================================================
@@ -244,6 +231,96 @@
   \draw[flow] (check) -- (evolve);
   % single return arrow: adaptation changes the load the tissue sees
   \draw[flow] (evolve.east) -- ++(4.2,0) |- (load.east);
+\end{tikzpicture}}
+
+% ============================================================================
+%  Immuno-mechanical regulation: a control-systems block diagram (TikZ)
+%  Mechanical stimuli -> state -> sensors; sensors & set-points feed a
+%  comparator that emits deviations; the system/model (gains & rates) drives
+%  biological responses, closed by a homeostatic (negative) feedback loop and
+%  an inflammatory (positive, grey) feedback that resets set-points and gains.
+%  Redrawn after Humphrey & Schwartz, Annu. Rev. Biomed. Eng. (2021).
+% ============================================================================
+\newcommand{\immunoreg}[1][1.0]{%
+\begin{tikzpicture}[scale=#1,>={Latex[length=2.4mm]},
+    circ/.style={circle,draw=black,thick,fill=black!12,minimum size=0.95cm,
+                 inner sep=0pt},
+    blk/.style={draw=black,thick,fill=black!8,minimum width=2.3cm,
+                minimum height=1.8cm,align=center},
+    main/.style={-{Latex[length=2.4mm]},line width=1.1pt},
+    every node/.style={font=\small}]
+  % --- nodes (labels anchored to node boundaries, not scaled coordinates) ---
+  \node[circ] (state) at (0,0) {};
+  \node[above=2pt of state] {State};
+  \node[circ] (sens) at (2.8,0) {};
+  \node[below=2pt of sens] {Sensors};
+  \node[circ] (setp) at (3.6,3.6) {};
+  \node[above=2pt of setp] {Set-Points};
+  % comparator (triangle)
+  \coordinate (tb1) at (5.2,-0.6);
+  \coordinate (tb2) at (5.2,1.4);
+  \coordinate (tap) at (6.6,0.4);
+  \draw[thick,fill=black!8] (tb1)--(tb2)--(tap)--cycle;
+  % system / model
+  \node[blk] (box) at (11.0,0.4) {Gains and\\ Rates};
+  \node[below=2pt of box,align=center] {SYSTEM / MODEL\\ min\{deviations\}};
+  % branch node + biological responses (arrow leaves the node)
+  \coordinate (dot) at (13.8,0.4);
+  \node[align=left,anchor=west,font=\bfseries] (bio) at (15.2,0.4)
+       {Biological\\ Responses};
+  % mechanical stimuli
+  \node[align=center,anchor=east] (stim) at (-1.6,0)
+       {\textbf{Mechanical}\\[-1pt] \textbf{Stimuli}\\[1pt] (pressure,\\flow,\ldots)};
+  % --- main signal path (black) ---
+  \draw[main] (stim.east) -- (state.west);
+  \draw[main] (state.east) -- (sens.west);
+  \draw[main] (sens.east) -- (5.2,0);             % sensors  -> comparator (low)
+  \draw[main] (setp.south) |- (5.2,0.75);         % set-points-> comparator (high)
+  \draw[main] (tap) -- (box.west);
+  \node at (7.6,1.0) {deviations};                 % clear of the arrow and the box
+  \draw[line width=1.1pt] (box.east) -- (dot);
+  \fill (dot) circle (2.6pt);
+  \draw[main] (dot) -- (bio.west);
+  % --- homeostatic (negative) feedback ---
+  \draw[main] (dot) -- (13.8,-3.3) -- (0,-3.3) -- (state.south);
+  \draw[line width=1.1pt] ([xshift=-5pt,yshift=-1pt]state.south)
+     -- ([xshift=5pt,yshift=-1pt]state.south);   % summing-junction tick, below the circle
+  \node[align=center] at (6.7,-4.0) {Homeostatic Processes\\ (negative feedback)};
+\end{tikzpicture}}
+
+% ---- thin-walled pressurised tube (Wolinsky-Glagov / Laplace schematic) -----
+% The \idealvessel longitudinal-cut sketch, stripped to the geometry and loads
+% that matter here: lumen pressure P, inner radius a, wall thickness h, and the
+% circumferential (hoop) stress sigma_theta.  Flow Q and wall shear tau_w are
+% removed.
+\newcommand{\wgvessel}[1][1.0]{%
+\begin{tikzpicture}[scale=#1,>={Latex[length=1.8mm]}]
+  \def\L{6.0}      % axial length
+  \def\a{1.6}      % inner radius (axis -> inner wall)
+  \def\h{0.7}      % wall thickness
+  % --- shaded lumen (blood-filled interior) ---
+  \fill[AccentRed!7] (0,-\a) rectangle (\L,\a);
+  % --- wall bands (top & bottom) ---
+  \fill[YaleLightBlue!22] (0,\a) rectangle (\L,\a+\h);
+  \fill[YaleLightBlue!22] (0,-\a) rectangle (\L,-\a-\h);
+  \draw[YaleBlue,very thick] (0,\a) rectangle (\L,\a+\h);
+  \draw[YaleBlue,very thick] (0,-\a) rectangle (\L,-\a-\h);
+  % --- blood pressure P: pushes outward on both inner surfaces ---
+  \foreach \x in {2.0,3.0,4.0}{
+    \draw[->,YaleLightBlue,thick] (\x,0.55) -- (\x,\a-0.06);
+    \draw[->,YaleLightBlue,thick] (\x,-0.55) -- (\x,-\a+0.06);}
+  \node[YaleLightBlue] at (3.0,0.0) {\large $P$};
+  % --- circumferential (hoop) stress sigma_theta: wraps AROUND the tube, i.e.
+  %     acts OUT of this longitudinal-cut plane -> out-of-page markers on the
+  %     wall (as in \idealvessel) ---
+  \foreach \x in {2.4,3.6,4.8}{\node[YaleBlue] at (\x,\a+\h/2) {$\odot$};}
+  \node[YaleBlue,anchor=south] at (3.6,\a+\h+0.10) {$T$ and $\sigma_\theta$};
+  % --- radius a (axis -> inner wall) ---
+  \draw[<->,thick] (0.75,0) -- (0.75,\a) node[midway,left]{$a$};
+  \fill (0.75,0) circle (1.4pt);
+  % --- wall thickness h ---
+  \draw[<->,thick,AccentRed] (\L+0.28,\a) -- (\L+0.28,\a+\h)
+       node[midway,right]{$h$};
 \end{tikzpicture}}
 
 \newcommand{\idealvessel}[1][1.0]{%
@@ -330,7 +407,7 @@
     node[above,font=\small,pos=0.5]{$\bm{\varphi}(t,\bm{X})$} (5.3,1.05);
   % line-element mapping (bottom arc, label below the arc, clear of bodies)
   \draw[cfgmaparrow] (1.9,-1.15) to[bend right=16] (6.15,-1.35);
-  \node[font=\footnotesize] at (4.0,-1.95) {$\dd\bm{x}=\bm{F}\,\dd\bm{X}$};
+  \node[font=\footnotesize] at (3.1,-2.25) {$\dd\bm{x}=\bm{F}\,\dd\bm{X}$};
 \end{tikzpicture}}
 
 % ---- 0D reduction of the SAME deformation, for the thin-walled vessel --------
@@ -438,7 +515,7 @@
     \draw[\sty] (\sx,2.0) rectangle ++(0.62,0.62);}
   \node[align=center] at (4.7,3.5)
     {stress-free \emph{mean} natural configuration per constituent
-     (\emph{evolving} --- not a history)};
+     (\emph{evolving}, not a history)};
   % arrows: single evolving natural config marches left->right
   \draw[natarr] (1.75,2.3) -- node[above]{$\bm{F}_n^{\alpha}$} (4.3,2.3);
   \draw[natarr] (5.75,2.3) -- node[above]{$\bm{F}_n^{\alpha}$} (8.5,2.3);
@@ -447,63 +524,72 @@
     \draw[natarr,black!45,dashed] (\bx,1.98) -- (\bx,0.75);}
 \end{tikzpicture}}
 
-% ---- Humphrey (2021) Fig. 1: finite deformations in a constrained mixture -----
-% Horizontal barrel of stacked ellipse cross-sections = tissue evolving from
-% kappa(0) -> kappa(tau) -> kappa(s); a deposited constituent sits at its own
-% stress-free natural config kappa_n^alpha(tau) above kappa(tau), carried in by
-% the deposition stretch G^alpha(tau); F_{n(tau)}^alpha(s) is the constituent-
-% specific deformation; F(tau), F(s) are the tissue-level deformations.
+% ---- Humphrey (2021) constrained-mixture configuration diagram ---------------
+% Three levels of configurations (bottom -> middle -> top):
+%   * computational REFERENCE kappa_R (point X);
+%   * IN VIVO MIXTURE kappa(0), kappa(tau), kappa(s) on the dashed G&R trajectory
+%     (points x(0), x(tau), x(s)), reached from kappa_R by F(0), F(tau), F(s);
+%   * CONSTITUENT NATURAL configs kappa^alpha_{n(tau)}, each deposited into
+%     kappa(tau) at its deposition stretch G^alpha(tau); the constituent-specific
+%     deformation F^alpha_{n(tau)}(s) maps a cohort's natural config to kappa(s).
 \newcommand{\humphreygr}[1][1.0]{%
 \begin{tikzpicture}[scale=#1,every node/.style={font=\small},
-    ell/.style={draw=black!65,thick,fill=black!12},
-    ellface/.style={draw=black!75,very thick,fill=black!18},
-    grarr/.style={-{Latex[length=2.4mm]},very thick,black!78},
-    tisarr/.style={-{Latex[length=2.2mm]},thick,black!70}]
-  % Elongated barrel of cross-sections kappa(0) -> kappa(tau) -> kappa(s); the
-  % ellipses GROW gradually left->right (ry ramps up over Nell steps).
-  \def\xzero{0.6}\def\xtau{7.3}\def\xs{14.0}
-  \def\rx{0.46}
-  \pgfmathsetmacro\Nell{8}
-  \def\rybase{0.42}\def\rystep{0.075}
-  \pgfmathsetmacro\rytau{\rybase+4*\rystep}
-  \pgfmathsetmacro\rys{\rybase+8*\rystep}
-  % --- barrel: few, widely spaced ellipses (plenty of room for labels) ---
-  \foreach \i in {0,1,...,8}{
-    \pgfmathsetmacro\xx{\xzero+\i*(\xs-\xzero)/\Nell}
-    \pgfmathsetmacro\ryy{\rybase+\i*\rystep}
-    \draw[ell,fill opacity=0.85] (\xx,0) ellipse [x radius=\rx, y radius=\ryy];}
-  % --- three labeled cross-sections (grown-face ellipses) ---
-  \draw[ellface] (\xzero,0) ellipse [x radius=\rx, y radius=\rybase];
-  \draw[ellface] (\xtau,0)  ellipse [x radius=\rx, y radius=\rytau];
-  \draw[ellface] (\xs,0)    ellipse [x radius=\rx, y radius=\rys];
-  \node[font=\footnotesize] at (\xzero,0) {$\kappa(0)$};
-  \node[font=\footnotesize] at (\xtau,0)  {$\kappa(\tau)$};
-  \node[font=\footnotesize] at (\xs,0)    {$\kappa(s)$};
-  % dash-dot centre axis extending both ends
-  \draw[densely dashdotted,black!55] (-0.4,0)--(\xzero-0.34,0);
-  \draw[densely dashdotted,black!55] (\xs+0.34,0)--(\xs+1.0,0);
-  \node[align=center,font=\footnotesize,black!75] at (\xs+1.2,-0.75)
-    {Growth \&\\Remodeling};
-  % --- three deposited constituents (e, c, m), a compact cluster above kappa(tau) ---
-  \coordinate (dE) at (\xtau-0.5,2.4);
-  \coordinate (dC) at (\xtau,2.55);
-  \coordinate (dM) at (\xtau+0.5,2.4);
-  \foreach \d/\lab in {dE/e,dC/c,dM/m}{
-    \fill[black!22,draw=black!80,thick] (\d) circle (3pt);
-    \node[font=\scriptsize,anchor=south] at ([yshift=2pt]\d) {$\lab$};}
-  \node[anchor=east,font=\footnotesize] at (\xtau-0.95,2.62) {$\kappa_n^{\alpha}(\tau)$};
-  % deposition stretch G^alpha(tau): ONE arrow from the cluster into kappa(tau);
-  % label sits to the left in clear space (no arrows there).
-  \draw[grarr] (\xtau,2.05) -- node[left,font=\small,pos=0.5]{$\bm{G}^{\alpha}(\tau)$}
-    (\xtau,\rytau+0.05);
-  % constituent-specific deformation from the RIGHT-MOST dot (m), arcing over the barrel
-  \draw[grarr] (dM) to[bend left=26]
-    node[above,font=\small,pos=0.5]{$\bm{F}^{\alpha}_{n(\tau)}(s)$} (\xs-0.05,\rys+0.08);
-  % --- tissue-level deformations: BOTH originate at kappa(0); labels kept off the arcs ---
-  \draw[tisarr] (\xzero,-\rybase-0.10) to[bend right=8]
-    node[below=2pt,font=\small,pos=0.40]{$\bm{F}(\tau)$} (\xtau,-\rytau-0.10);
-  \draw[tisarr] (\xzero,-\rybase-0.85) to[bend right=6]
-    node[below=2pt,font=\small,pos=0.58]{$\bm{F}(s)$} (\xs,-\rys-0.12);
+    blob/.style={draw=black,line width=0.8pt},
+    ar/.style={-{Latex[length=2.2mm]},line width=0.9pt},
+    dep/.style={-{Latex[length=2.0mm]},line width=0.7pt}]
+  % irregular "kidney-bean" configuration outline, centred at the origin
+  \def\blob{plot[smooth cycle,tension=0.9] coordinates{%
+    (-0.78,-0.05)(-0.36,0.55)(0.42,0.60)(0.85,0.05)(0.52,-0.55)(-0.40,-0.55)}}
+  % --- key points (spread out horizontally so labels sit in clear space) ---
+  \coordinate (X)    at (3.4,-2.6);
+  \coordinate (x0)   at (4.6,0);
+  \coordinate (xtau) at (9.8,0);
+  \coordinate (xs)   at (15.2,0);
+  \coordinate (k1)   at (6.9,3.0);
+  \coordinate (k2)   at (8.2,3.0);
+  \coordinate (ka)   at (10.8,3.0);
+  % --- dashed in vivo G&R trajectory (visible through the open outlines) ---
+  \draw[dashed,black!70] plot[smooth,tension=0.8]
+    coordinates{(2.4,-0.2)(4.6,0)(9.8,0.06)(15.2,0.18)(16.2,0.42)};
+  \draw[dashed,-{Latex[length=2mm]},black!70] (16.2,0.42) -- (16.9,0.9);
+  % --- configuration outlines (enlarged so the point labels fit inside) ---
+  \begin{scope}[shift={(X)}]    \draw[blob,scale=1.25] \blob; \end{scope}
+  \begin{scope}[shift={(x0)}]   \draw[blob,scale=1.55] \blob; \end{scope}
+  \begin{scope}[shift={(xtau)}] \draw[blob,scale=1.60] \blob; \end{scope}
+  \begin{scope}[shift={(xs)}]   \draw[blob,scale=1.65] \blob; \end{scope}
+  \foreach \p in {k1,k2,ka}{\begin{scope}[shift={(\p)}] \draw[blob,scale=0.62] \blob; \end{scope}}
+  % --- tissue-level deformations from the reference (arcs pass below the blobs) --
+  \draw[ar] (X) to[bend left=12]  node[pos=0.4,left=2pt]{$\bm{F}(0)$}   (x0);
+  \draw[ar] (X) to[bend right=7]  node[pos=0.62,below=2pt]{$\bm{F}(\tau)$} (xtau);
+  \draw[ar] (X) to[bend right=16] node[pos=0.72,below=2pt]{$\bm{F}(s)$}  (xs);
+  % --- deposition of every constituent laid down at tau into kappa(tau) ---
+  \draw[dep] (k1) -- (xtau);
+  \draw[dep] (k2) -- (xtau);
+  \draw[ar]  (ka) to[bend left=10] node[pos=0.5,right=2pt]{$\bm{G}^{\alpha}(\tau)$} (xtau);
+  % --- constituent-specific deformation to the current mixture ---
+  \draw[ar] (ka) to[bend left=16] (xs);
+  \node at (13.0,2.75) {$\bm{F}^{\alpha}_{n(\tau)}(s)$};
+  % --- points, with the x-labels INSIDE each configuration next to the dot ---
+  \fill (X)    circle (1.7pt); \node[anchor=north] at ($(X)+(0,-0.05)$)    {$\bm{X}$};
+  \fill (x0)   circle (1.7pt); \node[anchor=north] at ($(x0)+(0,0.9)$)   {$\bm{x}(0)$};
+  \fill (xtau) circle (1.7pt); \node[anchor=north] at ($(xtau)+(0,-0.1)$) {$\bm{x}(\tau)$};
+  \fill (xs)   circle (1.7pt); \node[anchor=north] at ($(xs)+(0,-0.1)$)   {$\bm{x}(s)$};
+  \foreach \p in {k1,k2,ka}{\fill (\p) circle (1.5pt);}
+  % --- configuration labels, hugging each outline ---
+  \node[anchor=north] at ($(X)+(0,-0.92)$)   {$\kappa_R$};
+  \node[anchor=north] at ($(x0)+(0,-1.02)$)  {$\kappa(0)$};
+  \node[anchor=north] at ($(xtau)+(0,-1.06)$){$\kappa(\tau)$};
+  \node[anchor=north] at ($(xs)+(0,-1.10)$)  {$\kappa(s)$};
+  \node[anchor=south] at ($(k1)+(0,0.46)$) {$\kappa^{1}_{n(\tau)}$};
+  \node[anchor=south] at ($(k2)+(0,0.46)$) {$\kappa^{2}_{n(\tau)}$};
+  \node[anchor=south] at ($(ka)+(0,0.46)$) {$\kappa^{\alpha}_{n(\tau)}$};
+  \node at (9.5,3.0) {$\cdots$};
+  % --- left-hand level labels ---
+  \node[align=left,anchor=north west] at (-2.2,3.85) {Constituent\\ natural\\ configurations};
+  \node[align=left,anchor=north west] at (-2.2,0.9)  {\textit{In vivo}\\ mixture\\ configurations};
+  \node[align=left,anchor=north west] at (-2.2,-1.7) {Computational\\ reference\\ configuration};
+  % --- G&R process label (top right) ---
+  \node[align=left,anchor=west] at (16.7,0.7) {G\&R\\ process};
 \end{tikzpicture}}
 
 % ---- Cyron (2016) Fig. 2 (right): mechanical analog for mass turnover ---------

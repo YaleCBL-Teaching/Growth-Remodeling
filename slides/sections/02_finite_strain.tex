@@ -1,90 +1,76 @@
-% ============================================================================
-%  SECTION 3 — Finite-strain continuum mechanics
-% ============================================================================
 \begin{frame}[t]{}
   \vfill\begin{center}{\Huge\color{YaleBlue} Finite-Strain Fundamentals}
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Reference and Current Configuration --- 3D and 0D}
+\begin{frame}[t]{Reference and Current Configuration}
   A body is described by a \textbf{reference} $\mathcal{B}_0$ (points $\bm{X}$) and
-  a \textbf{current} $\mathcal{B}_t$ (points $\bm{x}$), related by the motion
-  $\bm{x}=\bm{\varphi}(t,\bm{X})$. Everything here has a \textbf{full 3D} form and a
-  \textbf{reduced 0D} form --- \emph{same notation}, badges tell you which.
+  a \textbf{current} $\mathcal{B}_t$ (points $\bm{x}$) configuration, related by the motion
+  $\bm{x}=\bm{\varphi}(t,\bm{X})$.
   \vfill
   \begin{columns}[T]
-    \begin{column}{0.52\textwidth}
+    \begin{column}{0.54\textwidth}
       \begin{center}\tagd\ \textbf{3D geometric model}\end{center}
-      \begin{center}\configmap[0.62]\end{center}
-      {\footnotesize Full field $\bm{x}=\bm{\varphi}(t,\bm{X})$, tensor
-      $\bm{F}=\partial\bm{\varphi}/\partial\bm{X}$; solved on a meshed artery (FE).}
+      \vfill
+      \begin{center}\configmap[0.92]\end{center}
+      \vfill
     \end{column}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.46\textwidth}
       \begin{center}\tagz\ \textbf{0D reduced model}\end{center}
-      \begin{center}\scalarmap[0.82]\end{center}
-      {\footnotesize One dominant direction $\Rightarrow$ scalar stretch
-      $\lambda$; tensor $\bm{F}\to\lambda$; a few ODEs, runs in milliseconds.}
+      \vfill
+      \begin{center}\scalarmap[1.15]\end{center}
+      \vfill
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}[t]{The Deformation Gradient}
-  How a line element transforms is the key kinematic quantity --- the
-  \textbf{deformation gradient} maps reference line elements to current ones.
-  \dlab{general form --- a tensor}
-  \slboxeq{2.4em}{eq:defgrad}{\dd\bm{x} = \bm{F}\,\dd\bm{X},\qquad
+  The \textbf{deformation gradient} maps reference line elements to current ones.
+  \dlab{a $3\times3$ tensor}
+  \slboxeq{eq:defgrad}{\dd\bm{x} = \bm{F}\,\dd\bm{X},\qquad
     \bm{F}=\frac{\partial\bm{\varphi}}{\partial\bm{X}},\qquad J=\det\bm{F}}
-  $J$ is the volume ratio; \textbf{elastic incompressibility} means $J_e=1$ (only
-  growth changes volume).
-  \zlab{reduction used here --- one dominant direction}
+  $J$ is the volume ratio, \textbf{incompressibility} means $J=1$.
+  \zlab{a scalar}
   \giveneq{\bm{F}\ \longrightarrow\ \lambda=\frac{\text{current length}}
     {\text{reference length}},\qquad \lambda=1\ \text{undeformed}.}
 \end{frame}
 
-\begin{frame}[t]{Strain --- A Rotation-Free Measure of Stretching}
-  $\bm{F}$ still contains rigid rotation. Removing it gives the \textbf{right
-  Cauchy--Green} tensor and the \textbf{Green--Lagrange strain}.
-  \dlab{general form --- tensors}
-  \slboxeq{2.4em}{eq:strain}{\bm{C}=\bm{F}^{\!\intercal}\bm{F},\qquad
+\begin{frame}[t]{Strain: A Rotation-Free Measure of Stretch}
+  Removing rigid rotation gives the \textbf{right Cauchy--Green} tensor and the \textbf{Green--Lagrange strain}.
+  \dlab{symmetric $3\times3$ tensors}
+  \slboxeq{eq:strain}{\bm{C}=\bm{F}^\mathrm{T}\bm{F} = (\bm{R}\bm{U})^\mathrm{T}\bm{R}\bm{U} = \bm{U}^\mathrm{T} \bm{R}^\mathrm{T} \bm{R}^\mathrm{T} \bm{U} = \bm{U}^2,\qquad
     \bm{E}=\tfrac12\!\left(\bm{C}-\bm{I}\right)}
-  \zlab{reduction used here --- one dominant direction}
+  \zlab{scalars}
   \giveneq{C=\lambda^2,\qquad E=\tfrac12(\lambda^2-1).}
-  Along the dominant loading direction the whole strain state collapses to a
-  single stretch $\lambda$ --- all we need for the thin-walled vessel.
 \end{frame}
 
-\begin{frame}[t]{Stress --- Force per Current Area}
-  We report the \textbf{Cauchy (true) stress}: force per unit \emph{current} area
-  --- the natural measure for a growing body, since the load-bearing area itself
-  changes as the tissue remodels.
-  \dlab{general form --- a tensor (from the 2nd Piola--Kirchhoff $\bm{S}$)}
-  \giveneq{\bm{\sigma}=\tfrac1J\,\bm{F}\,\bm{S}\,\bm{F}^{\!\intercal},\qquad
-    \bm{S}=2\,\frac{\partial W}{\partial\bm{C}}.}
-  \zlab{reduction used here --- one scalar}
-  \giveneq{\bm{\sigma}\ \longrightarrow\ \sigma\ \text{(the value in Laplace,
-    \eqref{eq:laplace})}.}
-  Balance of linear momentum in the current configuration reduces, for our
-  quasi-static thin-walled vessel, to exactly that Laplace relation.
+\begin{frame}[t]{Stress: "Force per Area"}
+  \textbf{Cauchy stress}: \emph{current} force per unit \emph{current} area.
+  \dlab{spatial symmetric $3\times3$ tensor (from 2nd Piola--Kirchhoff stress $\bm{S}$)}
+  \giveneq{\bm{\sigma}=\tfrac1J\,\bm{F}\,\bm{S}\,\bm{F}^\mathrm{T},\qquad
+    \bm{S}=2\,\frac{\partial W}{\partial\bm{C}}, \quad W ~ \text{strain energy density function}.}
+  \zlab{scalar reduction ($C=\lambda^2$, $J=1$), the $\sigma_\theta$ in Laplace \eqref{eq:laplace}}
+  \giveneq{\sigma=\tfrac1J\,\lambda\,S\,\lambda=\lambda^2 S
+    =2\lambda^2\,\frac{\partial W}{\partial C}=\lambda\,\frac{\dd W}{\dd\lambda}.}
 \end{frame}
 
 \begin{frame}[t]{Hyperelasticity: Stress from a Stored-Energy Function}
-  A \textbf{hyperelastic} material stores energy $W$; its stress is a derivative
-  of $W$ --- no dissipation, path-independent. Each constituent gets its own $W$:
-  \textbf{elastin} is an isotropic \emph{neo-Hookean} solid, \textbf{collagen} a
-  \emph{Fung-type} fiber.
-  \dlab{general form --- energy $W(\bm{C})$, stress $\bm{S}=2\,\partial W/\partial\bm{C}$}
+  A \textbf{hyperelastic} material stores energy $W$ (deformation is path-independent).
+  \dlab{energy $W(\bm{C})$, stress $\bm{S}=2\,\partial W/\partial\bm{C}$}
   \vspace{-0.3em}
   \[
-    W_{\text{elastin}}=\tfrac{c}{2}\,(I_1-3),\qquad
-    W_{\text{collagen}}=\tfrac{c_1}{4c_2}\!\left[e^{\,c_2(I_4-1)^2}-1\right]
+    W_{\text{neo-Hooke}}=\tfrac{c}{2}\,(I_1-3),\qquad
+    W_{\text{Fung}}=\tfrac{c_1}{4c_2}\!\left[e^{\,c_2(I_4-1)^2}-1\right]
   \]
   \vspace{-0.6em}\par
-  {\footnotesize $I_1=\operatorname{tr}\bm{C}$ (isotropic elastin); $I_4$ reads
-  $\bm{C}$ along the collagen fiber --- the one place anisotropy enters.}
-  \zlab{reduction used here --- one stretch $\lambda$, scalar $\sigma=\lambda\,\dd W/\dd\lambda$}
+  {\footnotesize Invariants of $\bm{C}$: \ $I_1=\operatorname{tr}\bm{C}$
+  (isotropic, elastin); \ $I_4=\bm{M}\cdot\bm{C}\,\bm{M}=\lambda_{\text{fib}}^{2}$,
+  the squared stretch along the reference fiber direction $\bm{M}$
+  (anisotropy, collagen).}
+  \zlab{reduction used here, one stretch $\lambda$, scalar $\sigma=\lambda\,\dd W/\dd\lambda$}
   \vspace{-0.3em}
-  \slboxeq{2.6em}{eq:fung}{\sigma_{\text{elastin}}=c\,(\lambda^2-\lambda^{-1}),\qquad
-    \sigma_{\text{collagen}}=c_1\,\lambda^2(\lambda^2-1)\,e^{\,c_2(\lambda^2-1)^2}}
+  \slboxeq{eq:fung}{\sigma_{\text{neo-Hooke}}=c\,(\lambda^2-\lambda^{-1}),\qquad
+    \sigma_{\text{Fung}}=c_1\,\lambda^2(\lambda^2-1)\,e^{\,c_2(\lambda^2-1)^2}}
   \srccite{constituent laws as in Latorre, Humphrey, Comput Methods Appl Mech Eng (2020)}
 \end{frame}
 

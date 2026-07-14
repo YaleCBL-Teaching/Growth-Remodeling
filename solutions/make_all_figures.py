@@ -15,6 +15,7 @@ MODULES = [
     "fig03_compare_all",
     "fig04_equilibrated",
     "fig05_stability_and_aneurysm",
+    "fig_homeostasis_states",
 ]
 
 
