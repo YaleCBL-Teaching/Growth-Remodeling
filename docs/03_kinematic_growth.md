@@ -15,15 +15,15 @@ is what is left over to satisfy the loads.
 
 Split the deformation (2.2) into elastic and growth parts:
 
-$$\mathbf{F} = \mathbf{F}_e\,\mathbf{F}_g .$$
+$$\mathbf{F} = \mathbf{F}_e\mathbf{F}_g .$$
 
 Only $\mathbf{F}_e$ stores energy. For an artery, growth is **radial wall
 thickening**: the wall grows through its thickness (adding material) without
 changing the circumferential elastic stretch. We capture this with a single
 scalar thickening variable $\theta$ (a transversely isotropic growth tensor
-$\mathbf{F}_g = \mathbf{I} + (\theta-1)\,\mathbf{e}_r\!\otimes\mathbf{e}_r$), so
+$\mathbf{F}_g = \mathbf{I} + (\theta-1)\mathbf{e}_r\otimes\mathbf{e}_r$), so
 
-$$\frac{M}{M_0} = \theta,\qquad \text{constituent elastic stretch} = G^k\,\lambda,$$
+$$\frac{M}{M_0} = \theta,\qquad \text{constituent elastic stretch} = G^k\lambda,$$
 
 with $\lambda$ the circumferential tissue stretch. At homeostasis
 $\theta=1,\ \lambda=1$ and every constituent sits at $G^k$, giving $\sigma_h^k$.
@@ -39,7 +39,7 @@ first-order form of the classic stress-dependent growth law; production taken
 proportional to current mass):
 
 $$\frac{\mathrm{d}\theta}{\mathrm{d}t}
-   = k_g\,\theta\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right).\tag{3.1}$$
+   = k_g\theta\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right).\qquad (3.1)$$
 
 At each instant $\theta$ is known and the current stretch $\lambda$ follows from
 mechanical equilibrium $\bar\sigma(\lambda)=\sigma_{\text{req}}(\lambda,\theta)$
@@ -55,10 +55,10 @@ growth has exactly two possible fates:
 - **run away** without bound.
 
 Which one occurs is decided by the sign of the mechanical feedback. Linearising
-(3.1) about a fixed point $\theta^*$, growth is stable iff adding mass *lowers*
+(3.1) about a fixed point $\theta^\ast$, growth is stable iff adding mass *lowers*
 the stress it must carry:
 
-$$\left.\frac{\mathrm{d}\bar\sigma}{\mathrm{d}\theta}\right|_{\theta^*} < 0 .$$
+$$\left.\frac{\mathrm{d}\bar\sigma}{\mathrm{d}\theta}\right|_{\theta^\ast} < 0 .$$
 
 For the **artery** (required stress $\propto\lambda^2$, Laplace) this holds while
 the insult is mild, so growth is self-limiting; a strong enough insult flips the
