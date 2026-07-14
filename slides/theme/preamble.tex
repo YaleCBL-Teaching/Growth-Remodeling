@@ -200,8 +200,9 @@
 \newcommand{\sprob}[1]{\par\smallskip{\color{SFrame}\bfseries Example.}\ #1}
 \newcommand{\srun}[1]{\par\smallskip{\color{SFrame}\bfseries Run it.}\ #1}
 \newcommand{\sstudy}[1]{\par\smallskip{\color{SFrame}\bfseries Parametric study.}\ #1}
-% one code line in monospace inside a setup box
-\newcommand{\scodeline}[1]{{\ttfamily\small #1}\par}
+% one code line in monospace inside a setup box; always on its own line
+% (breaks before AND after, so it never runs into surrounding text)
+\newcommand{\scodeline}[1]{\par{\ttfamily\small #1}\par}
 
 
 % ===========================================================================
@@ -247,15 +248,14 @@
     blk/.style={draw=black,thick,fill=black!8,minimum width=2.3cm,
                 minimum height=1.8cm,align=center},
     main/.style={-{Latex[length=2.4mm]},line width=1.1pt},
-    posfb/.style={-{Latex[length=2.2mm]},line width=0.9pt,color=black!45},
     every node/.style={font=\small}]
-  % --- nodes (loop stretched horizontally) ---
+  % --- nodes (labels anchored to node boundaries, not scaled coordinates) ---
   \node[circ] (state) at (0,0) {};
-  \node at (0,1.05) {State};
+  \node[above=2pt of state] {State};
   \node[circ] (sens) at (2.8,0) {};
-  \node at (2.8,-1.05) {Sensors};
+  \node[below=2pt of sens] {Sensors};
   \node[circ] (setp) at (3.6,3.6) {};
-  \node at (3.6,4.55) {Set-Points};
+  \node[above=2pt of setp] {Set-Points};
   % comparator (triangle)
   \coordinate (tb1) at (5.2,-0.6);
   \coordinate (tb2) at (5.2,1.4);
@@ -263,10 +263,10 @@
   \draw[thick,fill=black!8] (tb1)--(tb2)--(tap)--cycle;
   % system / model
   \node[blk] (box) at (11.0,0.4) {Gains and\\ Rates};
-  \node[align=center] at (11.0,-1.7) {SYSTEM / MODEL\\ min\{deviations\}};
-  % biological responses + branch dot
+  \node[below=2pt of box,align=center] {SYSTEM / MODEL\\ min\{deviations\}};
+  % branch node + biological responses (arrow leaves the node)
   \coordinate (dot) at (13.8,0.4);
-  \node[align=left,anchor=west,font=\bfseries] (bio) at (14.1,0.4)
+  \node[align=left,anchor=west,font=\bfseries] (bio) at (15.2,0.4)
        {Biological\\ Responses};
   % mechanical stimuli
   \node[align=center,anchor=east] (stim) at (-1.6,0)
@@ -283,13 +283,9 @@
   \draw[main] (dot) -- (bio.west);
   % --- homeostatic (negative) feedback ---
   \draw[main] (dot) -- (13.8,-3.3) -- (0,-3.3) -- (state.south);
-  \draw[line width=1.1pt] (-0.36,-0.62) -- (0.36,-0.62);   % summing-junction tick
+  \draw[line width=1.1pt] ([xshift=-5pt,yshift=-1pt]state.south)
+     -- ([xshift=5pt,yshift=-1pt]state.south);   % summing-junction tick, below the circle
   \node[align=center] at (6.7,-4.0) {Homeostatic Processes\\ (negative feedback)};
-  % --- inflammatory (positive) feedback, grey ---
-  \draw[posfb] (dot) -- (13.8,5.3) -- (4.5,5.3) -- (4.5,3.6) -- (setp.east);
-  \draw[posfb] (11.0,5.3) -- (box.north);
-  \node[align=center,color=black!55] at (8.2,6.1)
-       {Inflammatory Processes\\ (positive feedback)};
 \end{tikzpicture}}
 
 % ---- thin-walled pressurised tube (Wolinsky-Glagov / Laplace schematic) -----
@@ -572,20 +568,19 @@
   \draw[ar]  (ka) to[bend left=10] node[pos=0.5,right=2pt]{$\bm{G}^{\alpha}(\tau)$} (xtau);
   % --- constituent-specific deformation to the current mixture ---
   \draw[ar] (ka) to[bend left=16] (xs);
-  \node[draw=blue,line width=1pt,ellipse,inner sep=2.5pt] at (13.0,2.75)
-    {$\bm{F}^{\alpha}_{n(\tau)}(s)$};
+  \node at (13.0,2.75) {$\bm{F}^{\alpha}_{n(\tau)}(s)$};
   % --- points ---
   \fill (X) circle (1.7pt);
   \foreach \p in {x0,xtau,xs}{\fill (\p) circle (1.7pt);}
   \foreach \p in {k1,k2,ka}{\fill (\p) circle (1.5pt);}
-  % --- point + configuration labels, each in a clear direction ---
-  \node[anchor=east]       at ($(X)+(-0.12,-0.05)$) {$\bm{X}$};
-  \node[anchor=north]      at ($(X)+(0,-0.95)$)     {$\kappa_R$};
-  \node[anchor=south west] at ($(x0)+(0.10,0.12)$)  {$\bm{x}(0)$};
+  % --- point + configuration labels, placed clear OUTSIDE each outline ---
+  \node[anchor=east]       at ($(X)+(-0.9,0)$)     {$\bm{X}$};
+  \node[anchor=north]      at ($(X)+(0,-0.95)$)    {$\kappa_R$};
+  \node[anchor=south west] at ($(x0)+(0.95,0.10)$)  {$\bm{x}(0)$};
   \node[anchor=north]      at ($(x0)+(0,-1.05)$)    {$\kappa(0)$};
-  \node[anchor=north west] at ($(xtau)+(0.12,-0.14)$) {$\bm{x}(\tau)$};
+  \node[anchor=south west] at ($(xtau)+(1.0,0.10)$) {$\bm{x}(\tau)$};
   \node[anchor=north]      at ($(xtau)+(0,-1.05)$)    {$\kappa(\tau)$};
-  \node[anchor=north west] at ($(xs)+(0.12,-0.14)$)   {$\bm{x}(s)$};
+  \node[anchor=south]      at ($(xs)+(0,0.9)$)       {$\bm{x}(s)$};
   \node[anchor=north]      at ($(xs)+(0,-1.05)$)      {$\kappa(s)$};
   \node[anchor=south] at ($(k1)+(0,0.52)$) {$\kappa^{1}_{n(\tau)}$};
   \node[anchor=south] at ($(k2)+(0,0.52)$) {$\kappa^{2}_{n(\tau)}$};

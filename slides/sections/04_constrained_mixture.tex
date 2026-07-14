@@ -10,7 +10,7 @@
   \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
-\begin{frame}[t]{The Idea: Track Every Cohort}
+\begin{frame}[t]{The Idea: Track Constituents Over Time}
   \vfill
   \begin{center}\humphreygr[0.56]\end{center}
   \vspace{-0.1em}
@@ -42,9 +42,9 @@
     \textbf{\color{YaleBlue}Elastin} & bears load at low stretch & 0.30 & 1.40 &
       neo-Hooke; \textbf{none} (decades)\\
     \textbf{\color{YaleBlue}Collagen} & stiff, crimped; anti-rupture & 0.35 & 1.08 &
-      Fung; fast ($\sim$20\,d)\\
+      Fung; fast ($\sim$80\,d)\\
     \textbf{\color{YaleBlue}Smooth muscle} & passive + active; the sensor & 0.35 & 1.20 &
-      Fung; fast ($\sim$20\,d)\\
+      Fung; fast ($\sim$80\,d)\\
     \bottomrule
   \end{tabular}
   \end{center}
@@ -52,7 +52,7 @@
   \textbf{Elastin cannot be renewed} ($k_d^e=0$) --- its loss drives
   \emph{aneurysm}; collagen \& SMC \textbf{turn over}, so the wall can
   \emph{adapt}.
-  \srccite{Humphrey, Eberth, Dye, Gleason, J Biomech (2009)}
+  \srccite{Humphrey \& Rajagopal (2002); Valent\'in \& Humphrey, Phil.\ Trans.\ R.\ Soc.\ A (2009)}
 \end{frame}
 
 \begin{frame}[t]{Every Cohort Shares One Stretch}
@@ -122,28 +122,24 @@
   \giveneq{\bm{\sigma}(s)=\frac{2}{J}\,\bm{F}(s)\,
      \frac{\partial W(s)}{\partial\bm{C}(s)}\,\bm{F}^{\mathrm{T}}(s),
      \qquad \bm{C}=\bm{F}^{\mathrm{T}}\bm{F},\quad J=\det\bm{F}.}
-  Rule of mixtures: $W=\sum_{\alpha}\tilde W^{\alpha}$. Closing the model needs
-  \textbf{three constituent-specific relations} --- a \emph{stored energy}
-  $W^{\alpha}$, a \emph{production} rate $m^{\alpha}$, and a \emph{removal}
-  (survival) $q^{\alpha}$.
+  Rule of mixtures: $W=\sum_{\alpha}\hat{W}^{\alpha}$. Closing the model needs
+  \textbf{three constituent-specific relations}:
+  \begin{itemize}
+    \item a \emph{stored energy} $W^{\alpha}$,
+    \item a \emph{production} rate $m^{\alpha}$, and
+    \item a \emph{removal} (survival) $q^{\alpha}$.
+  \end{itemize}
   \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
 \begin{frame}[t]{Three Constituent-Specific Constitutive Relations}
-  \textbf{1.\ Material:} constituent stored energy $W^{\alpha}$: neo-Hookean
-  elastin, Fung-type collagen \& smooth muscle (eq.~\eqref{eq:fung}).
-  \par\medskip
-  \textbf{2.\ Rate of production:} up with wall stress \& inflammation, down
+  \textbf{1.\ Material:} constituent stored energy $W^{\alpha}$ (e.g., neo-Hookean, Fung-type)\\
+  \textbf{2.\ Rate of production:} up with wall stress and inflammation, down
   with wall shear:
   \slboxeq{eq:production}{m^{\alpha}(\tau)=m_o^{\alpha}\big(1
-     + K_{\sigma}^{\alpha}\,\Delta\sigma
-     - K_{\tau_w}^{\alpha}\,\Delta\tau_w
-     + K_{\varphi}^{\alpha}\,\Delta\rho_{\varphi}\big)\ge 0}
-  \vspace{-0.4em}
-  \begin{center}\footnotesize\color{black!70}
-   $\Delta\sigma$: pressure \;\textbullet\; $\Delta\tau_w$: flow \;\textbullet\;
-   $\Delta\rho_{\varphi}$: inflammation
-  \end{center}
+     + \underbrace{K_{\sigma}^{\alpha}\,\Delta\sigma}_{\text{circumferential stress}}
+     - \underbrace{K_{\tau_w}^{\alpha}\,\Delta\tau_w}_{\text{wall shear stress}}
+     + \underbrace{K_{\varphi}^{\alpha}\,\Delta\rho_{\varphi}}_{\text{inflammation}}\big)\ge 0}
   \textbf{3.\ Rate of removal:} a survival fraction that decays faster under
   stress perturbation:
   \slboxeq{eq:removal}{q^{\alpha}(s,\tau)=\exp\!\Big(\!-\!\int_{\tau}^{s}
@@ -152,36 +148,35 @@
 \end{frame}
 
 \begin{frame}[t]{Constituent Stored-Energy Functions}
-  Each cohort carries its \emph{own} stored energy $W^{\alpha}$, evaluated at its
-  elastic deformation
-  $\bm{F}^{\alpha}_{n(\tau)}(s)=\bm{F}(s)\,\bm{F}^{-1}(\tau)\,\bm{G}^{\alpha}(\tau)$.
-  Summing over cohorts with the \emph{same} heredity structure gives the apparent
+  Each cohort carries its \emph{own} stored energy $W^{\alpha}$. Summing over cohorts with the \emph{same} heredity structure gives the apparent
   (mixture-level) energy:
-  \slboxeq{eq:mixenergy}{\rho\,\tilde W^{\alpha}(s)=
+  \slboxeq{eq:mixenergy}{\rho\,\hat{W}^{\alpha}(s)=
      \underbrace{\rho^{\alpha}(0)\,Q^{\alpha}(s)\,W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(0)}(s)\big)}
        _{\text{original material}}
      +\underbrace{\int_{0}^{s} m^{\alpha}(\tau)\,q^{\alpha}(s,\tau)\,
-       W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(\tau)}(s)\big)\,\dd\tau}_{\text{later cohorts}}}
-  The mixture energy $W=\sum_{\alpha}\tilde W^{\alpha}$ closes the stress above.
+       W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(\tau)}(s)\big)\,\dd\tau}_{\text{later cohorts}}},
+  with elastic deformation 
+  \slboxeq{eq:elastic_deformation}{\bm{F}^{\alpha}_{n(\tau)}(s)=\bm{F}(s)\,\bm{F}^{-1}(\tau)\,\bm{G}^{\alpha}(\tau)}.
+  The mixture energy $W=\sum_{\alpha}\hat{W}^{\alpha}$ closes the mixture stress.
   \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
-\begin{frame}[t]{Special Cases: $s=0$ and Homeostasis}
-  \textbf{(i) At $s=0$} (just before a perturbation) only original material is
+\begin{frame}[t]{Special Cases: Before Perturbation and Homeostasis}
+  \textbf{(I) At $s=0$} (just before a perturbation) only original material is
   present, and $Q^{\alpha}(0)=1$:
-  \giveneq{\rho\,\tilde W^{\alpha}(0)=\rho^{\alpha}(0)\,W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(0)}(0)\big)
+  \giveneq{\rho\,\hat{W}^{\alpha}(0)=\rho^{\alpha}(0)\,W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(0)}(0)\big)
      \;\Rightarrow\;
-     \tilde W^{\alpha}(0)=\underbrace{\tfrac{\rho^{\alpha}(0)}{\rho(0)}}_{\phi^{\alpha}(0)}
+     \hat{W}^{\alpha}(0)=\underbrace{\tfrac{\rho^{\alpha}(0)}{\rho(0)}}_{\phi^{\alpha}(0)}
        W^{\alpha}(0),}
   recovering the rule of mixtures $W(0)=\sum_{\alpha}\phi^{\alpha}(0)\,W^{\alpha}(0)$.
   \par\medskip
-  \textbf{(ii) Homeostasis} --- turnover in an \emph{unchanging} configuration, so
+  \textbf{(II) Homeostasis:} turnover in an \emph{unchanging} configuration, so
   $\bm{F}^{\alpha}_{n(\tau)}(s)=\bm{F}^{\alpha}_{n(0)}(s)$ (independent of $\tau$).
   Then $W^{\alpha}$ factors out and, using the mass balance,
-  \slboxeq{eq:homeo}{\rho\,\tilde W^{\alpha}(s)=
+  \slboxeq{eq:homeo}{\rho\,\hat{W}^{\alpha}(s)=
      \underbrace{\Big(\rho^{\alpha}(0)Q^{\alpha}(s)+\!\int_{0}^{s}\! m^{\alpha}q^{\alpha}\,\dd\tau\Big)}_{=\;\rho^{\alpha}(s)}
      \,W^{\alpha}\!\big(\bm{F}^{\alpha}_{n(0)}(s)\big)
-     \;\Rightarrow\; \tilde W^{\alpha}(s)=\phi^{\alpha}(s)\,W^{\alpha}(s).}
+     \;\Rightarrow\; \hat{W}^{\alpha}(s)=\phi^{\alpha}(s)\,W^{\alpha}(s).}
   \srccite{Humphrey, J Elasticity (2021)}
 \end{frame}
 
@@ -195,8 +190,7 @@
   requires the two to balance exactly:
   \slboxeq{eq:perfmaint}{\text{perfect maintenance}\iff
      \frac{m_0}{K^{\alpha}}=\rho^{\alpha}(0).}
-  Production $m_0$ then exactly offsets removal $K^{\alpha}\rho^{\alpha}$ ---
-  continuous turnover, unchanging tissue.
+  Production $m_0$ then exactly offsets removal $K^{\alpha}\rho^{\alpha}$ (continuous turnover, unchanging tissue).
   \srccite{Valentin \& Humphrey, Phil Trans R Soc A (2009)}
 \end{frame}
 
@@ -206,48 +200,46 @@
     deposited so far. How does the total cost scale with $N$?}
     \qhint{Step $k$ re-sums $\sim k$ stored cohorts; add up $\sum_{k=1}^{N}k$.}
   \end{yourturnbox}
-  \vfill
-  \begin{center}
-  $\displaystyle\sum_{k=1}^{N} k=\frac{N(N+1)}{2}=\mathcal{O}(N^2)$
-  \end{center}
-  \vfill
+  \vspace{0.6em}
+  \srev
+  \begin{answerbox}{Computational Cost?}
+    Step $k$ re-sums the $\sim k$ cohorts stored so far, so the total work is
+    \giveneq{\sum_{k=1}^{N} k=\frac{N(N+1)}{2}=\mathcal{O}(N^2)}
+    \textbf{quadratic} in the number of time steps. The \emph{homogenized}
+    model (next) removes this history sum, cutting the cost to $\mathcal{O}(N)$.
+  \end{answerbox}
 \end{frame}
 
 
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- turnover under hypertension (\texttt{ex03})}
+  \begin{setupbox}{Example 2: Turnover under Hypertension (\texttt{ex03})}
     \sprob{The same artery, now with collagen \& SMC turning over (elastin does
     not). Which constituent grows to carry the load, and does turnover restore the
     set-point? Equilibrium each step:
     $\bar\sigma(\lambda)=\bar\sigma_h\,\gamma\,\lambda^{2}/m$ (load factor $\gamma$,
     mass ratio $m$).}
     \srun{\scodeline{uv run python run.py configs/ex03\_constrained\_mixture.yaml}
-      Sets each constituent's \texttt{turnover\_days} ($1/k_d$), \texttt{gain}
-      ($K_\sigma$), and the \texttt{insult} --- hypertension ($\gamma$) or aneurysm
-      (\texttt{elastin\_surviving}).}
+      Sets each constituent's \texttt{turnover\_days} ($1/k_d$), \texttt{gain} ($K_\sigma$), and the \texttt{insult}, hypertension ($\gamma$) or aneurysm (\texttt{elastin\_surviving}).}
     \sstudy{\scodeline{... --set model.constituents.collagen.gain=3.0}}
   \end{setupbox}
 \end{frame}
 
-% ---- interactive coding exercise: ex03 -------------------------------------
 \begin{frame}[t]{}
-  \begin{yourturnbox}{Constrained mixture}
+  \begin{yourturnbox}{Constrained Mixture Model}
     \qq{Does the same tissue \emph{adapt} to hypertension but \emph{run away} on
     the aneurysm insult? Which constituent grows to carry the load elastin used
     to bear?}
-    \qhint{Try turnover 10 / 20 / 70 d and gain 0.3 / 1.0 / 3.0. Faster turnover
-    and higher gain reach the new state sooner; watch which insult the tissue can
-    absorb.}
+    % \qhint{Try turnover 10 / 20 / 70 d and gain 0.3 / 1.0 / 3.0. Faster turnover
+    % and higher gain reach the new state sooner; watch which insult the tissue can
+    % absorb.}
   \end{yourturnbox}
 \end{frame}
 
 \begin{frame}[t]{}
-  \begin{answerbox}{Constrained mixture}
-    Mild hypertension \textbf{adapts}: collagen and SMC grow, tissue stress returns
-    to homeostatic. A severe elastin insult can \textbf{run away}. Faster turnover
-    / higher gain reach the new state sooner.
+  \begin{answerbox}{Constrained Mixture Model}
+    Mild hypertension \textbf{adapts}: collagen and SMC grow, tissue stress returns to homeostatic. A severe elastin insult can \textbf{run away}. Faster turnover or higher gain reach the new state sooner.
   \end{answerbox}
   \vspace{-0.2em}
-  \bigfigw{fig03_constrained_mixture.pdf}{0.98\linewidth}{Your run: under
+  \bigfigw{fig03_constrained_mixture.pdf}{\linewidth}{Your run: under
   hypertension collagen/muscle grow, elastin dilutes, stress returns to set-point.}
 \end{frame}

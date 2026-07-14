@@ -1,26 +1,21 @@
-% ============================================================================
-%  SECTION 6 — Equilibrated constrained mixture
-% ============================================================================
 \begin{frame}[t]{}
   \vfill\begin{center}{\Huge\color{YaleBlue} Equilibrated CMM}
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Skip the Transient --- Solve for the End State}
+\begin{frame}[t]{Directly Solve for the End State}
   Set every rate to zero and solve the \textbf{algebraic} equilibrium --- one
   root-find instead of thousands of time steps.
-  \dlab{general form --- the 3D equilibrium conditions}
+  \dlab{the 3D equilibrium conditions}
   \vspace{-0.2em}
   \giveneq{\underbrace{\Upsilon=1\Rightarrow\bar\sigma^*=\bar\sigma_h}_{\text{(A) growth balance}}
     \quad
-    \underbrace{\bm{F}_n^{\alpha}=\text{const}\Rightarrow\sigma^{\alpha}=\sigma_h^{\alpha}}_{\text{(B) remodeling done}}
+    \underbrace{\bm{F}_n^{\alpha}=\mathrm{const}\Rightarrow\sigma^{\alpha}=\sigma_h^{\alpha}}_{\text{(B) remodeling completed}}
     \quad
     \underbrace{\nabla\!\cdot\bm{\sigma}=\bm 0}_{\text{(C) mechanical equilib.}}}
-  \zlab{reduction --- scalar conditions at the evolved geometry}
+  \zlab{scalar conditions at the evolved geometry}
   \giveneq{\bar\sigma^*=\bar\sigma_h,\qquad \lambda_e^{\alpha}=G^{\alpha},\qquad
     \sigma_\theta=\tfrac{P a}{h}.}
-  \bigfigw{equil_longterm.png}{0.56\linewidth}{The equilibrated model jumps
-  straight to the long-term evolved state that the transient theories approach.}
   \srccite{Latorre, Humphrey, ZAMM (2018)}
 \end{frame}
 
@@ -38,10 +33,7 @@
   is known, the evolved mass ratio is $M/M_0=\gamma(\lambda^*)^2$.
   \vspace{0.3em}
 
-  This equation \emph{is} the fixed point of the homogenized ODEs
-  (\eqref{eq:homog_mass}--\eqref{eq:homog_remodel} with $\dd/\dd t=0$), so its root
-  \textbf{coincides with the long-time limit of the transient theories} --- to
-  several digits.
+  This equation \emph{is} the fixed point of the homogenized ODEs (\eqref{eq:homog_mass}--\eqref{eq:homog_remodel} with $\dd/\dd t=0$), so its root coincides with the long-time limit of the transient theory.
   \srccite{Latorre, Humphrey, ZAMM (2018)}
 \end{frame}
 
@@ -53,8 +45,6 @@
   is exactly why the instant algebraic test is so useful.
 \end{frame}
 
-
-% ---- example + run: ex05 ---------------------------------------------------
 \begin{frame}[t]{}
   \begin{setupbox}{Example --- the equilibrated stability test (\texttt{ex05})}
     \sprob{Skip the transient: solve the single algebraic equation \eqref{eq:equil}
@@ -72,28 +62,17 @@
   \end{setupbox}
 \end{frame}
 
-% ---- interactive coding exercise: ex05 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Equilibrated}
-    \qq{Does the algebraic $\lambda^*$ land on the transient plateau where a root
-    exists --- and what is the critical elastin loss beyond which \emph{no}
-    equilibrium exists at all?}
-    \qhint{The scan curve shoots up as $s\to s_{\text{crit}}$: the adapted stretch
-    diverges just before the root vanishes. Below $s_{\text{crit}}$ the transient
-    models dilate without bound.}
+    \qq{Does the algebraic $\lambda^*$ land on the transient plateau where a root exists? What is the critical elastin loss beyond which \emph{no} equilibrium exists at all?}
   \end{yourturnbox}
 \end{frame}
 
 \begin{frame}[t]{}
   \begin{answerbox}{Equilibrated}
-    Where a root exists, the equilibrated solve lands exactly on the transient
-    end-state. Below $s_{\text{crit}}$ there is \emph{no} root --- the transient
-    dilates without bound.
+    Where a root exists, the equilibrated solve lands exactly on the transient end-state. Below $s_{\text{crit}}$ there is \emph{no} root: the transient dilates without bound.
   \end{answerbox}
   \vspace{-0.3em}
-  \bigfigw{fig05_equilibrated.pdf}{0.66\linewidth}{Your run: equilibrated end-state
+  \bigfigw{fig05_equilibrated.pdf}{\linewidth}{Your run: equilibrated end-state
   on the transient plateau where a root exists; near the boundary, critical slowing.}
-  \vspace{-0.4em}
-  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} \textbf{matches} the
-  transient theories \emph{if} an equilibrium exists --- and flags when it does not.\end{center}
 \end{frame}
