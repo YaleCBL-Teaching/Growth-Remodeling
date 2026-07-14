@@ -1,110 +1,128 @@
-% ============================================================================
-%  SECTION 3 — Kinematic growth
-% ============================================================================
 \begin{frame}[t]{}
   \vfill\begin{center}{\Huge\color{YaleBlue} Kinematic Growth}
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Multiplicative Decomposition --- Growth vs.\ Elasticity}
-  Kinematic growth splits the deformation into a stress-free \textbf{growth} part
-  $\bm{F}_g$ (how the tissue adds mass) and an \textbf{elastic} part $\bm{F}_e$ ---
-  the only part that carries stress.
-  \dlab{general form --- a product of tensors}
+\begin{frame}[t]{Multiplicative Decomposition: Growth vs.\ Elasticity}
+  Split the deformation into a stress-free \textbf{growth} part $\bm{F}_g$ and a stress-carying \textbf{elastic} part $\bm{F}_e$.
+  \dlab{a product of tensors}
   \giveneq{\bm{F}=\bm{F}_e\,\bm{F}_g,\qquad\text{only }\bm{F}_e\text{ stores energy.}}
-  \zlab{reduction used here --- scalar stretches}
-  \slboxeq{2.2em}{eq:split}{\lambda = \lambda_e \,\lambda_g}
-  Growth is \emph{one} inelastic stretch $\lambda_g$; the elastic stretch
-  $\lambda_e=\lambda/\lambda_g$ is the only part the material law sees. Here the
-  wall is treated as a \emph{single} material --- no separate constituents yet.
+  \zlab{scalar stretches}
+  \slboxeq{eq:split}{\lambda = \lambda_e \,\lambda_g}
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
-\begin{frame}[t]{The Idea, and the Kinematics}
-  Postulate a stress-free \textbf{growth} deformation $\bm{F}_g$; only the elastic
-  part $\bm{F}_e$ carries load. Grown pieces need not fit together ---
-  $\bm{F}_g$ leaves an \emph{incompatible} stress-free state; $\bm{F}_e$ forces
-  them back into one body (residual stress).
+\begin{frame}[t]{Multiplicative Decomposition: Growth vs.\ Elasticity}
+  $\bm{F}_g$ yields an \emph{incompatible} stress-free state, $\bm{F}_e$ restores compability via residual stress.
   \vfill
   \begin{center}\kinmap[1.0]\end{center}
   \vfill
 \end{frame}
 
-\begin{frame}[t]{The Growth Tensor Must Be Prescribed}
-  $\bm{F}_g$ is \textbf{chosen by the modeler}, not derived --- it encodes
-  \emph{how} the tissue is assumed to add mass. A common choice grows the tissue
-  along a single direction $\bm{e}_f$ (a wall-thickening or \emph{fiber}
-  direction):
-  \dlab{prescribed growth tensor --- this is an \emph{input}}
-  \slboxeq{2.6em}{eq:growthtensor}{\bm{F}_g = \bm{I} + (\theta-1)\,
-    \bm{e}_f\!\otimes\bm{e}_f
+\begin{frame}[t]{Kinematic Growth Tensor}
+  $\bm{F}_g$ encodes \emph{how} the tissue is assumed to add mass. A common choice grows the tissue
+  an amount $\theta$ along a fixed direction $\bm{f}$:
+  \dlab{prescribed growth tensor}
+  \slboxeq{eq:growthtensor}{\bm{F}_g = \bm{I} + (\theta-1)\,
+    \bm{f}\!\otimes\bm{f}
     \;=\;\mathrm{diag}(1,\,1,\,\theta)}
-  \zlab{0D-specific reduction --- the growth tensor becomes one stretch}
-  \giveneq{\bm{F}_g\ \longrightarrow\ \lambda_g\ \ (\text{scalar growth stretch}),
+  \zlab{growth stretch}
+  \giveneq{\lambda_g\ \ (\text{scalar growth stretch}),
     \qquad \theta=\det\bm{F}_g=M/M_0.}
-  Here $\bm{e}_f$ is the growth direction (e.g.\ wall-thickening). The growth
-  \emph{pattern} is fixed a priori; only the scalar \textbf{growth stretch}
-  $\lambda_g$ (equivalently the mass ratio $\theta$) evolves in time.
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
-\begin{frame}[t]{The Growth Law}
-  The growth \emph{pattern} $\bm{F}_g$ is fixed; the growth law evolves its single
-  scalar to null the stress deviation from the set-point (first-order, production
-  $\propto$ current mass). Since $\bm{F}_g$ is fixed by $\theta$, its rate
-  $\dot{\bm{F}}_g=\dot\theta\,\bm{e}_f\!\otimes\bm{e}_f$ reduces to \emph{one}
-  scalar ODE --- the \emph{same} law in the full 3D tensor model and the 0D
-  reduction (both track the scalar $\theta$):
-  \slboxeq{2.6em}{eq:kingrowth}{\frac{\dd\theta}{\dd t}
+\begin{frame}[t]{Growth Law}
+  The growth \emph{pattern} $\bm{F}_g$ is typically fixed. Its rate
+  $\dot{\bm{F}}_g=\dot\theta\,\bm{f}\!\otimes\bm{f}$ reduces to \emph{one}
+  scalar ODE:
+  \slboxeq{eq:kingrowth}{\frac{\dd\theta}{\dd t}
     = k_g\,\theta\left(\frac{\bar\sigma}{\bar\sigma_h}-1\right)}
-  The set-point $\bar\sigma_h$ is \textbf{prescribed}: wherever growth stops
-  ($\dot\theta=0$), stress is homeostatic \emph{by construction}. So the model can
-  only \emph{impose} its set-point, never \emph{predict} stability --- that is
-  what the mixture theories add.
+  Since $k_g\,\theta>0$, the sign of the response follows the stress deviation:
+  \giveneq{\frac{\dd\theta}{\dd t}
+    \begin{cases}
+      >0 & \bar\sigma>\bar\sigma_h \quad\text{(growth)}\\[2pt]
+      =0 & \bar\sigma=\bar\sigma_h \quad\text{(homeostasis)}\\[2pt]
+      <0 & \bar\sigma<\bar\sigma_h \quad\text{(atrophy)}
+    \end{cases}}
   \srccite{Rodriguez, Hoger, McCulloch, J Biomech (1994)}
 \end{frame}
 
-% ---- problem setup: ex02 ---------------------------------------------------
+\begin{frame}[t]{Getting Started with the Code}
+  \small
+  One runner drives \emph{every} exercise: you never edit Python, just point
+  it at a small input file. \textbf{First-time setup} (needs Python $\ge3.10$;
+  dependencies: NumPy, SciPy, Matplotlib, PyYAML):
+  \par\smallskip
+  \scodeline{git clone https://github.com/YaleCBL-Teaching/Growth-Remodeling}
+  \scodeline{cd Growth-Remodeling}
+  \vspace{0.2em}
+  \begin{columns}[T]
+    \begin{column}{0.4\textwidth}
+      \textbf{\color{YaleBlue}uv} (recommended):
+      \scodeline{uv sync}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \textbf{\color{YaleBlue}pip} (your own Python):
+      \scodeline{python -m venv .venv}
+      \scodeline{pip install -e .}
+    \end{column}
+  \end{columns}
+  \vspace{0.5em}
+  \textbf{What is where:}
+  \begin{itemize}\setlength\itemsep{1pt}
+    \item \texttt{run.py}: the single runner for all exercises
+    \item \texttt{configs/}: one YAML input file per exercise \emph{(you edit these)}
+    \item \texttt{src/gr/}: the models \& maths (read, don't edit)
+    \item \texttt{docs/}: documentation
+    \item \texttt{slides/}: semianr notes
+  \end{itemize}
+  \srccite{github.com/YaleCBL-Teaching/Growth-Remodeling}
+\end{frame}
+
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- hypertensive artery (\texttt{ex02})}
+  \begin{setupbox}{Example (hypertensive artery, \texttt{ex02})}
     \sprob{A pressurised artery is made \emph{hypertensive} by a sustained
-    pressure step. Kinematic growth thickens the wall --- does the wall stress
+    pressure step. Kinematic growth thickens the wall. Does the wall stress
     $\bar\sigma/\bar\sigma_h$ return to the \emph{prescribed} set-point?}
   \end{setupbox}
 \end{frame}
 
-% ---- how to run (concise), placed AFTER the problem setup ------------------
-\begin{frame}[t]{Running the Exercises}
-  One runner drives every exercise --- no Python to edit. Run the input file:
+\begin{frame}[t]{Running an Exercise}
+  \small
+  Point the runner at the input file (\texttt{uv run}, or plain \texttt{python}
+  once the venv is activated):
+  \par\smallskip
   \scodeline{uv run python run.py configs/ex02\_kinematic\_growth.yaml}
-  \textbf{Results:} the key numbers ($\bar\sigma/\bar\sigma_h$, mass,
+  \vspace{0.3em}\par
+  \textbf{You get:} the key numbers ($\bar\sigma/\bar\sigma_h$, mass,
   \texttt{diverged}) print to the terminal, and the time history opens as a plot.
-  \vspace{0.7em}\par
-  \textbf{Parametric study} --- one curve per value, from the command line:
+  \vspace{0.5em}\par
+  \textbf{Change one value:} edit the YAML, or override on the command line:
+  \par\smallskip
+  \scodeline{uv run python run.py configs/ex02\_kinematic\_growth.yaml --set insult.pressure\_factor=2}
+  \vspace{0.3em}\par
+  \textbf{Parametric study:} one curve per value:
+  \par\smallskip
   \scodeline{... --sweep insult.pressure\_factor=1.5,2,3}
-  Every parameter in the file can be swept or overridden the same way.
 \end{frame}
 
-% ---- interactive coding exercise: ex02 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Kinematic growth}
     \qq{Does the wall stress return to the prescribed set-point? Try larger
-    pressure steps --- does the outcome ever change?}
+    pressure steps. Does the outcome ever change?}
     \qhint{$\bar\sigma/\bar\sigma_h$ settles at 1 while $\theta$ climbs to the
-    pressure factor. Under pure hypertension it \emph{always} adapts --- runaway
+    pressure factor. Under pure hypertension it \emph{always} adapts. Runaway
     needs the mixture / aneurysm story (later).}
   \end{yourturnbox}
 \end{frame}
 
 \begin{frame}[t]{}
   \begin{answerbox}{Kinematic growth}
-    The stress plateau \emph{always} lands on the prescribed set-point --- the wall
+    The stress plateau \emph{always} lands on the prescribed set-point. The wall
     simply thickens more for a larger pressure step. Kinematic growth
     \emph{imposes} stability; it cannot predict runaway.
   \end{answerbox}
   \vspace{-0.2em}
-  \bigfigw{fig02_kinematic_growth.pdf}{0.98\linewidth}{}
-  \vspace{-0.3em}
-  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} reaches the
-  a-priori prescribed homeostasis --- stability is built in, not predicted.\end{center}
+  \bigfigw{fig02_kinematic_growth.pdf}{\linewidth}{}
 \end{frame}

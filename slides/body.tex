@@ -1,6 +1,6 @@
 % ---- title metadata --------------------------------------------------------
-\title{Growth \& Remodeling of Soft Tissue}
-\subtitle{A hands-on introduction to the four modelling frameworks}
+\title{Predicting Growth and Remodeling of Cardiovascular Tissue}
+% \subtitle{A hands-on introduction to the four modelling frameworks}
 \author{}
 \date{}
 
@@ -12,20 +12,34 @@
 \begin{frame}[plain]
   \vfill
   \begin{center}
-    {\Large\bfseries\color{YaleBlue} Growth \& Remodeling of Soft Tissue}\\[0.5em]
-    {\color{YaleLightBlue} A hands-on introduction to the four modelling frameworks}\\[2.6em]
+    % title on ONE line; "change in mass" / "change in microstructure" sit
+    % smaller, directly under the words Growth / Remodeling
+    \begin{tikzpicture}[every node/.style={inner sep=0pt,outer sep=0pt}]
+      \node[font=\Large\bfseries,text=YaleBlue] (tp) {Predicting};
+      \node[font=\Large\bfseries,text=YaleBlue,base right=0.3em of tp] (tg) {Growth};
+      \node[font=\Large\bfseries,text=YaleBlue,base right=0.3em of tg] (ta) {and};
+      \node[font=\Large\bfseries,text=YaleBlue,base right=0.3em of ta] (tr) {Remodeling};
+      \node[font=\Large\bfseries,text=YaleBlue,base right=0.3em of tr] (tc) {of Cardiovascular Tissue};
+      \node[font=\scriptsize,text=YaleBlue,below=3pt of tg] {change in mass};
+      \node[font=\scriptsize,text=YaleBlue,below=3pt of tr] {change in microstructure};
+    \end{tikzpicture}\\[2.4em]
     % --- author block (edit position / lab website / add logo as desired) ---
-    {\large\bfseries\color{YaleBlue} Martin Pfaller}\\[0.35em]
-    {\normalsize \textit{$\langle$position$\rangle$}}\\[0.15em]
-    {\normalsize Yale School of Medicine}\\[0.25em]
-    {\small\color{YaleLightBlue}\texttt{$\langle$lab website$\rangle$}}\\[2.4em]
+    {\normalsize\bfseries\color{YaleBlue} Dr.-Ing. Martin R. Pfaller}\\[0.25em]
+    {\normalsize \textit{Assistant Professor}}\\[0.25em]
+    {\normalsize Department of Biomedical Engineering, Yale University}\\[0.25em]
+    {\small\color{YaleLightBlue}\texttt{biomechanics.yale.edu}}\\[1.4em]
+    {\footnotesize\color{black!60} With much inspiration from
+     Drs.\ Amadeus Gebauer, Jonas Eichinger, and Jay Humphrey}\\[1.4em]
     \ifteacher
-      {\footnotesize\color{YaleBlue} teacher version --- key equations filled in}
+      {\footnotesize\color{YaleBlue} Teacher Version}
     \else
-      {\footnotesize\color{YaleLightBlue} student version --- boxes to fill in during class}
+      {\footnotesize\color{YaleLightBlue} Student Version}
     \fi
   \end{center}
   \vfill
+  % small Yale wordmark pinned to the bottom of the slide
+  \begin{center}\includegraphics[height=0.5cm]{figures/yale_logo.pdf}\end{center}
+  \vspace{0.6em}
 \end{frame}
 }
 
