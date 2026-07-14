@@ -47,12 +47,12 @@
   current $\lambda_n^{\alpha}$; mixing the two at the turnover rate evolves the mean.
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
-      \zlab{growth --- mass}
+      \zlab{growth (mass)}
       \slboxeq{eq:homog_mass}{\frac{\dd M^{\alpha}}{\dd t}
         = M^{\alpha} K_\sigma^{\alpha} k_d^{\alpha}\!\left(\tfrac{\bar\sigma}{\bar\sigma_h}-1\right)}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \zlab{remodeling --- mean natural stretch}
+      \zlab{remodeling (mean natural stretch)}
       \slboxeq{eq:homog_remodel}{\frac{\dd\lambda_n^{\alpha}}{\dd t}
         = \frac{m^{\alpha}}{M^{\alpha}}\!\left(\frac{\lambda}{G^{\alpha}}-\lambda_n^{\alpha}\right)}
     \end{column}
@@ -60,7 +60,7 @@
   \vspace{0.3em}
   with production $m^{\alpha}=k_d^{\alpha}M^{\alpha}\Upsilon^{\alpha}$. Holding
   $\lambda$ fixed, remodeling relaxes each constituent's stress to its prestress
-  $\sigma_h^{\alpha}$ (time constant $\sim\!1/k_d$) --- the Maxwell-with-motor
+  $\sigma_h^{\alpha}$ (time constant $\sim\!1/k_d$), the Maxwell-with-motor
   behaviour.
   \srccite{Cyron, Aydin, Humphrey, Biomech Model Mechanobiol (2016)}
 \end{frame}
@@ -99,7 +99,7 @@
 \end{frame}
 
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- homogenized vs.\ full (\texttt{ex04})}
+  \begin{setupbox}{Example (homogenized vs.\ full, \texttt{ex04})}
     \sprob{Run both mixture theories on the \emph{same} artery and insult. How closely does the homogenized model track the full model, and how much faster is it?}
     \srun{\scodeline{uv run python run.py configs/ex04\_homogenized\_vs\_full.yaml}
       Here \texttt{study: compare} runs
@@ -126,7 +126,7 @@
   \begin{answerbox}{Homogenized vs.\ full}
     The homogenized curve overlays the full CMM closely at a fraction of the
     runtime ($O(N)$ vs.\ $O(N^2)$). {\color{ABlue}\bfseries Learning:} it reproduces
-    a \textbf{similar time trajectory} to the full model --- cheaply.
+    a \textbf{similar time trajectory} to the full model, cheaply.
   \end{answerbox}
   \vspace{-0.4em}
   \bigfigw{fig04_compare_all.pdf}{0.52\linewidth}{Your overlay: homogenized (dashed)

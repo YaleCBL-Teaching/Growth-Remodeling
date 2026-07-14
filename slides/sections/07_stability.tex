@@ -21,10 +21,10 @@
     \begin{column}{0.54\textwidth}
       \small
       Growth thickens the wall ($h\!\propto\!M$), which lowers stress; but
-      dilation raises it as $\lambda^2$ (Laplace). \\[0.4em]
+      dilation raises it as $\lambda^2$ (Laplace).
       While enough \textbf{elastin} survives, its stiff recoil keeps
       $\dd\bar\sigma/\dd\theta<0$ and the artery \textbf{adapts}. Lose enough
-      elastin and the sign flips, $\dd\bar\sigma/\dd\theta>0$ ---
+      elastin and the sign flips, $\dd\bar\sigma/\dd\theta>0$:
       \textbf{runaway}. It is the quadratic Laplace exponent that makes this
       possible.
     \end{column}
@@ -37,15 +37,15 @@
 \end{frame}
 
 \begin{frame}[t]{Same Tissue, Two Insults}
-  Read stability two ways: \textbf{existence} --- the equilibrated equation
+  Read stability two ways: \textbf{existence}: the equilibrated equation
   \eqref{eq:equil} has a root iff the tissue can adapt (no time integration); or
-  \textbf{transient} --- integrate and watch it plateau or climb. The same tissue
+  \textbf{transient}: integrate and watch it plateau or climb. The same tissue
   can do either: mild elastin loss adapts, severe loss dilates without bound.
 \end{frame}
 
 % ---- example + run: ex06 ---------------------------------------------------
 \begin{frame}[t]{}
-  \begin{setupbox}{Example --- the stable/unstable map (\texttt{ex06})}
+  \begin{setupbox}{Example (the stable/unstable map, \texttt{ex06})}
     \sprob{A tissue \emph{adapts} to an insult iff a mechanobiological equilibrium
     exists \eqref{eq:equil}. Sweeping that instant test over (surviving elastin)
     $\times$ (pressure) draws the stable/unstable map. Then change \emph{one}
@@ -55,18 +55,18 @@
       the \texttt{adapts} existence test and shades adapt (blue) vs.\ runaway
       (red); it also prints the fraction of the grid that adapts.}
     \sstudy{Change one property in the \texttt{model:} block (gain, collagen
-      \texttt{c1}, or $G$) --- e.g.
+      \texttt{c1}, or $G$), e.g.
       \scodeline{... --set model.constituents.collagen.gain=3.0}
       \scodeline{... --set model.constituents.collagen.G=1.15}
-      --- and compare how much the stable region grows.}
+      Then compare how much the stable region grows.}
   \end{setupbox}
 \end{frame}
 
 % ---- interactive coding exercise: ex06 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Stability map}
-    \qq{Which single change --- higher gain, stiffer collagen, or larger
-    deposition stretch --- enlarges the stable region the most? Elastin cannot be
+    \qq{Which single change (higher gain, stiffer collagen, or larger
+    deposition stretch) enlarges the stable region the most? Elastin cannot be
     regrown in adults: what does that imply for aneurysm?}
     \qhint{Compare the printed ``fraction that adapts'' across the three changes.
     Each shifts the boundary between adaptation and runaway.}
@@ -76,7 +76,7 @@
 \begin{frame}[t]{}
   \begin{answerbox}{Stability map}
     Higher gain, stiffer collagen, or larger deposition stretch all enlarge the
-    \emph{adapts} region --- the tissue tolerates a stronger insult before running
+    \emph{adapts} region, the tissue tolerates a stronger insult before running
     away.
   \end{answerbox}
   \vspace{-0.3em}

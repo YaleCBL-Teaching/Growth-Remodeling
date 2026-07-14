@@ -7,7 +7,7 @@
 \end{frame}
 
 % ---- how the seminar code works: file-by-file rundown -----------------------
-\begin{frame}[t]{Under the Hood --- What Each File Computes (1/2: the core)}
+\begin{frame}[t]{Under the Hood, What Each File Computes (1/2: the core)}
   \footnotesize
   The \texttt{gr} package is layered: a shared \textbf{continuum-mechanics core}
   (read, don't edit), then one file per G\&R theory.
@@ -36,7 +36,7 @@
   \end{tabular}
 \end{frame}
 
-\begin{frame}[t]{Under the Hood --- What Each File Computes (2/2: the theories)}
+\begin{frame}[t]{Under the Hood, What Each File Computes (2/2: the theories)}
   \footnotesize
   \renewcommand{\arraystretch}{1.3}
   \begin{tabular}{@{}p{0.25\textwidth}p{0.41\textwidth}p{0.27\textwidth}@{}}
@@ -45,13 +45,13 @@
     \midrule
     \texttt{kinematic\_growth.py} & split $\bm{F}=\bm{F}_e\bm{F}_g$, scalar
       $\theta$; $\dot\theta=k_g\theta(\bar\sigma/\bar\sigma_h-1)$ &
-      Theory 1 --- kinematic growth \\
+      Theory 1: kinematic growth \\
     \texttt{constrained\_mixture.py} & heredity integrals over cohorts; mass
-      balance + mixture stress ($O(N^2)$) & Theory 2 --- full CMM \\
+      balance + mixture stress ($O(N^2)$) & Theory 2: full CMM \\
     \texttt{homogenized\_cmm.py} & two ODEs per constituent: $\dot M^{\alpha}$,
-      $\dot\lambda_n^{\alpha}$ ($O(N)$) & Theory 3 --- homogenized CMM \\
+      $\dot\lambda_n^{\alpha}$ ($O(N)$) & Theory 3: homogenized CMM \\
     \texttt{equilibrated\_cmm.py} & rates $\to 0$: one algebraic solve for
-      $\lambda^*$ & Theory 4 --- equilibrated CMM \\
+      $\lambda^*$ & Theory 4: equilibrated CMM \\
     \texttt{stability.py} & \texttt{adapts} (does a root exist?),
       \texttt{critical\_elastin\_loss} & stability $=$ \textbf{existence} of an
       equilibrium \\
@@ -63,7 +63,7 @@
   \vspace{0.3em}
   \begin{center}\footnotesize
   Common thread: each theory changes only \emph{how the supplied stress
-  $\bar\sigma(\lambda)$ is built} --- the same constituent laws and equilibrium
+  $\bar\sigma(\lambda)$ is built}, the same constituent laws and equilibrium
   solve are reused, so every difference you saw is the G\&R law alone.
   \end{center}
 \end{frame}

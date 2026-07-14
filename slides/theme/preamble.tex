@@ -515,7 +515,7 @@
     \draw[\sty] (\sx,2.0) rectangle ++(0.62,0.62);}
   \node[align=center] at (4.7,3.5)
     {stress-free \emph{mean} natural configuration per constituent
-     (\emph{evolving} --- not a history)};
+     (\emph{evolving}, not a history)};
   % arrows: single evolving natural config marches left->right
   \draw[natarr] (1.75,2.3) -- node[above]{$\bm{F}_n^{\alpha}$} (4.3,2.3);
   \draw[natarr] (5.75,2.3) -- node[above]{$\bm{F}_n^{\alpha}$} (8.5,2.3);
@@ -552,16 +552,16 @@
   \draw[dashed,black!70] plot[smooth,tension=0.8]
     coordinates{(2.4,-0.2)(4.6,0)(9.8,0.06)(15.2,0.18)(16.2,0.42)};
   \draw[dashed,-{Latex[length=2mm]},black!70] (16.2,0.42) -- (16.9,0.9);
-  % --- configuration outlines ---
-  \begin{scope}[shift={(X)}]    \draw[blob,scale=0.95] \blob; \end{scope}
-  \begin{scope}[shift={(x0)}]   \draw[blob,scale=1.15] \blob; \end{scope}
-  \begin{scope}[shift={(xtau)}] \draw[blob,scale=1.2]  \blob; \end{scope}
-  \begin{scope}[shift={(xs)}]   \draw[blob,scale=1.25] \blob; \end{scope}
-  \foreach \p in {k1,k2,ka}{\begin{scope}[shift={(\p)}] \draw[blob,scale=0.60] \blob; \end{scope}}
-  % --- tissue-level deformations from the reference (labels beside the arcs) ---
-  \draw[ar] (X) to[bend left=12]  node[pos=0.45,left=2pt]{$\bm{F}(0)$}   (x0);
+  % --- configuration outlines (enlarged so the point labels fit inside) ---
+  \begin{scope}[shift={(X)}]    \draw[blob,scale=1.25] \blob; \end{scope}
+  \begin{scope}[shift={(x0)}]   \draw[blob,scale=1.55] \blob; \end{scope}
+  \begin{scope}[shift={(xtau)}] \draw[blob,scale=1.60] \blob; \end{scope}
+  \begin{scope}[shift={(xs)}]   \draw[blob,scale=1.65] \blob; \end{scope}
+  \foreach \p in {k1,k2,ka}{\begin{scope}[shift={(\p)}] \draw[blob,scale=0.62] \blob; \end{scope}}
+  % --- tissue-level deformations from the reference (arcs pass below the blobs) --
+  \draw[ar] (X) to[bend left=12]  node[pos=0.4,left=2pt]{$\bm{F}(0)$}   (x0);
   \draw[ar] (X) to[bend right=7]  node[pos=0.62,below=2pt]{$\bm{F}(\tau)$} (xtau);
-  \draw[ar] (X) to[bend right=16] node[pos=0.7,below=2pt]{$\bm{F}(s)$}  (xs);
+  \draw[ar] (X) to[bend right=16] node[pos=0.72,below=2pt]{$\bm{F}(s)$}  (xs);
   % --- deposition of every constituent laid down at tau into kappa(tau) ---
   \draw[dep] (k1) -- (xtau);
   \draw[dep] (k2) -- (xtau);
@@ -569,22 +569,20 @@
   % --- constituent-specific deformation to the current mixture ---
   \draw[ar] (ka) to[bend left=16] (xs);
   \node at (13.0,2.75) {$\bm{F}^{\alpha}_{n(\tau)}(s)$};
-  % --- points ---
-  \fill (X) circle (1.7pt);
-  \foreach \p in {x0,xtau,xs}{\fill (\p) circle (1.7pt);}
+  % --- points, with the x-labels INSIDE each configuration next to the dot ---
+  \fill (X)    circle (1.7pt); \node[anchor=north] at ($(X)+(0,-0.05)$)    {$\bm{X}$};
+  \fill (x0)   circle (1.7pt); \node[anchor=north] at ($(x0)+(0,0.9)$)   {$\bm{x}(0)$};
+  \fill (xtau) circle (1.7pt); \node[anchor=north] at ($(xtau)+(0,-0.1)$) {$\bm{x}(\tau)$};
+  \fill (xs)   circle (1.7pt); \node[anchor=north] at ($(xs)+(0,-0.1)$)   {$\bm{x}(s)$};
   \foreach \p in {k1,k2,ka}{\fill (\p) circle (1.5pt);}
-  % --- point + configuration labels, placed clear OUTSIDE each outline ---
-  \node[anchor=east]       at ($(X)+(-0.9,0)$)     {$\bm{X}$};
-  \node[anchor=north]      at ($(X)+(0,-0.95)$)    {$\kappa_R$};
-  \node[anchor=south west] at ($(x0)+(0.95,0.10)$)  {$\bm{x}(0)$};
-  \node[anchor=north]      at ($(x0)+(0,-1.05)$)    {$\kappa(0)$};
-  \node[anchor=south west] at ($(xtau)+(1.0,0.10)$) {$\bm{x}(\tau)$};
-  \node[anchor=north]      at ($(xtau)+(0,-1.05)$)    {$\kappa(\tau)$};
-  \node[anchor=south]      at ($(xs)+(0,0.9)$)       {$\bm{x}(s)$};
-  \node[anchor=north]      at ($(xs)+(0,-1.05)$)      {$\kappa(s)$};
-  \node[anchor=south] at ($(k1)+(0,0.52)$) {$\kappa^{1}_{n(\tau)}$};
-  \node[anchor=south] at ($(k2)+(0,0.52)$) {$\kappa^{2}_{n(\tau)}$};
-  \node[anchor=south] at ($(ka)+(0,0.52)$) {$\kappa^{\alpha}_{n(\tau)}$};
+  % --- configuration labels, hugging each outline ---
+  \node[anchor=north] at ($(X)+(0,-0.92)$)   {$\kappa_R$};
+  \node[anchor=north] at ($(x0)+(0,-1.02)$)  {$\kappa(0)$};
+  \node[anchor=north] at ($(xtau)+(0,-1.06)$){$\kappa(\tau)$};
+  \node[anchor=north] at ($(xs)+(0,-1.10)$)  {$\kappa(s)$};
+  \node[anchor=south] at ($(k1)+(0,0.46)$) {$\kappa^{1}_{n(\tau)}$};
+  \node[anchor=south] at ($(k2)+(0,0.46)$) {$\kappa^{2}_{n(\tau)}$};
+  \node[anchor=south] at ($(ka)+(0,0.46)$) {$\kappa^{\alpha}_{n(\tau)}$};
   \node at (9.5,3.0) {$\cdots$};
   % --- left-hand level labels ---
   \node[align=left,anchor=north west] at (-2.2,3.85) {Constituent\\ natural\\ configurations};
