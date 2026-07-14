@@ -8,7 +8,7 @@
   root-find instead of thousands of time steps.
   \dlab{the 3D equilibrium conditions}
   \vspace{-0.2em}
-  \giveneq{\underbrace{\Upsilon=1\Rightarrow\bar\sigma^*=\bar\sigma_h}_{\text{(A) growth balance}}
+  \giveneq{\underbrace{\Upsilon^{\alpha}=1\Rightarrow\bar\sigma^*=\bar\sigma_h}_{\text{(A) growth balance}}
     \quad
     \underbrace{\bm{F}_n^{\alpha}=\mathrm{const}\Rightarrow\sigma^{\alpha}=\sigma_h^{\alpha}}_{\text{(B) remodeling completed}}
     \quad
@@ -25,12 +25,14 @@
   equation for the evolved stretch $\lambda^*$, consistent with the same
   $\lambda,\ G^{\alpha},\ \phi^{\alpha}$ used throughout:
   \zlab{scalar equilibrium equation for $\lambda^*$}
-  \slboxeq{eq:equil}{\phi^e\,s
-    + s\,\frac{\bar\sigma_h - \sigma^e(G^e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
+  \slboxeq{eq:equil}{\phi^e\,\xi
+    + \xi\,\frac{\bar\sigma_h - \sigma^e(G^e\lambda^*)}{\sigma_{\text{turn}} - \sigma_h^e}
     - \gamma\,(\lambda^*)^{2} = 0}
-  with the Laplace exponent $n=2$, $\gamma$ the sustained load factor, $s$ the
-  surviving elastin fraction, $\phi^e$ the elastin mass fraction. Once $\lambda^*$
-  is known, the evolved mass ratio is $M/M_0=\gamma(\lambda^*)^2$.
+  with the Laplace exponent $n=2$, $\gamma$ the sustained load factor, $\xi$ the
+  surviving elastin fraction, $\phi^e$ the elastin mass fraction,
+  $\sigma_h^e=\sigma^e(G^e)$ the elastin homeostatic stress, and $\sigma_{\text{turn}}$
+  the homeostatic stress carried by the turnover constituents (collagen and smooth
+  muscle). Once $\lambda^*$ is known, the evolved mass ratio is $M/M_0=\gamma(\lambda^*)^2$.
   \vspace{0.3em}
 
   This equation \emph{is} the fixed point of the homogenized ODEs (\eqref{eq:homog_mass}--\eqref{eq:homog_remodel} with $\dd/\dd t=0$), so its root coincides with the long-time limit of the transient theory.
@@ -55,8 +57,8 @@
       Here \texttt{study: equilibrium} solves once for the given insult, then the
       \texttt{scan:} block sweeps \texttt{elastin\_surviving} and
       \texttt{report\_critical: elastin} prints the critical surviving fraction
-      $s_\text{crit}$.}
-    \sstudy{Move the boundary by stiffening the wall, then re-read $s_\text{crit}$:
+      $\xi_\text{crit}$.}
+    \sstudy{Move the boundary by stiffening the wall, then re-read $\xi_\text{crit}$:
       \scodeline{... --set model.constituents.collagen.gain=3.0}
       \scodeline{... --set model.constituents.collagen.law.c1=600}}
   \end{setupbox}
@@ -70,7 +72,7 @@
 
 \begin{frame}[t]{}
   \begin{answerbox}{Equilibrated}
-    Where a root exists, the equilibrated solve lands exactly on the transient end-state. Below $s_{\text{crit}}$ there is \emph{no} root: the transient dilates without bound.
+    Where a root exists, the equilibrated solve lands exactly on the transient end-state. Below $\xi_{\text{crit}}$ there is \emph{no} root: the transient dilates without bound.
   \end{answerbox}
   \vspace{-0.3em}
   \bigfigw{fig05_equilibrated.pdf}{\linewidth}{Your run: equilibrated end-state
