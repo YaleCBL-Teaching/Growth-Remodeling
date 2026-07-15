@@ -67,7 +67,7 @@ set-point; it cannot *predict* mechanobiological stability from tissue turnover.
 That is what the mixture theories add
 ([§4](04_constrained_mixture.md)–[§7](07_stability.md)).
 
-![Kinematic growth under hypertension](figures/fig02_kinematic_growth.png)
+![Kinematic growth under hypertension](figures/fig01_kinematic_growth.png)
 
 *Kinematic growth of the artery adapting to a step rise in pressure (1 → 1.5×):
 it restores the prescribed homeostatic stress by thickening the wall. The stress
@@ -75,7 +75,7 @@ returns exactly to the set-point — that is guaranteed here, not predicted.*
 
 ---
 
-### Exercise → [`exercises/ex02_kinematic_growth.py`](../exercises/ex02_kinematic_growth.py)
+### Exercise → [`exercises/ex01_kinematic_growth.py`](../exercises/ex01_kinematic_growth.py)
 
 Change the growth-rate gain $k_g$ and the pressure step, and watch how fast (and
 whether) the tissue returns to homeostasis. Push the pressure high enough to

@@ -67,6 +67,7 @@ from . import (
 )
 from .geometry import artery
 from .mechanics import FungFiber, NeoHookean
+from .monitor import Monitor
 from .parameters import Insult, Model
 from .stability import adapts, critical_elastin_loss
 
@@ -124,12 +125,18 @@ def build_model(cfg: dict) -> Model:
     if globals_:
         model = replace(model, **globals_)
     for name, ov in (mc.get("constituents") or {}).items():
-        model = model.with_constituent(name, **_constituent_kwargs(ov))
+        model = model.with_constituent(name, **_constituent_kwargs(ov, model.by_name(name)))
     return model
 
 
-def _constituent_kwargs(ov: dict) -> dict:
-    """Translate a per-constituent override block into ``Constituent`` fields."""
+def _constituent_kwargs(ov: dict, current) -> dict:
+    """Translate a per-constituent override block into ``Constituent`` fields.
+
+    A *partial* law override inherits the coefficients it does not name from the
+    constituent's current law, so a single-value command-line override such as
+    ``--set model.constituents.collagen.law.c1=600`` works even when the config
+    does not spell out the whole law (previously that raised ``KeyError: 'c2'``).
+    """
     kw: dict = {}
     if "turnover_days" in ov:
         kw["k_d"] = 1.0 / float(ov["turnover_days"])
@@ -138,9 +145,20 @@ def _constituent_kwargs(ov: dict) -> dict:
             kw[key] = ov[key]
     if "law" in ov:
         law = ov["law"]
-        if "c1" in law:
-            kw["law"] = FungFiber(c1=float(law["c1"]), c2=float(law["c2"]))
-        elif "c" in law:
+        if "c1" in law or "c2" in law:          # Fung fiber (possibly a partial override)
+            base = current.law if isinstance(current.law, FungFiber) else None
+
+            def pick(key: str) -> float:
+                if key in law:
+                    return float(law[key])
+                if base is not None:
+                    return float(getattr(base, key))
+                raise ValueError(
+                    f"a Fung law override needs both c1 and c2 when the constituent's "
+                    f"current law is not a Fung fiber: {law}")
+
+            kw["law"] = FungFiber(c1=pick("c1"), c2=pick("c2"))
+        elif "c" in law:                        # neo-Hookean
             kw["law"] = NeoHookean(c=float(law["c"]))
         else:
             raise ValueError(f"law override needs c1/c2 (Fung) or c (neo-Hookean): {law}")
@@ -173,27 +191,36 @@ def _sim_kwargs(func, cfg: dict) -> dict:
 # =============================================================================
 # The four study types
 # =============================================================================
-def run(cfg: dict):
-    """Dispatch on ``study:`` and return ``(fig, summary_dict)``."""
+def run(cfg: dict, *, trace: bool = False, trace_every: float | None = None):
+    """Dispatch on ``study:`` and return ``(fig, summary_dict)``.
+
+    ``trace=True`` turns on the live tracker (:mod:`gr.monitor`): the physical
+    quantities from the slides are printed as the solver runs.  ``trace_every``
+    is the print interval in days (``None`` -> about 25 rows over the run).
+    """
     study = cfg["study"]
     if study == "transient":
-        return _study_transient(cfg)
+        return _study_transient(cfg, trace=trace, trace_every=trace_every)
     if study == "compare":
-        return _study_compare(cfg)
+        return _study_compare(cfg, trace=trace, trace_every=trace_every)
     if study == "equilibrium":
-        return _study_equilibrium(cfg)
+        return _study_equilibrium(cfg, trace=trace)
     if study == "map":
-        return _study_map(cfg)
+        return _study_map(cfg, trace=trace)
     raise ValueError(f"unknown study {study!r}")
 
 
-def _simulate_from(cfg: dict):
+def _make_monitor(trace: bool, trace_every: float | None) -> Monitor | None:
+    return Monitor(every=trace_every) if trace else None
+
+
+def _simulate_from(cfg: dict, monitor: Monitor | None = None):
     """Run the single theory named in ``cfg['theory']`` on this config."""
     module = THEORIES[cfg["theory"]]
     model = build_model(cfg)
     geom = build_geometry(cfg, model)
     insult = build_insult(cfg)
-    return module.simulate(geom, insult, **_sim_kwargs(module.simulate, cfg))
+    return module.simulate(geom, insult, monitor=monitor, **_sim_kwargs(module.simulate, cfg))
 
 
 def _sweep_configs(cfg: dict):
@@ -211,26 +238,36 @@ def _sweep_configs(cfg: dict):
         yield f"{_short(param)}={v:g}", child
 
 
-def _study_transient(cfg: dict):
+def _study_transient(cfg: dict, *, trace: bool = False, trace_every: float | None = None):
     """One theory over time; overlays one curve per swept value."""
     from .plotting import plt
 
-    runs = [(label or cfg["theory"], _simulate_from(child))
-            for label, child in _sweep_configs(cfg)]
+    print(f"[{cfg.get('title', cfg['theory'])}]  study=transient")
+    runs = []
+    for label, child in _sweep_configs(cfg):
+        if trace and label:
+            print(f"\n  ── sweep: {label} ──")
+        r = _simulate_from(child, monitor=_make_monitor(trace, trace_every))
+        runs.append((label or cfg["theory"], r))
 
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
     cmap = plt.get_cmap("viridis")
     n = len(runs)
     summary = []
-    print(f"[{cfg.get('title', cfg['theory'])}]  study=transient")
+    if trace:
+        print("\n  final states:")
     for i, (label, r) in enumerate(runs):
         color = cmap(0.15 + 0.7 * i / max(n - 1, 1)) if n > 1 else "black"
         axes[0].plot(r.t, r.sigma_norm, color=color, label=label)
         axes[1].plot(r.t, r.mass, color=color, label=label)
+        status = ("runaway (diverged)" if r.diverged
+                  else "adapted" if r.converged
+                  else "NOT converged (still evolving)")
         summary.append({"label": label, "sigma_norm": float(r.sigma_norm[-1]),
-                        "mass": float(r.mass[-1]), "diverged": bool(r.diverged)})
+                        "mass": float(r.mass[-1]), "diverged": bool(r.diverged),
+                        "converged": bool(r.converged)})
         print(f"  {label:>16}:  sigma/sigma_h -> {r.sigma_norm[-1]:.3f},"
-              f"  mass -> {r.mass[-1]:.3f},  diverged={r.diverged}")
+              f"  mass -> {r.mass[-1]:.3f},  {status}")
     axes[0].axhline(1.0, color="gray", lw=1)
     axes[0].set(xlabel="time [day]", ylabel=r"$\bar\sigma/\bar\sigma_h$", title="stress vs set-point")
     axes[1].set(xlabel="time [day]", ylabel=r"mass $M/M_0$", title="growth")
@@ -241,7 +278,7 @@ def _study_transient(cfg: dict):
     return fig, {"runs": summary}
 
 
-def _study_compare(cfg: dict):
+def _study_compare(cfg: dict, *, trace: bool = False, trace_every: float | None = None):
     """Overlay several theories on the same scenario; report speed and agreement."""
     from .plotting import STYLE, plt
 
@@ -254,7 +291,8 @@ def _study_compare(cfg: dict):
     for name in cfg["theories"]:
         module = THEORIES[name]
         t0 = time.perf_counter()
-        r = module.simulate(geom, insult, **_sim_kwargs(module.simulate, cfg))
+        r = module.simulate(geom, insult, monitor=_make_monitor(trace, trace_every),
+                            **_sim_kwargs(module.simulate, cfg))
         timings[r.theory] = time.perf_counter() - t0
         results.append(r)
         print(f"  {r.theory:>18}: {timings[r.theory]:6.2f} s")
@@ -282,7 +320,7 @@ def _study_compare(cfg: dict):
     return fig, {"timings": timings, "mass_gap": gap}
 
 
-def _study_equilibrium(cfg: dict):
+def _study_equilibrium(cfg: dict, *, trace: bool = False):
     """Instant equilibrated solve; optional scan traces the stability boundary."""
     from .plotting import plt
 
@@ -295,21 +333,53 @@ def _study_equilibrium(cfg: dict):
     print(f"  equilibrium exists? {e.exists}")
     if e.exists:
         print(f"  evolved stretch lambda* = {e.lam:.3f},  mass = {e.mass:.3f}")
+        # Cross-check the headline claim right here: the equilibrated solve skips the
+        # transient but should land on its plateau.  Run the cheap homogenized
+        # transient on the same insult and compare, so the student sees the match
+        # without having to set up a separate run.
+        rt = homogenized_cmm.simulate(geom, insult, t_end=5000, dt=1.0)
+        lam_t = float(rt.lam[-1])
+        gap = 100.0 * abs(lam_t - e.lam) / e.lam
+        settled = "settled" if rt.converged else "still evolving"
+        print(f"  transient check: homogenized plateau lambda = {lam_t:.3f} ({settled}) "
+              f"-> matches lambda* to {gap:.1f}%")
+        if trace:
+            # The evolved end state, in the same physical quantities the transient
+            # tracker prints: mass fractions phi^k and per-constituent stress.
+            tot = sum(e.masses.values())
+            fracs = "  ".join(f"φ_{k}={m / tot:.3f}" for k, m in e.masses.items())
+            stresses = "  ".join(f"σ_{k}/σh={s:.3f}" for k, s in e.stresses.items())
+            print(f"    radius r* = {e.radius:.3f} mm,  thickness h* = {e.thickness:.4f} mm")
+            print(f"    mass fractions:  {fracs}")
+            print(f"    constituent stress:  {stresses}")
 
     summary = {"exists": e.exists, "lam": float(e.lam)}
+    if e.exists:
+        summary["transient_lam"] = lam_t
 
     fig = None
     scan = cfg.get("scan")
     if scan:
         param = scan["parameter"]
         values = _axis_values(scan)
+        if trace:
+            print(f"\n  scanning {_short(param)} over {len(values)} values "
+                  f"[{values[0]:g} → {values[-1]:g}] for the stability boundary:")
         lam = []
-        for v in values:
+        n_exist = 0
+        step = max(1, len(values) // 12)
+        for idx, v in enumerate(values):
             child = copy.deepcopy(cfg)
             set_by_path(child, param, float(v))
             ev = equilibrated_cmm.solve(build_geometry(child, build_model(child)),
                                         build_insult(child))
             lam.append(ev.lam if ev.exists else np.nan)
+            n_exist += int(ev.exists)
+            if trace and (idx % step == 0 or idx == len(values) - 1):
+                state = f"λ*={ev.lam:.3f}" if ev.exists else "no equilibrium (runaway)"
+                print(f"      {_short(param)}={v:6.3f}  →  {state}")
+        if trace:
+            print(f"    equilibrium exists for {n_exist}/{len(values)} scanned values")
         fig, ax = plt.subplots(figsize=(7, 4.6))
         ax.plot(values, lam, color="#C44E52", lw=2.5)
         ax.set(xlabel=_short(param), ylabel=r"evolved stretch $\lambda^*$",
@@ -325,7 +395,7 @@ def _study_equilibrium(cfg: dict):
     return fig, summary
 
 
-def _study_map(cfg: dict):
+def _study_map(cfg: dict, *, trace: bool = False):
     """2-D existence grid: does an equilibrium exist over two swept axes?"""
     from .plotting import plt
 
@@ -334,6 +404,10 @@ def _study_map(cfg: dict):
     ys = _axis_values(ax_spec["y"])
     px, py = ax_spec["x"]["parameter"], ax_spec["y"]["parameter"]
 
+    print(f"[{cfg.get('title', 'stability map')}]  study=map")
+    if trace:
+        print(f"  sweeping {_short(px)} × {_short(py)} on a {len(xs)}×{len(ys)} grid "
+              f"({len(xs) * len(ys)} equilibrated solves):")
     Z = np.zeros((len(ys), len(xs)))
     for j, yv in enumerate(ys):
         for i, xv in enumerate(xs):
@@ -342,9 +416,12 @@ def _study_map(cfg: dict):
             set_by_path(child, py, float(yv))
             model = build_model(child)
             Z[j, i] = adapts(build_geometry(child, model), build_insult(child))
+        if trace:
+            row_frac = float(Z[j].mean())
+            print(f"      {_short(py)}={yv:6.3f}  ({j + 1:>3}/{len(ys)} rows)  "
+                  f"→  {row_frac * 100:3.0f}% of this row adapts")
 
     frac = float(Z.mean())
-    print(f"[{cfg.get('title', 'stability map')}]  study=map")
     print(f"  fraction of the grid that ADAPTS: {frac:.2f}  (bigger = more stable)")
 
     fig, ax = plt.subplots(figsize=(7, 5))

@@ -81,7 +81,7 @@
 \end{frame}
 
 \begin{frame}[t]{}
-  \begin{setupbox}{Example (hypertensive artery, \texttt{ex02})}
+  \begin{setupbox}{Example (hypertensive artery, \texttt{ex01})}
     \sprob{A pressurised artery is made \emph{hypertensive} by a sustained
     pressure step. Kinematic growth thickens the wall. Does the wall stress
     $\bar\sigma/\bar\sigma_h$ return to the \emph{prescribed} set-point?}
@@ -93,14 +93,14 @@
   Point the runner at the input file (\texttt{uv run}, or plain \texttt{python}
   once the venv is activated):
   \par\smallskip
-  \scodeline{uv run python run.py configs/ex02\_kinematic\_growth.yaml}
+  \scodeline{uv run python run.py configs/ex01\_kinematic\_growth.yaml}
   \vspace{0.3em}\par
   \textbf{You get:} the key numbers ($\bar\sigma/\bar\sigma_h$, mass,
   \texttt{diverged}) print to the terminal, and the time history opens as a plot.
   \vspace{0.5em}\par
   \textbf{Change one value:} edit the YAML, or override on the command line:
   \par\smallskip
-  \scodeline{uv run python run.py configs/ex02\_kinematic\_growth.yaml --set insult.pressure\_factor=2}
+  \scodeline{uv run python run.py configs/ex01\_kinematic\_growth.yaml --set insult.pressure\_factor=2}
   \vspace{0.3em}\par
   \textbf{Parametric study:} one curve per value:
   \par\smallskip
@@ -124,5 +124,5 @@
     \emph{imposes} stability; it cannot predict runaway.
   \end{answerbox}
   \vspace{-0.2em}
-  \bigfigw{fig02_kinematic_growth.pdf}{\linewidth}{}
+  \bigfigw{fig01_kinematic_growth.pdf}{\linewidth}{}
 \end{frame}

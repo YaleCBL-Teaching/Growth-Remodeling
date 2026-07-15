@@ -41,11 +41,17 @@ Equation (EQ) may or may not have a physical root:
     homogenized transient models — **the equilibrated theory matches the
     transient theories**, for a tiny fraction of the cost.
   * If NO root exists, there is no adapted state to converge to: the transient
-    models dilate without bound.  **The equilibrated theory returns "no
-    equilibrium" precisely when the tissue is mechanobiologically unstable.**
+    models dilate without bound.  The equilibrated theory returns "no equilibrium"
+    whenever the wall lacks the load-bearing capacity to adapt.
 
-This is why an equilibrium solver is also the cleanest stability test you can
-run — see the exercise in docs/07_stability.md.
+**Necessary, not sufficient.**  A root existing is a *necessary* condition for
+adaptation, not a full stability guarantee: the equilibrium location is independent
+of the mechano-sensitivity ``gain`` (at equilibrium production balances removal, so
+the gain cancels).  Whether the transient actually *reaches* an equilibrium that
+exists is a separate, gain-dependent question (mechanobiological *dynamic*
+stability, Cyron & Humphrey 2014): with too little gain the artery can run away even
+where a root exists.  So this solver draws the *existence* boundary; see
+gr.stability and docs/07_stability.md for the gain-dependent part.
 """
 from __future__ import annotations
 

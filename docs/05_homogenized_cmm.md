@@ -58,7 +58,7 @@ constituent to its deposition stretch. Together they reproduce the full model's
 trajectory — at a fraction of the cost. In the comparison figure the homogenized
 curve (dashed) sits almost on top of the full CMM (black):
 
-![Four theories compared](figures/fig04_compare_all.png)
+![Four theories compared](figures/fig03_compare_all.png)
 
 *All four theories, two scenarios. The homogenized CMM (dashed orange) tracks the
 full CMM (black) closely and both settle onto the equilibrated end-state (red
@@ -68,7 +68,7 @@ natural configurations individually.*
 
 ---
 
-### Exercise → [`exercises/ex04_homogenized_vs_full.py`](../exercises/ex04_homogenized_vs_full.py)
+### Exercise → [`exercises/ex03_homogenized_vs_full.py`](../exercises/ex03_homogenized_vs_full.py)
 
 Overlay the homogenized and full models for a scenario of your choice and measure
 how closely they agree — and how much faster the homogenized one runs.

@@ -47,15 +47,24 @@ equilibrated solution **coincides with the long-time limit of the transient
 theories** — to several digits (see the flat red target lines in the §5 figure,
 which the black and dashed curves settle onto).
 
-## 6.4 The punchline: existence = stability
+## 6.4 The punchline: existence is a necessary condition for stability
 
 Equation (6.1) may have **no physical root**. Then there is no adapted state to
 converge to, and the transient theories dilate without bound. So the equilibrated
-solver is also the cleanest possible **stability test**: solve one algebraic
-equation; if it has a root the tissue adapts, if it does not the tissue is
-mechanobiologically unstable.
+solver is the cleanest possible **existence test**: solve one algebraic equation;
+no root means the wall lacks the load-bearing capacity to adapt (an aneurysm-type
+runaway).
 
-![Equilibrated matches the transient, and predicts the boundary](figures/fig05_equilibrated.png)
+This existence is **necessary but not sufficient** for stability. The equilibrium
+*location* is independent of the mechano-sensitivity gain $K_\sigma$ — at
+equilibrium production balances removal ($\Upsilon=1$), so the gain cancels.
+Whether the transient actually *reaches* an equilibrium that exists is a separate,
+gain-dependent question (mechanobiological *dynamic* stability, Cyron & Humphrey
+2014): with too weak a gain the artery can run away even where a root exists. So
+the equilibrated solve draws the **existence** boundary; the gain-dependent part
+lives in the transient (see §7.4).
+
+![Equilibrated matches the transient, and predicts the boundary](figures/fig04_equilibrated.png)
 
 <i>(a) The homogenized transient settles exactly onto the equilibrated stretch
 $\lambda^\ast$ (dotted) — the two theories agree whenever an equilibrium exists.
@@ -71,7 +80,7 @@ why the instant equilibrated test is so useful.
 
 ---
 
-### Exercise → [`exercises/ex05_equilibrated.py`](../exercises/ex05_equilibrated.py)
+### Exercise → [`exercises/ex04_equilibrated.py`](../exercises/ex04_equilibrated.py)
 
 Sweep the insult and find, from the equilibrated solve alone, the critical
 elastin loss at which the artery can no longer adapt. Then confirm with a

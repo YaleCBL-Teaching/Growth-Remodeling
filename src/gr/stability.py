@@ -1,11 +1,22 @@
 r"""
 Stability helpers for the capstone (docs/07_stability.md).
 
-The cleanest test of whether a tissue can adapt to a sustained insult is simply
-whether a **mechanobiological equilibrium exists** — which the equilibrated model
-answers instantly (``gr.equilibrated_cmm.solve``).  These helpers sweep that test
-over a range of insults so you can draw the stable/unstable boundary without
-waiting out the (ever slower!) transients near the boundary.
+A necessary test of whether a tissue can adapt to a sustained insult is whether a
+**mechanobiological equilibrium exists** -- which the equilibrated model answers
+instantly (``gr.equilibrated_cmm.solve``).  These helpers sweep that test over a
+range of insults so you can draw the existence boundary without waiting out the
+(ever slower!) transients near it.
+
+**Necessary, not sufficient.**  Existence depends only on the wall's load-bearing
+capacity (elastin loss, constituent stiffness, deposition stretch) -- *not* on the
+mechano-sensitivity ``gain``: at equilibrium production balances removal and the
+gain cancels out.  Whether the transient actually *reaches* an equilibrium that
+exists is a separate, gain-dependent question (mechanobiological *dynamic*
+stability, Cyron & Humphrey 2014): if adaptation is too weak the artery can run
+away even where a root exists.  So ``adapts`` here means "an equilibrium exists",
+which is the existence boundary, not the full dynamic-stability boundary.  Explore
+the gain-dependent part with the transient models (``gr.homogenized_cmm``) at a low
+gain near the boundary; see docs/07_stability.md.
 """
 from __future__ import annotations
 
@@ -17,7 +28,11 @@ from .parameters import Insult
 
 
 def adapts(geom: Geometry, insult: Insult) -> bool:
-    """True if a mechanobiological equilibrium exists for this sustained insult."""
+    """True if a mechanobiological equilibrium *exists* for this sustained insult.
+
+    This is the necessary (capacity) condition; the gain-dependent dynamic-stability
+    check is separate -- see the module docstring.
+    """
     return eq.solve(geom, insult).exists
 
 

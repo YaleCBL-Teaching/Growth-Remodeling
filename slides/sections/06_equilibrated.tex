@@ -39,28 +39,34 @@
   \srccite{Latorre, Humphrey, ZAMM (2018)}
 \end{frame}
 
-\begin{frame}[t]{The Punchline: Existence = Stability}
+\begin{frame}[t]{The Punchline: Existence Sets the Capacity Limit}
   Equation \eqref{eq:equil} may have \textbf{no physical root}. Then no adapted
-  state exists and the transient theories dilate without bound. The solver is
-  therefore the cleanest \textbf{stability test}: root $\Rightarrow$ adapts, no root
-  $\Rightarrow$ unstable. Near the boundary the transient slows critically, which
-  is exactly why the instant algebraic test is so useful.
+  state exists and the transient theories dilate without bound. So the solver is
+  the cleanest \textbf{existence test}: no root $\Rightarrow$ the wall lacks the
+  \emph{capacity} to adapt. Existence is \emph{necessary} for stability; whether the
+  transient actually \emph{reaches} an equilibrium that exists is a separate,
+  gain-dependent question (dynamic stability). Near the boundary the transient slows
+  critically, which is exactly why the instant algebraic test is so useful.
 \end{frame}
 
 \begin{frame}[t]{}
-  \begin{setupbox}{Example (the equilibrated stability test, \texttt{ex05})}
+  \begin{setupbox}{Example (the equilibrated stability test, \texttt{ex04})}
     \sprob{Skip the transient: solve the single algebraic equation \eqref{eq:equil}
     for the \emph{final} adapted stretch $\lambda^*$. A physical root means the
     tissue adapts; \emph{no root} means it dilates without bound. Scanning elastin
     loss then traces the stability boundary.}
-    \srun{\scodeline{uv run python run.py configs/ex05\_equilibrated.yaml}
-      Here \texttt{study: equilibrium} solves once for the given insult, then the
-      \texttt{scan:} block sweeps \texttt{elastin\_surviving} and
+    \srun{\scodeline{uv run python run.py configs/ex04\_equilibrated.yaml}
+      Here \texttt{study: equilibrium} solves once for the given insult (and prints
+      a transient cross-check: the homogenized plateau lands on $\lambda^*$), then
+      the \texttt{scan:} block sweeps \texttt{elastin\_surviving} and
       \texttt{report\_critical: elastin} prints the critical surviving fraction
       $\xi_\text{crit}$.}
-    \sstudy{Move the boundary by stiffening the wall, then re-read $\xi_\text{crit}$:
-      \scodeline{... --set model.constituents.collagen.gain=3.0}
-      \scodeline{... --set model.constituents.collagen.law.c1=600}}
+    \sstudy{Move the boundary by changing the wall's load-bearing \emph{capacity},
+      then re-read $\xi_\text{crit}$:
+      \scodeline{... --set model.constituents.collagen.law.c1=600}
+      \scodeline{... --set model.constituents.collagen.G=1.15}
+      (Raising the \texttt{gain} leaves $\xi_\text{crit}$ unchanged: gain sets how
+      \emph{fast} the transient adapts, not \emph{whether} an equilibrium exists.)}
   \end{setupbox}
 \end{frame}
 
@@ -75,6 +81,6 @@
     Where a root exists, the equilibrated solve lands exactly on the transient end-state. Below $\xi_{\text{crit}}$ there is \emph{no} root: the transient dilates without bound.
   \end{answerbox}
   \vspace{-0.3em}
-  \bigfigw{fig05_equilibrated.pdf}{\linewidth}{Your run: equilibrated end-state
+  \bigfigw{fig04_equilibrated.pdf}{\linewidth}{Your run: equilibrated end-state
   on the transient plateau where a root exists; near the boundary, critical slowing.}
 \end{frame}

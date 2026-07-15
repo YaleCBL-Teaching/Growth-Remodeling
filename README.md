@@ -65,14 +65,14 @@ If you are the **instructor**, run `solutions/` to regenerate every figure.
 ```bash
 uv venv                 # create .venv
 uv pip install -e .     # install the gr package (editable)
-uv run python run.py configs/ex02_kinematic_growth.yaml
+uv run python run.py configs/ex01_kinematic_growth.yaml
 ```
 
 or activate the environment once and use plain `python`:
 
 ```bash
 source .venv/bin/activate
-python run.py configs/ex02_kinematic_growth.yaml
+python run.py configs/ex01_kinematic_growth.yaml
 ```
 
 ### Option B — conda
@@ -81,7 +81,7 @@ python run.py configs/ex02_kinematic_growth.yaml
 conda env create -f environment.yml
 conda activate growth-remodeling
 pip install -e .
-python run.py configs/ex02_kinematic_growth.yaml
+python run.py configs/ex01_kinematic_growth.yaml
 ```
 
 Dependencies are only **NumPy, SciPy, Matplotlib, and PyYAML**. No LaTeX install
@@ -97,18 +97,18 @@ the command line:
 
 ```bash
 # run an exercise as-is:
-uv run python run.py configs/ex02_kinematic_growth.yaml
+uv run python run.py configs/ex01_kinematic_growth.yaml
 
 # parametric study — one curve per value (overrides the file's sweep: block):
-uv run python run.py configs/ex02_kinematic_growth.yaml \
+uv run python run.py configs/ex01_kinematic_growth.yaml \
     --sweep simulate.k_g=0.02,0.05,0.2
 
 # change any single value (dotted path into the config):
-uv run python run.py configs/ex03_constrained_mixture.yaml \
+uv run python run.py configs/ex02_constrained_mixture.yaml \
     --set model.constituents.collagen.gain=3.0
 
 # save the figure instead of showing it:
-uv run python run.py configs/ex06_stability.yaml --save out/ex06.pdf --no-show
+uv run python run.py configs/ex05_stability.yaml --save out/ex05.pdf --no-show
 ```
 
 A config picks the `study` (`transient`, `compare`, `equilibrium`, or `map`),
@@ -119,28 +119,74 @@ the `theory`, `geometry`, `insult`, and parameters; a `sweep:` block (or
 
 ---
 
+## Watch the physics as it solves (`--trace`)
+
+Add `--trace` to print the quantities from the slides **live, as the solver
+marches in time** — so you can watch the wall thicken, the collagen fraction
+rise, and the production stimulus relax back to 1 as the tissue adapts (or run
+away):
+
+```bash
+uv run python run.py configs/ex02_constrained_mixture.yaml --trace
+```
+
+```
+  ▶ full CMM · artery
+      insult: pressure ×1.5 from t=1 d (ramp 1 d)
+      set-point: σh = 102.4 kPa,  R = 1.00 mm,  H = 0.130 mm
+      t[day]       λ    σ/σh    M/M0   φ_ela   φ_col   φ_smc   Υ_col   Υ_smc   r[mm]   h[mm]
+      --------------------------------------------------------------------------------------
+           0   1.000   1.000   1.000   0.300   0.350   0.350   1.000   1.000   1.000  0.1299
+         120   1.036   1.002   1.608   0.187   0.407   0.407   1.002   1.002   1.036  0.2016
+         ...
+        3000   1.018   1.000   1.556   0.193   0.404   0.404   1.000   1.000   1.018  0.1984   ✓ adapted
+```
+
+The columns are the physical quantities the theory introduces: global stretch
+`λ`, tissue stress relative to its set-point `σ/σh`, total mass `M/M0`, the
+per-constituent **mass fractions** `φ`, the production **stimuli** `Υ`
+(`= 1 + Kσ(σ/σh − 1)`), and the wall radius/thickness. The `equilibrium` and
+`map` studies instead trace their **scan progress** (which insult values still
+have an equilibrium, and how much of the grid adapts). Print interval:
+`--trace-every DAYS` (default: about 25 rows over the run).
+
+## Run every slide exercise at once (`run_all.py`)
+
+```bash
+uv run python run_all.py                 # run ex01..ex05 with --trace, save to out/
+uv run python run_all.py --show          # also open each figure window
+uv run python run_all.py --only ex02     # just one (substring match, repeatable)
+uv run python run_all.py --no-trace       # end-of-run summaries only
+```
+
+This runs the five `run.py` exercises that appear in the seminar, back to back,
+with the live tracker on. (`exercises/ex00_biology_and_mechanics.py` is a static
+materials plot with no time-marching solver, so it is run directly, not here.)
+
+---
+
 ## Suggested 3-hour flow
 
 **Part 1 (90 min) — foundations & the first two theories**
 
 1. `docs/01_biology.md` — why tissues grow and remodel (no maths).
 2. `docs/02_finite_strain.md` — the minimum continuum mechanics.
-   → `exercises/ex01_biology_and_mechanics.py` (a materials plot)
+   → `exercises/ex00_biology_and_mechanics.py` (a materials plot)
 3. `docs/03_kinematic_growth.md` — multiplicative growth.
-   → `run.py configs/ex02_kinematic_growth.yaml`
+   → `run.py configs/ex01_kinematic_growth.yaml`
 4. `docs/04_constrained_mixture.md` — turnover & heredity integrals.
-   → `run.py configs/ex03_constrained_mixture.yaml`
+   → `run.py configs/ex02_constrained_mixture.yaml`
 
 *— 3-minute break —*
 
 **Part 2 (90 min) — approximations, equilibrium, and stability**
 
 5. `docs/05_homogenized_cmm.md` — temporal homogenization.
-   → `run.py configs/ex04_homogenized_vs_full.yaml`
+   → `run.py configs/ex03_homogenized_vs_full.yaml`
 6. `docs/06_equilibrated_cmm.md` — skip the transient.
-   → `run.py configs/ex05_equilibrated.yaml`
+   → `run.py configs/ex04_equilibrated.yaml`
 7. `docs/07_stability.md` — the capstone: adaptation vs. aneurysm.
-   → `run.py configs/ex06_stability.yaml`
+   → `run.py configs/ex05_stability.yaml`
 
 Each step has a matching annotated script in `exercises/` (the theory in code)
 and a `solutions/figXX_*.py` that produces the slide figure.

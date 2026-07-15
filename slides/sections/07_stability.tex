@@ -16,7 +16,7 @@
     \ \Longleftrightarrow\ \text{tissue adapts}}
   \begin{columns}[c]
     \begin{column}{0.46\textwidth}
-      \begin{center}\includegraphics[width=\linewidth]{figures/fig01b_required_stress.pdf}\end{center}
+      \begin{center}\includegraphics[width=\linewidth]{figures/fig00_required_stress.pdf}\end{center}
     \end{column}
     \begin{column}{0.54\textwidth}
       \small
@@ -31,7 +31,7 @@
   \end{columns}
   \begin{center}\footnotesize\color{BoxGray}
   The verdict follows analytically from the Laplace feedback (curve is
-  reproducible; explored numerically in \texttt{ex06}).
+  reproducible; explored numerically in \texttt{ex05}).
   \end{center}
   \srccite{Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
 \end{frame}
@@ -43,46 +43,54 @@
   can do either: mild elastin loss adapts, severe loss dilates without bound.
 \end{frame}
 
-% ---- example + run: ex06 ---------------------------------------------------
+% ---- example + run: ex05 ---------------------------------------------------
 \begin{frame}[t]{}
-  \begin{setupbox}{Example (the stable/unstable map, \texttt{ex06})}
+  \begin{setupbox}{Example (the stable/unstable map, \texttt{ex05})}
     \sprob{A tissue \emph{adapts} to an insult iff a mechanobiological equilibrium
     exists \eqref{eq:equil}. Sweeping that instant test over (surviving elastin)
     $\times$ (pressure) draws the stable/unstable map. Then change \emph{one}
     tissue property and watch the unstable ``aneurysm'' region shrink.}
-    \srun{\scodeline{uv run python run.py configs/ex06\_stability.yaml}
+    \srun{\scodeline{uv run python run.py configs/ex05\_stability.yaml}
       Here \texttt{study: map} builds the 2D grid over the two \texttt{axes:} via
       the \texttt{adapts} existence test and shades adapt (blue) vs.\ runaway
       (red); it also prints the fraction of the grid that adapts.}
-    \sstudy{Change one property in the \texttt{model:} block (gain, collagen
-      \texttt{c1}, or $G$), e.g.
-      \scodeline{... --set model.constituents.collagen.gain=3.0}
+    \sstudy{Enlarge the \emph{adapts} region by giving the wall more load-bearing
+      capacity, then compare the printed fraction:
+      \scodeline{... --set model.constituents.collagen.law.c1=600}
       \scodeline{... --set model.constituents.collagen.G=1.15}
-      Then compare how much the stable region grows.}
+      (Raising the \texttt{gain} does \emph{not} move this map: existence is
+      gain-independent. Gain governs \emph{dynamic} stability instead, in the
+      transient.)}
   \end{setupbox}
 \end{frame}
 
-% ---- interactive coding exercise: ex06 -------------------------------------
+% ---- interactive coding exercise: ex05 -------------------------------------
 \begin{frame}[t]{}
   \begin{yourturnbox}{Stability map}
-    \qq{Which single change (higher gain, stiffer collagen, or larger
-    deposition stretch) enlarges the stable region the most? Elastin cannot be
-    regrown in adults: what does that imply for aneurysm?}
-    \qhint{Compare the printed ``fraction that adapts'' across the three changes.
-    Each shifts the boundary between adaptation and runaway.}
+    \qq{Which capacity change (stiffer collagen or larger deposition stretch)
+    enlarges the stable region the most, and why does raising the \texttt{gain}
+    leave the map unchanged? Elastin cannot be regrown in adults: what does that
+    imply for aneurysm?}
+    \qhint{Compare the printed ``fraction that adapts''. Stiffness and deposition
+    stretch move the existence boundary; the gain does not, it sets how fast (and
+    whether) the transient reaches an equilibrium that exists.}
   \end{yourturnbox}
 \end{frame}
 
 \begin{frame}[t]{}
   \begin{answerbox}{Stability map}
-    Higher gain, stiffer collagen, or larger deposition stretch all enlarge the
-    \emph{adapts} region, the tissue tolerates a stronger insult before running
-    away.
+    Stiffer collagen or a larger deposition stretch enlarge the \emph{adapts}
+    region: the wall carries more load, so it tolerates more elastin loss. The
+    \texttt{gain} leaves this existence map unchanged (at equilibrium, production
+    balances removal and the gain cancels); it instead sets \emph{dynamic}
+    stability, whether the transient actually reaches an equilibrium that exists
+    (too weak adaptation runs away even when a root exists).
   \end{answerbox}
   \vspace{-0.3em}
-  \bigfigw{fig06_stability.pdf}{0.66\linewidth}{Your map: 30\% elastin adapts (blue),
+  \bigfigw{fig05_stability.pdf}{0.66\linewidth}{Your map: 30\% elastin adapts (blue),
   3\% dilates without bound (red). Boundary from the equilibrated existence test.}
   \vspace{-0.4em}
-  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} the existence test
-  that defines the equilibrium boundary \emph{is} the stability criterion.\end{center}
+  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} an equilibrium must
+  \emph{exist} (enough load-bearing capacity) \textbf{and} adaptation must be fast
+  enough to \emph{reach} it, existence is necessary, sufficient gain makes it so.\end{center}
 \end{frame}

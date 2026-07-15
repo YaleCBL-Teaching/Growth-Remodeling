@@ -98,12 +98,13 @@
 \end{frame}
 
 \begin{frame}[t]{}
-  \begin{setupbox}{Example (homogenized vs.\ full, \texttt{ex04})}
+  \begin{setupbox}{Example (homogenized vs.\ full, \texttt{ex03})}
     \sprob{Run both mixture theories on the \emph{same} artery and insult. How closely does the homogenized model track the full model, and how much faster is it?}
-    \srun{\scodeline{uv run python run.py configs/ex04\_homogenized\_vs\_full.yaml}
-      Here \texttt{study: compare} runs
-      \texttt{theories: [constrained\_mixture, homogenized\_cmm]} on one scenario
-      and prints each runtime and the largest mass-ratio gap between them.}
+    \srun{\scodeline{uv run python run.py configs/ex03\_homogenized\_vs\_full.yaml}
+      Here \texttt{study: compare} overlays \texttt{constrained\_mixture},
+      \texttt{homogenized\_cmm} and \texttt{kinematic\_growth} on one scenario,
+      and prints each runtime and the mass-ratio gap between the first two (full
+      vs.\ homogenized).}
     \sstudy{Stress the comparison with a harsher, longer insult:
       \scodeline{... --set insult.elastin\_surviving=0.3 --set insult.ramp=10}
       \scodeline{... --set simulate.t\_end=4000\ \ \ \ \ \# does the agreement hold?}}
@@ -128,6 +129,7 @@
     a \textbf{similar time trajectory} to the full model, cheaply.
   \end{answerbox}
   \vspace{-0.4em}
-  \bigfigw{fig04_compare_all.pdf}{0.52\linewidth}{Your overlay: homogenized (dashed)
-  on the full CMM (black); kinematic growth (blue) under-responds.}
+  \bigfigw{fig03_compare_all.pdf}{0.52\linewidth}{The full comparison (all theories,
+  hypertension + aneurysm). Your \texttt{ex03} run reproduces the hypertension overlay:
+  homogenized (dashed) on the full CMM (gold), with kinematic growth (blue) under-responding.}
 \end{frame}

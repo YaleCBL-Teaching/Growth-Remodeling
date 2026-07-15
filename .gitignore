@@ -16,3 +16,5 @@ venv/
 # Generated presentation figures are committed on purpose (see solutions/),
 # but scratch output is not:
 docs/figures/_scratch/
+out/
+test_run/

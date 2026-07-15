@@ -95,7 +95,7 @@ $\sigma = \lambda_e^2S$ — for elastin
 $\sigma_e = c_e(\lambda_e^2 - 1/\lambda_e)$, and for the Fung fiber
 $\sigma = c_1\lambda_e^2(\lambda_e^2-1)e^{c_2(\lambda_e^2-1)^2}$.
 
-![Constituent laws and the artery's Laplace feedback](figures/fig01_constitutive.png)
+![Constituent laws and the artery's Laplace feedback](figures/fig00_constitutive.png)
 
 <i>Left: the constituent laws in <b>reference measures</b> — 2nd Piola–Kirchhoff
 stress $S^k$ vs Green–Lagrange strain $E_e$ — with the deposition set-points

@@ -39,7 +39,7 @@ stable insult plateaus, an unstable one climbs without bound. Near the boundary
 the transient slows down dramatically (critical slowing) — so (1) is the
 practical tool and (2) is the confirmation.
 
-![Stability depends on the insult](figures/fig06_stability.png)
+![Stability depends on the insult](figures/fig05_stability.png)
 
 *(a) The same tissue, two insults: retaining 30% of elastin, it adapts and
 plateaus (blue); retaining only 3%, it dilates without bound (red). (b) The
@@ -54,7 +54,7 @@ region; severe ones cross into the red "aneurysm" region.*
 | Kinematic growth | No — stability is *imposed* | Reaches the prescribed set-point, or runs away; you don't learn *why* from turnover. |
 | Full CMM | Yes | Adapts or dilates depending on insult; the faithful reference. |
 | Homogenized CMM | Yes | Same verdict as the full model, cheaply. |
-| Equilibrated CMM | Yes — *instantly* | A root exists ⇔ the tissue adapts. No root ⇔ unbounded growth. |
+| Equilibrated CMM | Existence, *instantly* | A root is *necessary* for adaptation; no root ⇒ unbounded growth. Gain-dependent dynamic stability is separate (§7.6). |
 
 ## 7.5 The takeaways of the whole lecture
 
@@ -65,13 +65,41 @@ region; severe ones cross into the red "aneurysm" region.*
 3. The **homogenized** model reproduces the full model's trajectory at a fraction
    of the cost.
 4. The **equilibrated** model matches the transient theories *when an equilibrium
-   exists*, and — by failing to find one — flags exactly when the tissue becomes
-   unstable.
+   exists*, and — by failing to find one — flags when the wall lacks the *capacity*
+   to adapt. Existence is **necessary but not sufficient**: reaching an equilibrium
+   that exists also needs a strong enough adaptation gain (dynamic stability, §7.6).
 
 ---
 
-### Exercise → [`exercises/ex06_stability_and_aneurysm.py`](../exercises/ex06_stability_and_aneurysm.py)
+### Exercise → [`exercises/ex05_stability_and_aneurysm.py`](../exercises/ex05_stability_and_aneurysm.py)
 
-Reproduce the stability map, then explore what stabilises a tissue: raise the
-production gain, stiffen the collagen, or increase the deposition stretch, and
-watch the "aneurysm" region shrink.
+Reproduce the stability map, then explore what enlarges the *adapts* region:
+stiffen the collagen (`--set model.constituents.collagen.law.c1=600`) or raise the
+deposition stretch (`--set model.constituents.collagen.G=1.15`), and watch the
+"aneurysm" region shrink. Raising the production **gain** leaves this map unchanged
+— existence is gain-independent (see §7.6).
+
+## 7.6 Existence is necessary; adaptation must also be *fast enough*
+
+The map tests only whether an equilibrium **exists** — a capacity question set by
+elastin, constituent stiffness, and deposition stretch. Whether the transient
+actually *reaches* an equilibrium that exists is a separate, gain-dependent
+question: the mechanobiological *dynamic* stability of Cyron & Humphrey (2014).
+You can see it directly. Take an aneurysm *just inside* the existence boundary and
+lower the gain in the transient (homogenized) model:
+
+```bash
+# elastin 12% is ABOVE the ~8% existence boundary, so an equilibrium EXISTS --
+# yet with a weak gain the transient runs away (diverges); the default gain adapts:
+uv run python run.py configs/ex02_constrained_mixture.yaml \
+    --set theory=homogenized_cmm --set sweep.values="[1.0]" \
+    --set insult.pressure_factor=1.0 --set insult.elastin_surviving=0.12 \
+    --set insult.ramp=10 --set simulate.t_end=40000 \
+    --set model.constituents.collagen.gain=0.1 --set model.constituents.smc.gain=0.1
+```
+
+Put both gains back to `1.0` and the same insult adapts. So the full statement is:
+an equilibrium must **exist** (enough load-bearing capacity) **and** the adaptation
+must be strong enough to **reach** it. (These reduced 1-D models capture the effect
+only qualitatively — at very low gain the full and homogenized reductions can even
+disagree — but the principle is real: stronger adaptation stabilises.)

@@ -58,6 +58,7 @@ import numpy as np
 
 from .geometry import Geometry
 from .history import Result
+from .monitor import Monitor, cmm_columns, driving_preamble, status_note
 from .parameters import Insult
 
 
@@ -68,6 +69,7 @@ def simulate(
     t_end: float = 2000.0,      # [day]
     dt: float = 1.0,            # [day]  (explicit heredity integral; smaller dt = more accurate)
     lam_runaway: float = 8.0,
+    monitor: Monitor | None = None,   # optional live tracker (see gr.monitor)
 ) -> Result:
     """Integrate the full constrained-mixture model (heredity integrals)."""
     model = geom.model
@@ -76,6 +78,11 @@ def simulate(
 
     N = int(round(t_end / dt))
     t = np.arange(N + 1) * dt
+    if monitor is not None:
+        monitor.begin(f"full CMM · {geom.name}",
+                      cmm_columns(model.constituents, turnover),
+                      driving_preamble(model, insult), t_span=t_end)
+    last_snap: dict | None = None
 
     # Per-turnover-constituent cohort book-keeping.  cohort j was produced at
     # time t[j] at global stretch lam_dep[j]; its production rate is m_prod[k][j].
@@ -132,6 +139,8 @@ def simulate(
             for nm in masses_hist:
                 masses_hist[nm][i:] = masses_hist[nm][i - 1] if i > 0 else np.nan
                 stress_hist[nm][i:] = stress_hist[nm][i - 1] if i > 0 else np.nan
+            if monitor is not None and last_snap is not None:
+                monitor.end(ti, last_snap, status_note(diverged=True))
             break
 
         out["lam"][i] = lam
@@ -150,16 +159,26 @@ def simulate(
                 s += float((cm * c.law.stress_cauchy(c.G * lam / lam_dep[:i])).sum())
             stress_hist[c.name][i] = s / M[c.name] / c.sigma_h
 
+        # --- live tracking of the physical quantities (mass fractions, stimuli)
+        dev = out["sigma"][i] / model.sigma_bar_h - 1.0            # tissue stress deviation
+        if monitor is not None:
+            last_snap = {"t": ti, "lam": lam, "sig": out["sigma"][i] / model.sigma_bar_h,
+                         "mass": mass_ratio, "r": out["r"][i], "h": out["h"][i]}
+            for c in model.constituents:
+                last_snap[f"phi_{c.name}"] = masses_hist[c.name][i] / M_tot
+            for c in turnover:
+                last_snap[f"ups_{c.name}"] = 1.0 + c.gain * dev    # stimulus Upsilon, Eq. (CM3)
+            monitor.row(ti, last_snap)
+
         # --- close the loop: tissue stress -> production for THIS step ---------
         # (explicit: this cohort's production enters the mass of later steps)
         if i < N:
             lam_dep[i] = lam
-            dev = out["sigma"][i] / model.sigma_bar_h - 1.0        # tissue stress deviation
             for c in turnover:
                 upsilon = 1.0 + c.gain * dev                       # stimulus, Eq. (CM3)
                 m_prod[c.name][i] = max(0.0, c.k_d * M[c.name] * upsilon)
 
-    return Result(
+    result = Result(
         theory="full CMM",
         setting=geom.name,
         sigma_h=model.sigma_bar_h,
@@ -173,3 +192,6 @@ def simulate(
         stresses=stress_hist,
         diverged=diverged,
     )
+    if monitor is not None and not diverged and last_snap is not None:
+        monitor.end(t[-1], last_snap, status_note(False, result.converged))
+    return result
