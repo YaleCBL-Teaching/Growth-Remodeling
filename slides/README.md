@@ -41,11 +41,11 @@ Add `\srev` between text pieces (at frame level) to build them up too.
 
 ## Reproducible figures
 
-The result figures (`fig01`–`fig05`, `fig_svgrowth_comparison`) are produced by
-the `gr` package in this repository:
+The result figures (`fig01`–`fig05`) are produced by the `gr` package in this
+repository:
 
 ```sh
-python solutions/make_all_figures.py   # or: uv run python solutions/make_all_figures.py
+uv run python solutions/make_all_figures.py
 ```
 
 `make figures` runs this and copies the PDFs into `figures/`, so the deck never
