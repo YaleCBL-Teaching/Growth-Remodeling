@@ -1,47 +1,44 @@
-% ============================================================================
-%  SECTION 7 — Stability capstone
-% ============================================================================
 \begin{frame}[t]{}
   \vfill\begin{center}{\Huge\color{YaleBlue} Stability}
   \end{center}\vfill
 \end{frame}
 
-\begin{frame}[t]{Where Instability Comes From: The Laplace Exponent}
-  In a pressurised tube the wall stress is $\bar\sigma=\tfrac{Pa}{h}$ with radius
-  $a\!\propto\!\lambda$ and thickness $h\!\propto\!M$, so the required (Laplace)
-  stress is \emph{quadratic} in the stretch,
-  $\bar\sigma_{\text{req}}\propto\gamma\,\lambda^{2}/M$. The homeostatic state is
-  stable only if adding mass \emph{lowers} the stress it must carry:
-  \slboxeq{eq:stab}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
-    \ \Longleftrightarrow\ \text{tissue adapts}}
-  \begin{columns}[c]
-    \begin{column}{0.46\textwidth}
-      \begin{center}\includegraphics[width=\linewidth]{figures/fig00_required_stress.pdf}\end{center}
-    \end{column}
-    \begin{column}{0.54\textwidth}
-      \small
-      Growth thickens the wall ($h\!\propto\!M$), which lowers stress; but
-      dilation raises it as $\lambda^2$ (Laplace).
-      While enough \textbf{elastin} survives, its stiff recoil keeps
-      $\dd\bar\sigma/\dd\theta<0$ and the artery \textbf{adapts}. Lose enough
-      elastin and the sign flips, $\dd\bar\sigma/\dd\theta>0$:
-      \textbf{runaway}. It is the quadratic Laplace exponent that makes this
-      possible.
-    \end{column}
-  \end{columns}
-  \begin{center}\footnotesize\color{BoxGray}
-  The verdict follows analytically from the Laplace feedback (curve is
-  reproducible; explored numerically in \texttt{ex05}).
-  \end{center}
-  \srccite{Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
-\end{frame}
+% \begin{frame}[t]{Where Instability Comes From: The Laplace Exponent}
+%   In a pressurised tube the wall stress is $\bar\sigma=\tfrac{Pa}{h}$ with radius
+%   $a\!\propto\!\lambda$ and thickness $h\!\propto\!M$, so the required (Laplace)
+%   stress is \emph{quadratic} in the stretch,
+%   $\bar\sigma_{\text{req}}\propto\gamma\,\lambda^{2}/M$. The homeostatic state is
+%   stable only if adding mass \emph{lowers} the stress it must carry:
+%   \slboxeq{eq:stab}{\left.\frac{\dd\bar\sigma}{\dd\theta}\right|_{\theta^*}<0
+%     \ \Longleftrightarrow\ \text{tissue adapts}}
+%   \begin{columns}[c]
+%     \begin{column}{0.46\textwidth}
+%       \begin{center}\includegraphics[width=\linewidth]{figures/fig00_required_stress.pdf}\end{center}
+%     \end{column}
+%     \begin{column}{0.54\textwidth}
+%       \small
+%       Growth thickens the wall ($h\!\propto\!M$), which lowers stress; but
+%       dilation raises it as $\lambda^2$ (Laplace).
+%       While enough \textbf{elastin} survives, its stiff recoil keeps
+%       $\dd\bar\sigma/\dd\theta<0$ and the artery \textbf{adapts}. Lose enough
+%       elastin and the sign flips, $\dd\bar\sigma/\dd\theta>0$:
+%       \textbf{runaway}. It is the quadratic Laplace exponent that makes this
+%       possible.
+%     \end{column}
+%   \end{columns}
+%   \begin{center}\footnotesize\color{BoxGray}
+%   The verdict follows analytically from the Laplace feedback (curve is
+%   reproducible; explored numerically in \texttt{ex05}).
+%   \end{center}
+%   \srccite{Cyron, Wilson, Humphrey, J R Soc Interface (2014)}
+% \end{frame}
 
-\begin{frame}[t]{Same Tissue, Two Insults}
-  Read stability two ways: \textbf{existence}: the equilibrated equation
-  \eqref{eq:equil} has a root iff the tissue can adapt (no time integration); or
-  \textbf{transient}: integrate and watch it plateau or climb. The same tissue
-  can do either: mild elastin loss adapts, severe loss dilates without bound.
-\end{frame}
+% \begin{frame}[t]{Same Tissue, Two Insults}
+%   Read stability two ways: \textbf{existence}: the equilibrated equation
+%   \eqref{eq:equil} has a root iff the tissue can adapt (no time integration); or
+%   \textbf{transient}: integrate and watch it plateau or climb. The same tissue
+%   can do either: mild elastin loss adapts, severe loss dilates without bound.
+% \end{frame}
 
 % ---- example + run: ex05 ---------------------------------------------------
 \begin{frame}[t]{}
@@ -82,15 +79,11 @@
     Stiffer collagen or a larger deposition stretch enlarge the \emph{adapts}
     region: the wall carries more load, so it tolerates more elastin loss. The
     \texttt{gain} leaves this existence map unchanged (at equilibrium, production
-    balances removal and the gain cancels); it instead sets \emph{dynamic}
+    balances removal and the gain cancels). It instead sets \emph{dynamic}
     stability, whether the transient actually reaches an equilibrium that exists
     (too weak adaptation runs away even when a root exists).
   \end{answerbox}
   \vspace{-0.3em}
-  \bigfigw{fig05_stability.pdf}{0.66\linewidth}{Your map: 30\% elastin adapts (blue),
+  \bigfigw{fig05_stability.pdf}{0.8\linewidth}{Your map: 30\% elastin adapts (blue),
   3\% dilates without bound (red). Boundary from the equilibrated existence test.}
-  \vspace{-0.4em}
-  \begin{center}{\footnotesize\color{ABlue}\bfseries Learning:} an equilibrium must
-  \emph{exist} (enough load-bearing capacity) \textbf{and} adaptation must be fast
-  enough to \emph{reach} it, existence is necessary, sufficient gain makes it so.\end{center}
 \end{frame}
