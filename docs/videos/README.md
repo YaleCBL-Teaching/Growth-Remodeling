@@ -54,7 +54,7 @@ point.
 Regenerate them all with:
 
 ```bash
-uv pip install -e ".[video]"           # bundled ffmpeg for MP4 (optional)
+uv sync --extra video                  # bundled ffmpeg for MP4 (optional)
 uv run python solutions/make_all_videos.py          # -> docs/videos/*.mp4
 uv run python solutions/make_all_videos.py --gif    # -> *.gif (inline-previewable)
 ```

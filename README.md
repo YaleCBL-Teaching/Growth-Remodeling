@@ -1,237 +1,133 @@
 # Growth & Remodeling of Soft Tissue — a hands-on seminar
 
 A 3-hour introduction, for an engineering audience, to how living cardiovascular
-tissues adapt their **mass, composition, and microstructure** to mechanical
-load — and to the four modelling frameworks that describe it:
+tissues adapt their **mass, composition, and microstructure** to mechanical load,
+and to the four modelling frameworks that describe it:
 
 1. **Kinematic growth** (Rodriguez, Hoger & McCulloch 1994)
 2. **Constrained mixture** — full heredity integrals (Humphrey & Rajagopal 2002)
 3. **Homogenized constrained mixture** (Cyron, Aydin & Humphrey 2016)
 4. **Equilibrated constrained mixture** (Latorre & Humphrey 2018)
 
-All four are implemented on **one shared set of parameters** and **one shared
-mechanical setting**, so every comparison is apples-to-apples. You drive the same
-tissue with the same insults and watch the theories agree — or disagree.
+All four run on **one shared set of parameters** and **one shared mechanical
+setting**, so every comparison is apples-to-apples. They are deliberately
+reduced-order (1D, single stress component) so the essential behaviour fits on a
+screen and runs in seconds; `docs/` and the code comments point to the full
+tensorial equations.
 
-> These are deliberately **reduced-order (1D / thin-membrane, single stress
-> component)** versions of the full theories, chosen so the essential behaviour
-> fits on a screen and runs in seconds. The code comments and `docs/` point to
-> the full tensorial equations and the papers.
-
----
-
-## The one big question
-
-> **When does a loaded tissue adapt to a stable new state, and when does it lose
-> stability and grow without bound (aneurysm)?**
-
-What you will take away, and can reproduce yourself in the exercises:
+The one big question: **when does a loaded tissue adapt to a stable new state, and
+when does it grow without bound (aneurysm)?**
 
 | Theory | Stability behaviour you will observe |
 |---|---|
-| **Kinematic growth** | Either it converges to the *prescribed* homeostatic stress, or it runs away — stability is imposed, not predicted. |
+| **Kinematic growth** | Converges to the *prescribed* homeostatic stress, or runs away — stability is imposed, not predicted. |
 | **Constrained mixture (full)** | Stability is *predicted* from turnover and **depends on the insult**: mild → adapts, severe → runaway. |
 | **Homogenized CMM** | Follows the full model's **time trajectory** closely, at a fraction of the cost. |
-| **Equilibrated CMM** | **Matches** the transient theories *if an equilibrium exists* — and tells you (by having no solution) when one does not. |
-
----
-
-## Repository layout
-
-```
-src/gr/          FUNDAMENTALS  — the maths and the four models.  Read them; you
-                 don't need to edit them.  Comments tie each line to an equation.
-docs/            The lecture notes: biology, finite-strain theory, one file per
-                 theory, plus the stability capstone.  Equations + figures.
-configs/         STUDENT input files — one small YAML per exercise.  Edit a value
-                 or add a `sweep:` block; no Python to touch.
-run.py           ONE runner for every exercise:  run.py configs/exNN_*.yaml
-exercises/       The same exercises as annotated Python scripts — read these to
-                 see each theory expressed in code (they also run standalone).
-solutions/       TEACHER files.  Fully worked; running them writes the
-                 presentation-ready PDFs into docs/figures/.
-```
-
-If you are a **student**, run the exercises from `configs/` with `run.py`, and
-read `docs/` (plus `exercises/` to see the code).
-If you are the **instructor**, run `solutions/` to regenerate every figure.
-
----
+| **Equilibrated CMM** | **Matches** the transient theories *if an equilibrium exists* — and flags, by having no solution, when one does not. |
 
 ## Setup
 
-### Option A — `uv` (recommended)
-
 ```bash
-uv venv                 # create .venv
-uv pip install -e .     # install the gr package (editable)
-uv run python run.py configs/ex01_kinematic_growth.yaml
+uv sync                 # create .venv and install everything from uv.lock
 ```
 
-or activate the environment once and use plain `python`:
+Dependencies are only NumPy, SciPy, Matplotlib, and PyYAML; no LaTeX install is
+needed (figures use Matplotlib mathtext). Prefix commands with `uv run`, or
+activate the environment once with `source .venv/bin/activate`.
 
-```bash
-source .venv/bin/activate
-python run.py configs/ex01_kinematic_growth.yaml
-```
-
-### Option B — conda
-
-```bash
-conda env create -f environment.yml
-conda activate growth-remodeling
-pip install -e .
-python run.py configs/ex01_kinematic_growth.yaml
-```
-
-Dependencies are only **NumPy, SciPy, Matplotlib, and PyYAML**. No LaTeX install
-is needed (figures use Matplotlib mathtext).
-
----
-
-## Running an exercise & doing a parametric study
+## Running an exercise
 
 Each exercise is a small **YAML input file** in `configs/`; one `run.py` drives
-them all. You never edit Python — change a value in the file, or override it on
+them all — you never edit Python. Change a value in the file, or override it on
 the command line:
 
 ```bash
 # run an exercise as-is:
 uv run python run.py configs/ex01_kinematic_growth.yaml
 
-# parametric study — one curve per value (overrides the file's sweep: block):
-uv run python run.py configs/ex01_kinematic_growth.yaml \
-    --sweep simulate.k_g=0.02,0.05,0.2
+# parametric study — one overlaid curve per value:
+uv run python run.py configs/ex01_kinematic_growth.yaml --sweep insult.pressure_factor=1.5,2,3
 
-# change any single value (dotted path into the config):
-uv run python run.py configs/ex02_constrained_mixture.yaml \
-    --set model.constituents.collagen.gain=3.0
+# override any single value (dotted path into the config):
+uv run python run.py configs/ex02_constrained_mixture.yaml --set model.constituents.collagen.gain=3.0
 
 # save the figure instead of showing it:
 uv run python run.py configs/ex05_stability.yaml --save out/ex05.pdf --no-show
 ```
 
-A config picks the `study` (`transient`, `compare`, `equilibrium`, or `map`),
-the `theory`, `geometry`, `insult`, and parameters; a `sweep:` block (or
-`--sweep`) turns any parameter into an overlaid study. See the comments in each
-`configs/*.yaml` for what to try, and the schema at the top of
-[`src/gr/scenario.py`](src/gr/scenario.py).
+A config picks the `study` (`transient`, `compare`, `equilibrium`, or `map`), the
+`theory`, `geometry`, `insult`, and parameters; a `sweep:` block (or `--sweep`)
+turns any parameter into an overlaid study. See the comments in each
+`configs/*.yaml` and the schema atop [`src/gr/scenario.py`](src/gr/scenario.py).
 
----
+### Watch the physics as it solves (`--trace`)
 
-## Watch the physics as it solves (`--trace`)
-
-Add `--trace` to print the quantities from the slides **live, as the solver
-marches in time** — so you can watch the wall thicken, the collagen fraction
-rise, and the production stimulus relax back to 1 as the tissue adapts (or run
-away):
-
-```bash
-uv run python run.py configs/ex02_constrained_mixture.yaml --trace
-```
+Add `--trace` to stream the quantities from the slides as the solver marches in
+time — stretch `λ`, tissue stress `σ/σh`, total mass `M/M0`, per-constituent
+**mass fractions** `φ`, production **stimuli** `Υ`, and the wall radius/thickness:
 
 ```
   ▶ full CMM · artery
       insult: pressure ×1.5 from t=1 d (ramp 1 d)
       set-point: σh = 102.4 kPa,  R = 1.00 mm,  H = 0.130 mm
       t[day]       λ    σ/σh    M/M0   φ_ela   φ_col   φ_smc   Υ_col   Υ_smc   r[mm]   h[mm]
-      --------------------------------------------------------------------------------------
            0   1.000   1.000   1.000   0.300   0.350   0.350   1.000   1.000   1.000  0.1299
-         120   1.036   1.002   1.608   0.187   0.407   0.407   1.002   1.002   1.036  0.2016
-         ...
-        3000   1.018   1.000   1.556   0.193   0.404   0.404   1.000   1.000   1.018  0.1984   ✓ adapted
+         200   1.033   0.998   1.603   0.187   0.406   0.406   0.998   0.998   1.033  0.2016
+         400   1.027   0.999   1.583   0.190   0.405   0.405   0.999   0.999   1.027  0.2003   ✓ adapted
 ```
 
-The columns are the physical quantities the theory introduces: global stretch
-`λ`, tissue stress relative to its set-point `σ/σh`, total mass `M/M0`, the
-per-constituent **mass fractions** `φ`, the production **stimuli** `Υ`
-(`= 1 + Kσ(σ/σh − 1)`), and the wall radius/thickness. The `equilibrium` and
-`map` studies instead trace their **scan progress** (which insult values still
-have an equilibrium, and how much of the grid adapts). Print interval:
-`--trace-every DAYS` (default: about 25 rows over the run).
+The `equilibrium` and `map` studies trace their scan progress instead. Control
+the row interval with `--trace-every DAYS`.
 
-## Run every slide exercise at once (`run_all.py`)
+### Run every slide exercise at once
 
 ```bash
-uv run python run_all.py                 # run ex01..ex05 with --trace, save to out/
-uv run python run_all.py --show          # also open each figure window
-uv run python run_all.py --only ex02     # just one (substring match, repeatable)
-uv run python run_all.py --no-trace       # end-of-run summaries only
+uv run python run_all.py               # ex01..ex05 with --trace, figures to out/
+uv run python run_all.py --no-trace    # end-of-run summaries only
+uv run python run_all.py --only ex02   # just one (substring match)
 ```
 
-This runs the five `run.py` exercises that appear in the seminar, back to back,
-with the live tracker on. (`exercises/ex00_biology_and_mechanics.py` is a static
-materials plot with no time-marching solver, so it is run directly, not here.)
+## Repository layout
 
----
+```
+src/gr/      the maths and the four models (read, don't edit; comments tie each line to an equation)
+docs/        lecture notes: biology, finite-strain theory, one file per theory, the stability capstone
+configs/     student input files — one small YAML per exercise
+run.py       one runner for every exercise;  run_all.py runs them all
+exercises/   the same exercises as annotated standalone scripts
+solutions/   teacher scripts; regenerate the slide figures into docs/figures/
+slides/      the LaTeX deck (student + teacher builds)
+```
+
+Students run `configs/` with `run.py` and read `docs/`; instructors run
+`solutions/` to regenerate figures.
 
 ## Suggested 3-hour flow
 
-**Part 1 (90 min) — foundations & the first two theories**
+| Read | then run |
+|---|---|
+| `docs/01_biology.md`, `docs/02_finite_strain.md` | `exercises/ex00_biology_and_mechanics.py` (materials plot) |
+| `docs/03_kinematic_growth.md` | `run.py configs/ex01_kinematic_growth.yaml` |
+| `docs/04_constrained_mixture.md` | `run.py configs/ex02_constrained_mixture.yaml` |
+| `docs/05_homogenized_cmm.md` | `run.py configs/ex03_homogenized_vs_full.yaml` |
+| `docs/06_equilibrated_cmm.md` | `run.py configs/ex04_equilibrated.yaml` |
+| `docs/07_stability.md` | `run.py configs/ex05_stability.yaml` |
 
-1. `docs/01_biology.md` — why tissues grow and remodel (no maths).
-2. `docs/02_finite_strain.md` — the minimum continuum mechanics.
-   → `exercises/ex00_biology_and_mechanics.py` (a materials plot)
-3. `docs/03_kinematic_growth.md` — multiplicative growth.
-   → `run.py configs/ex01_kinematic_growth.yaml`
-4. `docs/04_constrained_mixture.md` — turnover & heredity integrals.
-   → `run.py configs/ex02_constrained_mixture.yaml`
+Part 1 (kinematic growth + full mixture) then, after a short break, Part 2
+(homogenized, equilibrated, and the stability capstone).
 
-*— 3-minute break —*
-
-**Part 2 (90 min) — approximations, equilibrium, and stability**
-
-5. `docs/05_homogenized_cmm.md` — temporal homogenization.
-   → `run.py configs/ex03_homogenized_vs_full.yaml`
-6. `docs/06_equilibrated_cmm.md` — skip the transient.
-   → `run.py configs/ex04_equilibrated.yaml`
-7. `docs/07_stability.md` — the capstone: adaptation vs. aneurysm.
-   → `run.py configs/ex05_stability.yaml`
-
-Each step has a matching annotated script in `exercises/` (the theory in code)
-and a `solutions/figXX_*.py` that produces the slide figure.
-
----
-
-## Regenerate every lecture figure at once
+## Teacher tooling
 
 ```bash
-uv run python solutions/make_all_figures.py
-# -> writes docs/figures/*.pdf
+uv run python solutions/make_all_figures.py    # regenerate docs/figures/*.pdf
+uv run python solutions/_check_models.py        # quick numerical self-check
+uv sync --extra video                           # add bundled ffmpeg for MP4 (optional)
+uv run python solutions/make_all_videos.py      # animated twins -> docs/videos/*.mp4
 ```
 
-## Animated videos
-
-Every simulation figure also has an animated twin — a deforming vessel next to
-the response curves, with the insult drawn over time so the **immediate elastic**
-jump is separated from the slow **growth & remodeling**. They are built from the
-same `Result` objects the models return (`gr.animation`), so the numbers match
-the figures exactly. See [`docs/videos/`](docs/videos/README.md).
-
-```bash
-uv pip install -e ".[video]"                    # bundled ffmpeg for MP4 (optional)
-uv run python solutions/make_all_videos.py      # -> docs/videos/*.mp4
-```
-
-## Sanity check the models
-
-```bash
-uv run python -m pytest -q        # if you add tests, or:
-uv run python solutions/_check_models.py   # quick numerical self-check
-```
-
----
-
-## Cross-validation against svGrowth
-
-The `comparison/` directory (on the `svgrowth-comparison` branch) reproduces the
-hypertension exercise with [**svGrowth**](https://github.com/StanfordCBCL/svGrowth),
-a research-grade constrained-mixture framework, and checks that the two codes
-agree. Configured to the same problem, the `gr` 1-D model and svGrowth's biaxial
-thin-wall model track each other's normalised adaptation closely (inner radius to
-<1%, other quantities to a few percent). See
-[`comparison/README.md`](comparison/README.md) for setup, the matched
-configuration, and the residual-difference discussion.
+The videos are animated twins of the figures, built from the same `Result`
+objects the models return, so the numbers match exactly. See
+[`docs/videos/`](docs/videos/README.md).
 
 ## References
 
